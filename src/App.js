@@ -9,6 +9,11 @@ function App() {
     <NextUIProvider>
       <div className='p-3 grid grid-cols-1 place-items-center w-[100vw]'>
         <ItemCard />
+        <div className='h-2'></div>
+        <ItemCard />
+        <div className='h-2'></div>
+        <ItemCard />
+        <div className='h-2'></div>
       </div>
     </NextUIProvider>
   );
