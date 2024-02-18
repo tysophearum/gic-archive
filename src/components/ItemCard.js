@@ -5,7 +5,7 @@ import { GithubIcon } from '../icons/GithubIcon';
 import { DotIcon } from '../icons/DotIcon';
 import { StarIcon } from '../icons/StarIcon';
 
-const ItemCard = (props) => {
+const ItemCard = () => {
     // Initialize state for the liked status
     const [liked, setLiked] = useState(false);
 
@@ -16,28 +16,27 @@ const ItemCard = (props) => {
     };
 
     return (
-        <button className='rounded-xl duration-150 hover:shadow-gray-100 hover:shadow-xl'>
-            <Card className='xl:w-[1100px] lg:w-[950px] md:w-[780px] sm:w-[80%] w-[80%]'>
+        <button className='rounded-xl duration-150 hover:shadow-gray-100 hover:shadow-xl xl:w-[1100px] lg:w-[950px] md:w-[720px] sm:w-[80%] w-[80vw]'>
+            <Card>
                 <CardBody className='grid md:grid-cols-[17%,57%,17%] gap-7 place-items-start p-4 sm:grid-cols-1s'>
-                    <img className='rounded object-cover md:w-56 w-full h-44' src='https://production-media.paperswithcode.com/thumbnails/papergithubrepo/c43885ec-1a26-4192-8794-5c2dcbf36cbd.jpg'/>
+                    <img className='rounded object-cover md:w-56 w-full h-44' alt='#' src='https://production-media.paperswithcode.com/thumbnails/papergithubrepo/c43885ec-1a26-4192-8794-5c2dcbf36cbd.jpg'/>
                     <div className='h-full'>
                         <h5 className='text-xl font-medium text-gray-900'>Title lorem gwe</h5>
                         <div className='flex items-center text-sm text-gray-600 my-2'>
                             <GithubIcon />
-                            <a href='#' className='ml-2 hover:underline'>testing/something</a>
+                            <a href='www.example.com' className='ml-2 hover:underline'>testing/something</a>
                             <DotIcon />
-                            <text>9 Feb 2024</text>
+                            <span>9 Feb 2024</span>
                         </div>
                         <p className='text-sm text-gray-600'>wergwergwerg</p>
                     </div>
                     <div className='w-full flex flex-col items-center'>
-                        {/* Apply conditional background color based on liked state */}
                         <Button
                             radius='sm'
                             className={`text-white ${liked ? 'bg-yellow-600 text-white' : 'text-yellow-600'} mb-3`}
                             variant='bordered'
                             startContent={<StarIcon height={20} width={20}/>}
-                            onClick={handleLikeClick} // Call the handleLikeClick function on button click
+                            onClick={handleLikeClick}
                         >
                             231
                         </Button>
