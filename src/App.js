@@ -22,6 +22,11 @@ function App() {
             Most liked
           </Button> 
         </div>
+        <div className=' mb-5 flex justify-start xl:w-[1100px] lg:w-[950px] md:w-[720px] sm:w-[80%] w-[80vw]'>
+          <h1 className='text-3xl'>
+            Trending
+          </h1>
+        </div>
         <ItemCard />
         <div className='h-8'></div>
         <ItemCard />
