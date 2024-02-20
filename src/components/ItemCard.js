@@ -16,10 +16,10 @@ const ItemCard = () => {
     };
 
     return (
-        <button className='rounded-xl duration-150 hover:shadow-gray-100 hover:shadow-xl xl:w-[1100px] lg:w-[950px] md:w-[720px] sm:w-[80%] w-[80vw]'>
+        <button className='rounded-xl duration-150 mb-4 hover:shadow-gray-100 hover:shadow-xl xl:w-[1100px] lg:w-[950px] md:w-[720px] sm:w-[80%] w-[80vw]'>
             <Card>
                 <CardBody className='grid md:grid-cols-[17%,57%,17%] gap-7 place-items-start p-4 sm:grid-cols-1s'>
-                    <img className='rounded object-cover md:w-56 w-full h-44' alt='#' src='https://production-media.paperswithcode.com/thumbnails/papergithubrepo/c43885ec-1a26-4192-8794-5c2dcbf36cbd.jpg'/>
+                    <img className='rounded object-cover md:w-56 w-full h-44' alt='#' src='https://production-media.paperswithcode.com/thumbnails/paper/2102.07619.jpg'/>
                     <div className='h-full'>
                         <h5 className='text-xl font-medium text-gray-900'>Title lorem gwe</h5>
                         <div className='flex items-center text-sm text-gray-600 my-2'>

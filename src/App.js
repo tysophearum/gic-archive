@@ -4,6 +4,7 @@ import ItemCard from './components/ItemCard';
 import Header from './components/Header';
 import { TrendingIcon } from './icons/TrendingIcon';
 import { StarIcon } from './icons/StarIcon';
+import ItemList from './components/ItemList';
 
 function App() {
 
@@ -11,10 +12,10 @@ function App() {
     <NextUIProvider>
       <Header />
       <div className='p-3 grid grid-cols-1 place-items-center w-[100vw]'>
-        <div className='my-5 flex justify-start xl:w-[1100px] lg:w-[950px] md:w-[720px] sm:w-[80%] w-[80vw]'>
+        <div className='mt-3 flex justify-start w-[75vw]'>
           <Button className='mx-1' radius='full' color="primary" variant="bordered" startContent={<TrendingIcon />}>
             Trending
-          </Button> 
+          </Button>
           <Button className='mx-1' radius='full' color="primary" variant="faded">
             New
           </Button> 
@@ -22,34 +23,8 @@ function App() {
             Most liked
           </Button> 
         </div>
-        <div className=' mb-5 flex justify-start xl:w-[1100px] lg:w-[950px] md:w-[720px] sm:w-[80%] w-[80vw]'>
-          <h1 className='text-3xl'>
-            Trending
-          </h1>
-        </div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
-        <ItemCard />
-        <div className='h-8'></div>
       </div>
+      <ItemList />
     </NextUIProvider>
   );
 }

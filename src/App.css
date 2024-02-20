@@ -39,4 +39,5 @@
 
 body {
   background-color: #f7fbff;
+  min-height: 100vh;
 }
