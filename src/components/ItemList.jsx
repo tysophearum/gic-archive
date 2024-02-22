@@ -1,5 +1,5 @@
 import React from "react";
-import { ListIcon } from "../icons/ListIcon";
+// import { ListIcon } from "../icons/ListIcon";
 import { GridIcon } from "../icons/GridIcon";
 import { useState } from "react";
 import ItemCard from "./ItemCard";
@@ -29,7 +29,8 @@ export default function ItemList({ numberOfElements, title }) {
               grid ? "" : " border border-primary text-primary rounded-lg"
             }
           >
-            <ListIcon height={25} width={25} />
+            {/* <ListIcon height={25} width={25} /> */}
+            <span>List</span>
           </button>
         </div>
       </div>
