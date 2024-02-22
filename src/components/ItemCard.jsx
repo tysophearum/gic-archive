@@ -4,6 +4,7 @@ import { PaperIcon } from '../icons/PaperIcon';
 import { GithubIcon } from '../icons/GithubIcon';
 import { DotIcon } from '../icons/DotIcon';
 import { StarIcon } from '../icons/StarIcon';
+import { Link } from 'react-router-dom'
 
 const ItemCard = () => {
     // Initialize state for the liked status
@@ -16,10 +17,10 @@ const ItemCard = () => {
     };
 
     return (
-        <button className='rounded-xl mb-4 hover:shadow-gray-100 hover:shadow-xl w-full'>
-            <Card>
+        <Link to="/detail" className='rounded-xl mb-4 duration-150 hover:shadow-gray-100 hover:shadow-xl w-full'>
+            <Card shadow='sm'>
                 <CardBody className='grid md:grid-cols-[17%,57%,17%] gap-7 place-items-start p-4 sm:grid-cols-1s'>
-                    <img className='rounded object-cover md:w-56 w-full h-44' alt='#' src='https://production-media.paperswithcode.com/thumbnails/paper/2102.07619.jpg'/>
+                    <img className='rounded object-cover md:w-56 w-full h-44' alt='#' src='https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg'/>
                     <div className='h-full'>
                         <h5 className='text-xl font-medium text-gray-900'>Title lorem gwe</h5>
                         <div className='flex items-center text-sm text-gray-600 my-2'>
@@ -45,7 +46,7 @@ const ItemCard = () => {
                     </div>
                 </CardBody>
             </Card>
-        </button>
+        </Link>
     );
 }
 

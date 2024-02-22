@@ -1,3 +1,4 @@
+import React from 'react';
 import { Card, CardFooter, Image, CardHeader, Button, Input } from "@nextui-org/react";
 import { SearchIcon } from "../icons/SearchIcon";
 

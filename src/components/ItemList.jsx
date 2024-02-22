@@ -5,18 +5,15 @@ import { useState } from "react";
 import ItemCard from "./ItemCard";
 import ItemCard2 from "./ItemCard2";
 
-export default function ItemList() {
+export default function ItemList({ numberOfElements, title }) {
   let [grid, setGrid] = useState(true);
 
-  const list = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-  ];
+  const list = Array.from({ length: numberOfElements }, (_, index) => index);
 
   return (
     <>
       <div className="flex justify-between my-4">
-        <h1 className="text-3xl">Trending</h1>
+        <h1 className="text-3xl text-nowrap mb-4 font-semibold">{title}</h1>
         <div className="sm:flex justify-end items-center w-[75vw] hidden">
           <button
             onClick={() => setGrid(true)}

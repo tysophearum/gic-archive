@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from "@nextui-org/react";
 import { StarIcon } from "../icons/StarIcon";
 import { TrendingIcon } from "../icons/TrendingIcon";
@@ -31,7 +32,7 @@ const HomePage = () => {
         </Button>
       </div>
       <Banner />
-      <ItemList />
+      <ItemList numberOfElements={20} title="Trending" />
     </div>
   );
 };

@@ -14,7 +14,7 @@ export default function Header4() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <h1 className="text-4xl font-bold tracking-tight text-black">G</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-black">GIC Archive</h1>
         </NavbarBrand>
       </NavbarContent>
 
