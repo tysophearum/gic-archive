@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Avatar, Button } from '@nextui-org/react';
+import { Avatar, Button, Textarea } from '@nextui-org/react';
 import { PaperIcon } from '../icons/PaperIcon';
 import { GithubIcon } from '../icons/GithubIcon';
 import ItemList from '../components/ItemList';
@@ -51,7 +51,7 @@ const ViewDetail = () => {
       <span className=" text-sm text-primary-700 mt-3">
         Publish in 12 Mar 2024 by <b>Someone Important</b>
       </span>
-      <div className="mt-7 text-zinc-700">
+      <div className="mt-7 text-zinc-500">
         <p ref={textRef} style={{
           overflow: expanded ? 'visible' : 'hidden',
           textOverflow: expanded ? 'inherit' : 'ellipsis',
@@ -112,6 +112,64 @@ const ViewDetail = () => {
       </div>
       <h2 className=" text-xl font-semibold mt-10 mb-2">Citation </h2>
       <p className="text-zinc-700 mb-10">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas, in. Sapiente, sed perspiciatis, neque quam quisquam animi nisi soluta sunt dolor, ea esse consectetur. Sunt aliquam harum iste expedita quo?</p>
+      <h2 className=" text-xl font-semibold mb-2">Comments </h2>
+      <div className="flex mb-2">
+        <Avatar
+          className="transition-transform h-14 w-14 mr-3"
+          color="primary"
+          name="Jason Hughes"
+          src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg"
+        />
+        <Textarea
+          label="Comment"
+          placeholder="Enter your comment"
+          className="w-full"
+          validate={'bordered'}
+          color='primary'
+        />
+      </div>
+      <div>
+        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
+          <Avatar
+            className="transition-transform mr-3"
+            color="primary"
+            name="Jason Hughes"
+            size='md'
+            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg"
+          />
+          <div className='w-full'>
+            <span className='font-semibold'>Ty Sophearum</span>
+            <p className='text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, sint voluptas enim accusamus expedita nam asperiores aspernatur quia mollitia maxime officiis maiores suscipit possimus sequi, minima consectetur corrupti deleniti voluptatibus?</p>
+          </div>
+        </div>
+        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
+          <Avatar
+            className="transition-transform mr-3"
+            color="primary"
+            name="Jason Hughes"
+            size='md'
+            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg"
+          />
+          <div className='w-full'>
+            <span className='font-semibold'>Ty Sophearum</span>
+            <p className='text-sm'>Lorem ipsum dolor sit aoluptas enim accusamus expedita nam asperiores aspernataiores suscipit possimus sequi, minima consectetur corrupti deleniti voluptatibus?</p>
+          </div>
+        </div>
+        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
+          <Avatar
+            className="transition-transform mr-3"
+            color="primary"
+            name="Jason Hughes"
+            size='md'
+            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg"
+          />
+          <div className='w-full'>
+            <span className='font-semibold'>Ty Sophearum</span>
+            <p className='text-sm'>Lorem ipsum dolor sit amet s?</p>
+          </div>
+        </div>
+      </div>
+      <Button className='w-full bg-primary-400 text-white'>More</Button>
       <ItemList numberOfElements={4} title="Related papers"/>
     </div>
   );

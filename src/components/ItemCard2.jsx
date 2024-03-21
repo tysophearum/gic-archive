@@ -16,6 +16,7 @@ const ItemCard2 = () => {
       >
         <CardBody className="overflow-visible p-0 h-56">
           <Image
+            isZoomed
             shadow="none"
             radius="lg"
             width="100%"

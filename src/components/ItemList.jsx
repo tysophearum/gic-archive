@@ -1,11 +1,11 @@
 import React from "react";
-// import { ListIcon } from "../icons/ListIcon";
+import { ListIcon } from "../icons/ListIcon";
 import { GridIcon } from "../icons/GridIcon";
 import { useState } from "react";
 import ItemCard from "./ItemCard";
 import ItemCard2 from "./ItemCard2";
 
-export default function ItemList({ numberOfElements, title }) {
+const ItemList = ({ numberOfElements, title }) => {
   let [grid, setGrid] = useState(true);
 
   const list = Array.from({ length: numberOfElements }, (_, index) => index);
@@ -29,8 +29,8 @@ export default function ItemList({ numberOfElements, title }) {
               grid ? "" : " border border-primary text-primary rounded-lg"
             }
           >
-            {/* <ListIcon height={25} width={25} /> */}
-            <span>List</span>
+            <ListIcon height={25} width={25} />
+            {/* <span>List</span> */}
           </button>
         </div>
       </div>
@@ -50,3 +50,5 @@ export default function ItemList({ numberOfElements, title }) {
     </>
   );
 }
+
+export default ItemList
