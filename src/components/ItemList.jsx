@@ -12,13 +12,13 @@ const ItemList = ({ numberOfElements, title }) => {
 
   return (
     <>
-      <div className="flex justify-between my-4">
-        <h1 className="text-3xl text-nowrap mb-4 font-semibold">{title}</h1>
-        <div className="sm:flex justify-end items-center w-[75vw] hidden">
+      <div className="flex justify-between my-4 w-full">
+        {title}
+        <div className="sm:flex items-center hidden">
           <button
             onClick={() => setGrid(true)}
             className={
-              grid ? " border border-primary text-primary rounded-lg" : ""
+              grid ? " border border-primary text-primary rounded-lg mr-1" : ""
             }
           >
             <GridIcon height={25} width={25} />
@@ -26,7 +26,7 @@ const ItemList = ({ numberOfElements, title }) => {
           <button
             onClick={() => setGrid(false)}
             className={
-              grid ? "" : " border border-primary text-primary rounded-lg"
+              grid ? "" : " border border-primary text-primary rounded-lg ml-1"
             }
           >
             <ListIcon height={25} width={25} />

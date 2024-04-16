@@ -6,10 +6,20 @@ import { LinkedinIcon } from "../icons/LinkedinIcon";
 import { AddIcon } from "../icons/AddIcon";
 import { Tabs, Tab } from "@nextui-org/react";
 import { EditIcon } from "../icons/EditIcon";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import {
+  Modal,
+  ModalContent,
+  Button,
+  useDisclosure,
+} from "@nextui-org/react";
+import React, { useState } from "react";
+import TestTable from "./TestTable";
+import EditProfileForm from "../components/EditProfileForm";
+import CreatePostForm from "../components/CreatePostForm";
 
 const ProfilePage = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const profilePopup = useDisclosure();
+  const postPopup = useDisclosure();
 
   return (
     <div className="flex flex-col items-center md:mt-8">
@@ -22,42 +32,54 @@ const ProfilePage = () => {
               <h2 className=" text-xl font-bold mt-3">Ty Sophearum <span className="text-sm font-normal">( Year 5 )</span></h2>
               <span>ID: e20191219</span>
             </div>
-            <Button size="sm" startContent={<EditIcon />} variant="bordered" onPress={onOpen} className="ml-2">Edit</Button>
+            <Button size="sm" startContent={<EditIcon />} variant="bordered" onPress={profilePopup.onOpen} className="ml-2">Edit</Button>
             <Modal
-              isOpen={isOpen}
+              isOpen={profilePopup.isOpen}
               placement='center'
-              onOpenChange={onOpenChange}
+              onOpenChange={profilePopup.onOpenChange}
+              size="4xl"
             >
               <ModalContent>
                 {(onClose) => (
-                  <>
-                    <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-                    <ModalBody>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nullam pulvinar risus non risus hendrerit venenatis.
-                        Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                      </p>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nullam pulvinar risus non risus hendrerit venenatis.
-                        Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                      </p>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="danger" variant="light" onPress={onClose}>
-                        Close
-                      </Button>
-                      <Button color="primary" onPress={onClose}>
-                        Action
-                      </Button>
-                    </ModalFooter>
-                  </>
+                  <EditProfileForm onClose={onClose}/>
                 )}
               </ModalContent>
             </Modal>
           </div>
-          <Button size="sm" color="primary" startContent={<AddIcon />}>New post</Button>
+          <Button size="sm" color="primary" onPress={postPopup.onOpen} startContent={<AddIcon />}>New post</Button>
+          <Modal
+            isOpen={postPopup.isOpen}
+            placement='center'
+            onOpenChange={postPopup.onOpenChange}
+            size="full"
+            placement='bottom'
+            motionProps={{
+              variants: {
+                enter: {
+                  y: 0,
+                  opacity: 1,
+                  transition: {
+                    duration: 0.3,
+                    ease: "easeIn",
+                  },
+                },
+                exit: {
+                  y: 20,
+                  opacity: 0,
+                  transition: {
+                    duration: 0.2,
+                    ease: "easeOut",
+                  },
+                }
+              }
+            }}
+          >
+            <ModalContent className="h-[94%] overflow-scroll !rounded-t-3xl">
+              {(onClose) => (
+                <CreatePostForm onClose={onClose}/>
+              )}
+            </ModalContent>
+          </Modal>
         </div>
 
         <div className="flex justify-between">
@@ -69,7 +91,6 @@ const ProfilePage = () => {
             <FacebookIcon width={30} height={30} />
             <EmailIcon width={30} height={30} />
             <LinkedinIcon width={30} height={30} />
-            <AddIcon width={30} height={30} />
           </div>
           <div className="flex w-[12vw] justify-between pt-4">
             <div className=" flex flex-col items-center">
@@ -82,11 +103,14 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
+        <div className="mt-6">
+          <TestTable />
+        </div>
         <Tabs size='lg' aria-label="Tabs sizes" className="w-full mt-8">
           <Tab className="w-[40vw]" key="photos" title="Class projects" />
           <Tab className="w-[40vw]" key="videos" title="Thesis" />
         </Tabs>
-        <ItemList numberOfElements={18} title="My Posts" />
+        <ItemList numberOfElements={18} title={<h1 className=" text-lg font-semibold">My post</h1>} />
       </div>
     </div>
   )

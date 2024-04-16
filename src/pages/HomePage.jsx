@@ -32,7 +32,7 @@ const HomePage = () => {
         </Button>
       </div>
       <Banner />
-      <ItemList numberOfElements={20} title="Trending" />
+      <ItemList numberOfElements={20} title={<h1 className='text-3xl font-semibold'>Trending</h1>} />
     </div>
   );
 };
