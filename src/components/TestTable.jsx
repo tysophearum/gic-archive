@@ -1,11 +1,11 @@
 import React from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, useDisclosure, Modal, ModalContent } from "@nextui-org/react";
-import { EditIcon } from "./EditIcon";
-import { DeleteIcon } from "./DeleteIcon";
-import { EyeIcon } from "./EyeIcon";
-import { columns, users } from "./data";
-import ViewDetail from "../components/ViewDetail";
-import Feedbacks from "../components/Feedbacks";
+import { EditIcon } from "../icons/EditIcon";
+import { DeleteIcon } from "../icons/DeleteIcon";
+import { EyeIcon } from "../icons/EyeIcon";
+import { columns, users } from "../pages/data";
+import ViewDetail from "./ViewDetail";
+import Feedbacks from "./Feedbacks";
 
 const statusColorMap = {
   active: "success",
@@ -71,7 +71,6 @@ export default function TestTable() {
       </Table>
       <Modal
         isOpen={viewPopup.isOpen}
-        placement='center'
         onOpenChange={viewPopup.onOpenChange}
         size="full"
         placement='bottom'

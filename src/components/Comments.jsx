@@ -1,6 +1,44 @@
 import { Avatar, Button, Textarea, User } from '@nextui-org/react';
+import React, { useState, useEffect } from "react";
+import fetchData from "../util/fetchData";
 
-const Comments = () => {
+const Comments = ({ query, id }) => {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Introduce loading state
+  const [page, setPage] = useState(1)
+  const [pagination, setPagination] = useState()
+  const endpoint = process.env.REACT_APP_ENDPOINT;
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        setLoading(true);
+        const [responseData, error] = await fetchData(endpoint, query, {documentId: id, pager: {limit: 3, page: page}});
+        if (error) {
+          throw new Error(error.message);
+        }
+        const resArray = Object.entries(responseData);
+        const [[key, res]] = resArray;
+        setData([...data, ...res.comment]);
+        setPagination(res.pagination)
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false); // Set loading state to false after fetching
+      }
+    }
+
+    getData();
+  }, [page]);
+
+  if (loading) {
+    return <p>Loading...</p>; // Render loading state
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>; // Render error state
+  }
   return (
     <>
       <h2 className=" text-xl font-semibold mb-2">Comments </h2>
@@ -18,44 +56,24 @@ const Comments = () => {
           color='primary' />
       </div>
       <div>
-        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
-          <Avatar
-            className="transition-transform mr-3"
-            color="primary"
-            name="Jason Hughes"
-            size='md'
-            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
-          <div className='w-full'>
-            <span className='font-semibold'>Ty Sophearum</span>
-            <p className='text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, sint voluptas enim accusamus expedita nam asperiores aspernatur quia mollitia maxime officiis maiores suscipit possimus sequi, minima consectetur corrupti deleniti voluptatibus?</p>
+        {data.map((userComment) => {
+          return (
+          <div className="flex my-3 bg-gray-50 rounded-lg p-2">
+            <Avatar
+              className="transition-transform mr-3"
+              color="primary"
+              name="Jason Hughes"
+              size='md'
+              src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
+            <div className='w-full'>
+              <span className='font-semibold'>{userComment.user.firstName}</span>
+              <p className='text-sm'>{userComment.comment}</p>
+            </div>
           </div>
-        </div>
-        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
-          <Avatar
-            className="transition-transform mr-3"
-            color="primary"
-            name="Jason Hughes"
-            size='md'
-            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
-          <div className='w-full'>
-            <span className='font-semibold'>Ty Sophearum</span>
-            <p className='text-sm'>Lorem ipsum dolor sit aoluptas enim accusamus expedita nam asperiores aspernataiores suscipit possimus sequi, minima consectetur corrupti deleniti voluptatibus?</p>
-          </div>
-        </div>
-        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
-          <Avatar
-            className="transition-transform mr-3"
-            color="primary"
-            name="Jason Hughes"
-            size='md'
-            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
-          <div className='w-full'>
-            <span className='font-semibold'>Ty Sophearum</span>
-            <p className='text-sm'>Lorem ipsum dolor sit amet s?</p>
-          </div>
-        </div>
+          )
+        })}
       </div>
-      <Button className='w-full bg-primary-400 text-white'>More</Button>
+      {pagination.hasNextPage ? <Button onClick={() => setPage(page+1)} className='w-full bg-primary-400 text-white'>More</Button> : <p></p>}
     </>
   )
 }

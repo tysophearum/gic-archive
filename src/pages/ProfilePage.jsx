@@ -13,9 +13,10 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import React, { useState } from "react";
-import TestTable from "./TestTable";
+import TestTable from "../components/TestTable";
 import EditProfileForm from "../components/EditProfileForm";
 import CreatePostForm from "../components/CreatePostForm";
+import QUERIES from "../util/queries";
 
 const ProfilePage = () => {
   const profilePopup = useDisclosure();
@@ -49,10 +50,9 @@ const ProfilePage = () => {
           <Button size="sm" color="primary" onPress={postPopup.onOpen} startContent={<AddIcon />}>New post</Button>
           <Modal
             isOpen={postPopup.isOpen}
-            placement='center'
             onOpenChange={postPopup.onOpenChange}
             size="full"
-            placement='bottom'
+            placement="bottom"
             motionProps={{
               variants: {
                 enter: {
@@ -106,11 +106,14 @@ const ProfilePage = () => {
         <div className="mt-6">
           <TestTable />
         </div>
-        <Tabs size='lg' aria-label="Tabs sizes" className="w-full mt-8">
-          <Tab className="w-[40vw]" key="photos" title="Class projects" />
-          <Tab className="w-[40vw]" key="videos" title="Thesis" />
+        <Tabs fullWidth className="mt-8">
+          <Tab className="w-full" key="photos" title="Class projects">
+            <ItemList baseLink={'/classProject'} query={QUERIES.listMyApprovedClassProject} header={{ Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY2MTNiZTNiMmVmZmNhODY1YmY1M2MxMyIsImZpcnN0TmFtZSI6IlN0dWRlbnQyIiwibGFzdE5hbWUiOiJTdHVkZW50MiIsImVtYWlsIjoic3R1ZGVudDJAZ21haWwuY29tIiwiZ2VuZGVyIjoibWFsZSIsInBhc3N3b3JkIjoiJDJiJDEwJFpjZjkwSlBNRmVnMWtvZ1h5OC9jdk9mN0dpQnNVWkVNTkVWcVNjRTFqbnUvZFZDNzh4VnFTIiwiY29udGFjdHMiOlt7InR5cGUiOiJGYWNlYm9vayIsInZhbHVlIjoiU3R1ZGVudDIifV0sImltYWdlIjoiIiwicm9sZSI6InN0dWRlbnQiLCJjbGFzc1Byb2plY3RDYXRlZ29yeSI6W10sInVwZGF0ZWRfYXQiOjAsImNyZWF0ZWRfYXQiOjE3MTI1Njk5MTUyMDcsIl9fdiI6MH0sImlhdCI6MTcxMzQ5NzMwMywiZXhwIjoxNzEzNTMzMzAzfQ.GFyCQEOK0BW96FTP5NhgEUxTRgQ5R-avhufWOss-rSk` }} title={<h1 className=" text-lg font-semibold">My class project</h1>} />
+          </Tab>
+          <Tab className="w-full" key="videos" title="Thesis">
+            <ItemList baseLink={'/thesis'} query={QUERIES.listMyApprovedThesis} header={{ Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY2MTNiZTNiMmVmZmNhODY1YmY1M2MxMyIsImZpcnN0TmFtZSI6IlN0dWRlbnQyIiwibGFzdE5hbWUiOiJTdHVkZW50MiIsImVtYWlsIjoic3R1ZGVudDJAZ21haWwuY29tIiwiZ2VuZGVyIjoibWFsZSIsInBhc3N3b3JkIjoiJDJiJDEwJFpjZjkwSlBNRmVnMWtvZ1h5OC9jdk9mN0dpQnNVWkVNTkVWcVNjRTFqbnUvZFZDNzh4VnFTIiwiY29udGFjdHMiOlt7InR5cGUiOiJGYWNlYm9vayIsInZhbHVlIjoiU3R1ZGVudDIifV0sImltYWdlIjoiIiwicm9sZSI6InN0dWRlbnQiLCJjbGFzc1Byb2plY3RDYXRlZ29yeSI6W10sInVwZGF0ZWRfYXQiOjAsImNyZWF0ZWRfYXQiOjE3MTI1Njk5MTUyMDcsIl9fdiI6MH0sImlhdCI6MTcxMzQ5NzMwMywiZXhwIjoxNzEzNTMzMzAzfQ.GFyCQEOK0BW96FTP5NhgEUxTRgQ5R-avhufWOss-rSk` }} title={<h1 className=" text-lg font-semibold">My thesis</h1>} />
+          </Tab>
         </Tabs>
-        <ItemList numberOfElements={18} title={<h1 className=" text-lg font-semibold">My post</h1>} />
       </div>
     </div>
   )

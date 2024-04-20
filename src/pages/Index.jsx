@@ -1,13 +1,13 @@
-import Header from "../components/Header"
-import { Outlet } from "react-router-dom"
+import Header from "../components/Header";
+import { Outlet } from "react-router-dom";
 
 const Index = () => {
   return (
     <>
-    <Header />
-    <Outlet />
+      <Header />
+      <Outlet />
     </>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

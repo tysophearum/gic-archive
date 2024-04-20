@@ -7,8 +7,8 @@ import {useTheme} from "next-themes";
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [tab, setTab] = useState('classProject')
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [tab, setTab] = useState('home')
   const { setTheme } = useTheme()
 
   return (
@@ -26,18 +26,27 @@ const Header = () => {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-12" justify="end">
+        <NavbarItem isActive={tab==='home'} onClick={() => setTab('home')} >
+          <Link to='/home' className={`${tab==='home' ? 'text-blue-500' : ''} cursor-pointer`}>
+              Home
+          </Link>
+        </NavbarItem>
         <NavbarItem isActive={tab==='classProject'} onClick={() => setTab('classProject')} className={`${tab==='classProject' ? 'text-blue-500' : ''} cursor-pointer`}>
-            Class project
+          <Link to='/classProject' className={`${tab==='classProject' ? 'text-blue-500' : ''} cursor-pointer`}>
+            Class Project
+          </Link>
         </NavbarItem>
         <NavbarItem isActive={tab==='thesis'} onClick={() => setTab('thesis')} className={`${tab==='thesis' ? 'text-blue-500' : ''} cursor-pointer`}>
+          <Link to='/thesis' className={`${tab==='thesis' ? 'text-blue-500' : ''} cursor-pointer`}>
             Thesis
+          </Link>
         </NavbarItem>
         <NavbarItem isActive={tab==='aboutUs'} onClick={() => setTab('aboutUs')} className={`${tab==='aboutUs' ? 'text-blue-500' : ''} cursor-pointer`}>
             About us
         </NavbarItem>
-        <NavbarItem isActive={tab==='GIC'} onClick={() => setTab('GIC')} className={`${tab==='GIC' ? 'text-blue-500' : ''} cursor-pointer`}>
+        {/* <NavbarItem isActive={tab==='GIC'} onClick={() => setTab('GIC')} className={`${tab==='GIC' ? 'text-blue-500' : ''} cursor-pointer`}>
             GIC
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
       <NavbarContent as="div" className="items-center" justify="end">
         <Input
@@ -128,7 +137,7 @@ const Header = () => {
             </DropdownItem>
             <DropdownItem
               key="usage_metrics"
-              description="Real-time metrics to debug issues. Slow query added? We’ll show you exactly where."
+              description="Real-time metrics to debug issues. Slow query added? We'll show you exactly where."
             // startContent={icons.activity}
             >
               Usage Metrics

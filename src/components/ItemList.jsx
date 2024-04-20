@@ -1,14 +1,46 @@
-import React from "react";
 import { ListIcon } from "../icons/ListIcon";
 import { GridIcon } from "../icons/GridIcon";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import fetchData from "../util/fetchData";
 import ItemCard from "./ItemCard";
 import ItemCard2 from "./ItemCard2";
 
-const ItemList = ({ numberOfElements, title }) => {
+const ItemList = ({ query, variable, header, title, baseLink }) => {
   let [grid, setGrid] = useState(true);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Introduce loading state
+  const endpoint = process.env.REACT_APP_ENDPOINT;
 
-  const list = Array.from({ length: numberOfElements }, (_, index) => index);
+  useEffect(() => {
+    async function getData() {
+      try {
+        setLoading(true);
+        const [responseData, error] = await fetchData(endpoint, query, variable, header);
+        console.log(query);
+        if (error) {
+          throw new Error(error.message);
+        }
+        const resArray = Object.entries(responseData);
+        const [[key, res]] = resArray;
+        setData(res.data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false); // Set loading state to false after fetching
+      }
+    }
+
+    getData();
+  }, [query, variable]);
+
+  if (loading) {
+    return <p>Loading...</p>; // Render loading state
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>; // Render error state
+  }
 
   return (
     <>
@@ -36,14 +68,14 @@ const ItemList = ({ numberOfElements, title }) => {
       </div>
       {grid ? (
         <div className="gap-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2">
-          {list.map((item, index) => (
-            <ItemCard2 />
+          {data.map((item, index) => (
+            <ItemCard2 link={baseLink+'/'+item.id} document={item} key={index} /> // Don't forget to add key prop
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 place-items-center">
-          {list.map((item, index) => (
-            <ItemCard />
+          {data.map((item, index) => (
+            <ItemCard document={item} key={index} /> // Don't forget to add key prop
           ))}
         </div>
       )}
@@ -51,4 +83,4 @@ const ItemList = ({ numberOfElements, title }) => {
   );
 }
 
-export default ItemList
+export default ItemList;
