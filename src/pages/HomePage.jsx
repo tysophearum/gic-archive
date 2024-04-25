@@ -39,7 +39,7 @@ const HomePage = () => {
           })}
       </div>
       <Banner />
-      <ItemList numberOfElements={20} title={<h1 className='text-3xl font-semibold'>Trending</h1>} />
+      {/* <ItemList numberOfElements={20} title={<h1 className='text-3xl font-semibold'>Trending</h1>} /> */}
     </div>
   );
 };

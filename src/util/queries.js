@@ -33,8 +33,8 @@ const QUERIES = {
         image
         user {
           id
-          firstName
-          lastName
+          name
+          studentId
         }
         likeAmount
         createdAt
@@ -52,8 +52,8 @@ const QUERIES = {
   }
   `,
   listApprovedClassProject: gql`
-  {
-    listApprovedClassProject {
+  query ListApprovedClassProject($pager: PaginationInput) {
+    listApprovedClassProject(pager: $pager) {
       data {
         id
         title
@@ -61,10 +61,20 @@ const QUERIES = {
         image
         user {
           id
-          firstName
-          lastName
+          name
+          studentId
+          email
+          gender
+          image
+          createdAt
+          updatedAt
         }
+        classProjectLink
+        repositoryLink
+        videoLink
+        isApproved
         likeAmount
+        liked
         createdAt
         updatedAt
       }
@@ -89,8 +99,8 @@ const QUERIES = {
         image
         user {
           id
-          firstName
-          lastName
+          name
+          studentId
           image
         }
         likeAmount
@@ -119,8 +129,8 @@ const QUERIES = {
         image
         user {
           id
-          firstName
-          lastName
+          name
+          studentId
           image
         }
         likeAmount
@@ -148,8 +158,8 @@ const QUERIES = {
       image
       user {
         id
-        firstName
-        lastName
+        name
+        studentId
         email
         gender
         image
@@ -165,8 +175,8 @@ const QUERIES = {
       }
       collaborators {
         id
-        firstName
-        lastName
+        name
+        studentId
         email
         gender
         image
@@ -190,8 +200,8 @@ const QUERIES = {
         id
         user {
           id
-          firstName
-          lastName
+          name
+          studentId
           email
           gender
           image
@@ -222,8 +232,18 @@ const QUERIES = {
       image
       user {
         id
-        firstName
-        lastName
+        name
+        studentId
+        email
+        gender
+        image
+        createdAt
+        updatedAt
+      }
+      teacher {
+        id
+        name
+        studentId
         email
         gender
         image
@@ -239,8 +259,8 @@ const QUERIES = {
       }
       collaborators {
         id
-        firstName
-        lastName
+        name
+        studentId
         email
         gender
         image
@@ -264,8 +284,8 @@ const QUERIES = {
         id
         user {
           id
-          firstName
-          lastName
+          name
+          studentId
           email
           gender
           image
@@ -297,8 +317,8 @@ const QUERIES = {
         image
         user {
           id
-          firstName
-          lastName
+          name
+          studentId
           email
           gender
           image
@@ -342,8 +362,8 @@ const QUERIES = {
         image
         user {
           id
-          firstName
-          lastName
+          name
+          studentId
           email
           gender
           image
@@ -378,44 +398,162 @@ const QUERIES = {
   }
   `,
   createClassProject: gql`
-  mutation CreateClassProject($classProject: CreateClassProjectInput!, $file: [Upload!], $image: Upload) {
-    createClassProject(classProject: $classProject, file: $file, image: $image) {
+  mutation CreateClassProject($classProject: CreateClassProjectInput!, $image: Upload) {
+    createClassProject(classProject: $classProject, image: $image) {
       id
-      title
-      description
+    }
+  }
+  `,
+  createThesis: gql`
+  mutation CreateThesis($thesis: CreateThesisInput!, $image: Upload) {
+    createThesis(thesis: $thesis, image: $image) {
+      id
+    }
+  }
+  `,
+  listMyUnapprovedClassProject: gql`
+  query ListMyUnapprovedClassProject {
+    listMyUnapprovedClassProject {
+      data {
+        id
+        title
+        description
+        image
+        classProjectCategory {
+          id
+          name
+          description
+          createdAt
+          updatedAt
+        }
+        classProjectLink
+        repositoryLink
+        videoLink
+        isApproved
+        likeAmount
+        liked
+        createdAt
+        updatedAt
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
+    }
+  }
+  `,
+  listMyUnapprovedThesis: gql`
+  query ListMyUnapprovedThesis {
+    listMyUnapprovedThesis {
+      data {
+        id
+        title
+        description
+        image
+        thesisCategory {
+          id
+          name
+          description
+          createdAt
+          updatedAt
+        }
+        thesisLink
+        repositoryLink
+        videoLink
+        isApproved
+        likeAmount
+        liked
+        createdAt
+        updatedAt
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
+    }
+  }
+  `,
+  searchStudents: gql`
+  query SearchStudents($name: String!) {
+    searchStudents(name: $name) {
+      id
+      name
+      studentId
+      email
+      gender
       image
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  searchTeachers: gql`
+  query SearchTeachers($name: String!) {
+    searchTeachers(name: $name) {
+      id
+      name
+      studentId
+      email
+      gender
+      image
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  deleteClassProject: gql`
+  mutation DeleteClassProject($classProjectId: String!) {
+    deleteClassProject(classProjectId: $classProjectId)
+  }
+  `,
+  deleteThesis: gql`
+  mutation DeleteThesis($thesisId: String!) {
+    deleteThesis(thesisId: $thesisId)
+  }
+  `,
+  createClassProjectComment: gql`
+  mutation CreateClassProjectComment($classProjectComment: CreateClassProjectCommentInput!) {
+    createClassProjectComment(classProjectComment: $classProjectComment) {
+      id
       user {
         id
-        firstName
-        lastName
+        name
+        studentId
         email
         gender
         image
         createdAt
         updatedAt
       }
-      classProjectCategory {
+      comment
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  createThesisComment: gql`
+  mutation CreateThesisComment($thesisComment: CreateThesisCommentInput!) {
+    createThesisComment(thesisComment: $thesisComment) {
+      id
+      user {
         id
         name
-        description
-        createdAt
-        updatedAt
-      }
-      collaborators {
-        id
-        firstName
-        lastName
+        studentId
         email
         gender
         image
         createdAt
         updatedAt
       }
-      classProjectLink
-      repositoryLink
-      videoLink
-      isApproved
-      likeAmount
+      comment
       createdAt
       updatedAt
     }

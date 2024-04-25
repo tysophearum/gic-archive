@@ -2,68 +2,58 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@nextui-org/react";
 import Banner from "../components/Banner";
 import ItemList from "../components/ItemList";
-import fetchData from '../util/fetchData';
 import QUERIES from '../util/queries';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+
 const ClassProjectPage = () => {
-  const endpoint = process.env.REACT_APP_ENDPOINT;
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [selectCategory, setSelectCategory] = useState({name: "All"});
-  const [loading, setLoading] = useState(true);
+  const [selectCategory, setSelectCategory] = useState({ name: "All" });
   const [listDataQuery, setListDataQuery] = useState(QUERIES.listApprovedClassProject);
   const [variables, setVariables] = useState();
+  const { loading, error, data } = useQuery(QUERIES.listClassProjectCategory);
 
   useEffect(() => {
-    async function getData() {
-      try {
-        if (selectCategory.id) {
-          setListDataQuery(QUERIES.listApprovedClassProjectByCategory);
-          setVariables({ categoryId: selectCategory.id })
-        }
-        const [data, error] = await fetchData(endpoint, QUERIES.listClassProjectCategory);
-        setData(data.listClassProjectCategory);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
+    if (selectCategory.id) {
+      setListDataQuery(QUERIES.listApprovedClassProjectByCategory);
+      setVariables({ categoryId: selectCategory.id })
     }
-    getData();
   }, [selectCategory]);
 
-  if (loading) {
-    return <p>Loading...</p>; // Render loading state
-  }
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
+  if (!data) return <p>No data</p>;
   return (
-    <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
-      <div className="mt-3 flex justify-start">
-        <Link to={'/thesis'}>
-          <Button
-            className="mx-1"
-            radius="full"
-            color="primary"
-            variant="bordered"
-          >
-            All
-          </Button>
-        </Link>
-        {data.map((category) => {
-          return (
-            <div onClick={()=>{
-              setSelectCategory(category)
-              }}
-              className='border-2 rounded-full border-primary grid place-items-center px-2 mx-1 text-primary'
-              key={category.id}>
-              {category.name}
-            </div>
-          )
-        })}
+    <>
+      <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
+        <div className="mt-3 flex justify-start">
+          <Link to={'/classProject'}>
+            <Button
+              className="mx-1"
+              radius="full"
+              color="primary"
+              variant="bordered"
+            >
+              All
+            </Button>
+          </Link>
+          {
+            data.listClassProjectCategory.map((category) => {
+              return (
+                <div onClick={() => {
+                  setSelectCategory(category)
+                }}
+                  className='border-2 rounded-full border-primary grid place-items-center px-2 mx-1 text-primary'
+                  key={category.id}>
+                  {category.name}
+                </div>
+              )
+            })
+          }
+        </div>
+        <Banner />
+        <ItemList baseLink={'/classProject'} query={listDataQuery} variable={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
       </div>
-      <Banner />
-      <ItemList baseLink={'/classProject'} query={listDataQuery} variable={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
-    </div>
+    </>
   );
 };
 

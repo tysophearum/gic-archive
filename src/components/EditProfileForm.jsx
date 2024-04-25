@@ -16,8 +16,11 @@ import {
 import React, { useState } from "react";
 import { useDropzone } from 'react-dropzone';
 
-const EditProfileForm = ({onClose}) => {
+const EditProfileForm = ({ onClose }) => {
   const [file, setFile] = useState("https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg");
+  const handleChange = (e) => {
+    setFile(URL.createObjectURL(e.target.files[0]))
+  }
   return (
     <>
       <ModalBody>
@@ -36,10 +39,13 @@ const EditProfileForm = ({onClose}) => {
               alt="NextUI Album Cover"
               className="mt-5 ml-5 object-cover"
             />
-            {/* <input type="file" onChange={handleChange} /> */}
-            <Button type="file" className="ml-[-15px] mt-[-2] z-50" radius="full" isIconOnly color="warning" size="sm" variant="faded" aria-label="Take a photo">
+            <label className="flex items-center justify-center border-2 rounded-full bg-gray-50 text-yellow-500 ml-[-15px] mt-[-2] z-50">
               <CameraIcon />
-            </Button>
+              <input type="file" onChange={handleChange} className="hidden" />
+            </label>
+            {/* <Button type="file" className="ml-[-15px] mt-[-2] z-50" radius="full" isIconOnly color="warning" size="sm" variant="faded" aria-label="Take a photo">
+              <CameraIcon />
+            </Button> */}
           </div>
         </div>
         <Divider />

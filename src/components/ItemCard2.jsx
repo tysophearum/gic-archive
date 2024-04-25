@@ -1,11 +1,12 @@
 import React from "react";
 import { Card, CardBody, CardFooter, Image, Avatar } from "@nextui-org/react";
 import { StarIcon } from "../icons/StarIcon";
+import { StarIconFill } from "../icons/StarIconFill";
 import { Link } from 'react-router-dom'
 
-const ItemCard2 = ({document, link}) => {
+const ItemCard2 = ({ document, baseLink }) => {
   return (
-    <Link to={link}>
+    <Link to={baseLink+'/'+document.id}>
       <Card
         className="h-fit min-w-60 w-full border-[#d9ecff] bg-transparent"
         shadow="none"
@@ -29,13 +30,21 @@ const ItemCard2 = ({document, link}) => {
         <div className="flex items-center">
           <Avatar className="w-6 h-6 text-tiny" />
           <a href="www.example.com" className="hover:underline font-semibold ml-1">
-            {document.user.firstName}
+            {document.user.name}
           </a>
         </div>
-        <span className="flex">
-          <StarIcon height={20} width={20} />
-          <span>{document.likeAmount}</span>
-        </span>
+        {document.liked ? (
+          <span className="flex text-yellow-500">
+            <StarIconFill height={20} width={20} />
+            <span>{document.likeAmount}</span>
+          </span>
+        ) : (
+          <span className="flex">
+            <StarIcon height={20} width={20} />
+            <span>{document.likeAmount}</span>
+          </span>
+        )}
+
       </div>
     </Link>
   );

@@ -1,34 +1,71 @@
 import { Avatar, Button, Textarea, User } from '@nextui-org/react';
 import React, { useState, useEffect } from "react";
 import fetchData from "../util/fetchData";
+import { PaperPlaneIcon } from '../icons/PaperPlaceIcon';
+import { useMutation } from '@apollo/client';
+import QUERIES from '../util/queries';
 
-const Comments = ({ query, id }) => {
+const Comments = ({ id, type }) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Introduce loading state
-  const [page, setPage] = useState(1)
-  const [pagination, setPagination] = useState()
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState();
   const endpoint = process.env.REACT_APP_ENDPOINT;
+  const [createClassProjectComment] = useMutation(QUERIES.createClassProjectComment);
+  const [createThesisComment] = useMutation(QUERIES.createThesisComment);
+  const [comment, setComment] = useState('');
+
+  async function getData() {
+    try {
+      let query = null;
+      if (type === 'classProject') {
+        query = QUERIES.listClassProjectComment
+      }
+      if (type === 'thesis') {
+        query = QUERIES.listThesisComment
+      }
+      setLoading(true);
+      const [responseData, error] = await fetchData(endpoint, query, {documentId: id, pager: {limit: 3, page: page}});
+      if (error) {
+        throw new Error(error.message);
+      }
+      const resArray = Object.entries(responseData);
+      const [[key, res]] = resArray;
+      setData([...data, ...res.comment]);
+      setPagination(res.pagination)
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false); // Set loading state to false after fetching
+    }
+  }
+
+  const handleComment = async () => {
+    if (comment === '') {
+      return;
+    }
+    try {
+      if (type === 'classProject') {
+        const { data: resData } = await createClassProjectComment({ variables: { classProjectComment: {classProject: id, comment: comment} } });
+        if (resData) {
+          setComment('');
+          setData([resData.createClassProjectComment, ...data])
+        }
+      }
+      else if (type === 'thesis') {
+        const { data } = await createThesisComment({ variables: { thesisComment: {thesis: id, comment: comment} } });
+        if (data) {
+          setComment('');
+          getData();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    };
 
   useEffect(() => {
-    async function getData() {
-      try {
-        setLoading(true);
-        const [responseData, error] = await fetchData(endpoint, query, {documentId: id, pager: {limit: 3, page: page}});
-        if (error) {
-          throw new Error(error.message);
-        }
-        const resArray = Object.entries(responseData);
-        const [[key, res]] = resArray;
-        setData([...data, ...res.comment]);
-        setPagination(res.pagination)
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false); // Set loading state to false after fetching
-      }
-    }
-
     getData();
   }, [page]);
 
@@ -48,17 +85,28 @@ const Comments = ({ query, id }) => {
           color="primary"
           name="Jason Hughes"
           src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
-        <Textarea
-          label="Comment"
-          placeholder="Enter your comment"
-          className="w-full"
-          validate={'bordered'}
-          color='primary' />
+        <div className="relative w-full">
+          <Textarea
+            label="Comment"
+            placeholder="Enter your comment"
+            className="w-full"
+            validate={'bordered'}
+            color='primary' 
+            value={comment}
+            onValueChange={(value) => setComment(value)}/>
+            <Button onClick={handleComment} className="absolute flex items-center bottom-0 right-0 m-2 px-2 py-1 bg-blue-500 text-white rounded">
+              <PaperPlaneIcon /> 
+              <span className='ml-2'>Post</span>
+            </Button>
+        </div>
       </div>
+      {/* <div className="flex justify-end px-4">
+        <button className='mt-[-100px] z-50'>Send</button>
+      </div> */}
       <div>
         {data.map((userComment) => {
           return (
-          <div className="flex my-3 bg-gray-50 rounded-lg p-2">
+          <div className="flex my-3 bg-gray-50 rounded-lg p-2" key={userComment.id}>
             <Avatar
               className="transition-transform mr-3"
               color="primary"
@@ -66,7 +114,7 @@ const Comments = ({ query, id }) => {
               size='md'
               src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
             <div className='w-full'>
-              <span className='font-semibold'>{userComment.user.firstName}</span>
+              <span className='font-semibold'>{userComment.user.name}</span>
               <p className='text-sm'>{userComment.comment}</p>
             </div>
           </div>

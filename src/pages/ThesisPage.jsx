@@ -2,39 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@nextui-org/react";
 import Banner from "../components/Banner";
 import ItemList from "../components/ItemList";
-import fetchData from '../util/fetchData';
 import QUERIES from '../util/queries';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
 
 const ThesisPage = () => {
-  const endpoint = process.env.REACT_APP_ENDPOINT;
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
   const [selectCategory, setSelectCategory] = useState({name: "All"});
-  const [loading, setLoading] = useState(true);
   const [listDataQuery, setListDataQuery] = useState(QUERIES.listApprovedThesis);
   const [variables, setVariables] = useState();
+  const { loading, error, data } = useQuery(QUERIES.listThesisCategory);
 
   useEffect(() => {
-    async function getData() {
-      try {
-        if (selectCategory.id) {
-          setListDataQuery(QUERIES.listApprovedThesisByCategory);
-          setVariables({ categoryId: selectCategory.id })
-        }
-        const [data, error] = await fetchData(endpoint, QUERIES.listThesisCategory);
-        setData(data.listThesisCategory);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
+    if (selectCategory.id) {
+      setListDataQuery(QUERIES.listApprovedThesisByCategory);
+      setVariables({ categoryId: selectCategory.id })
     }
-    getData();
   }, [selectCategory]);
 
   if (loading) {
-    return <p>Loading...</p>; // Render loading state
+    return <p>Loading...</p>;
   }
   if (error) return <p>Error: {error.message}</p>;
   return (
@@ -50,7 +36,7 @@ const ThesisPage = () => {
             All
           </Button>
         </Link>
-        {data.map((category) => {
+        {data.listThesisCategory.map((category) => {
           return (
             <div onClick={()=>{
               setSelectCategory(category)

@@ -1,6 +1,7 @@
 import { Image } from "@nextui-org/react";
 import { Tabs, Tab } from "@nextui-org/react";
 import { SearchIcon } from "../icons/SearchIcon";
+import { CameraIcon } from "../icons/CameraIcon";
 import { UploadIcon } from "../icons/UploadIcon";
 import {
   ModalFooter,
@@ -12,53 +13,166 @@ import {
   SelectItem,
   ModalHeader,
   Autocomplete,
-  AutocompleteItem,
   User,
-  Card
+  Card,
+  CardBody
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDropzone } from 'react-dropzone';
 import fetchData from '../util/fetchData';
 import QUERIES from '../util/queries';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import axios from "axios";
 
-const CreatePostForm = ({ onClose }) => {
+let classProjectPayload = {
+  classProject: {
+    title: '',
+    description: '',
+    classProjectCategory: '',
+    classProjectLink: '',
+    repositoryLink: '',
+    videoLink: '',
+    collaborators: [],
+  },
+  image: null
+}
+let thesisPayload = {
+  thesis: {
+    title: '',
+    description: '',
+    thesisCategory: '',
+    thesisLink: '',
+    repositoryLink: '',
+    videoLink: '',
+    teacher: '',
+    collaborators: [],
+  },
+  file: null,
+  image: null
+}
+const CreatePostForm = ({ onClose, onComplete }) => {
   const endpoint = process.env.REACT_APP_ENDPOINT;
-  // const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-  const amimals = [{ name: 'dog' }, { name: 'cat' }]
-  // const files = acceptedFiles.map(file => (
-  //   <Card className="p-3" shadow="sm" key={file.path}>
-  //     {file.path} - {file.size} bytes
-  //   </Card>
-  // ));
-
-  let payload = {
-    classProject: {
-      title: '',
-      description: '',
-      classProjectCategory: '',
-      classProjectLink: '',
-      repositoryLink: '',
-      videoLink: '',
-      collaborators: [],
-    },
-    file: null,
-    image: null
-  }
-
   const [uploadClassProject] = useMutation(QUERIES.createClassProject);
+  const [uploadThesis] = useMutation(QUERIES.createThesis);
+  const classProjectCategory = useQuery(QUERIES.listClassProjectCategory);
+  const thesisCategory = useQuery(QUERIES.listThesisCategory);
+  const [searchedUsers, setSearchedUsers] = useState([]);
+  const [searchedTeacher, setSearchedTeacher] = useState([]);
+  const [collaborator, setCollaborator] = useState([]);
+  const [teacher, setTeacher] = useState(null);
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const files = acceptedFiles.map(file => (
+    <Card className="p-3" shadow="sm" key={file.path}>
+      {file.path} - {file.size} bytes
+    </Card>
+  ));
 
-  async function createClassProject() {
+  async function searchStudent(input) {
     try {
-      const { data } = await uploadClassProject({ variables: payload });
+      const [responseData, error] = await fetchData(endpoint, QUERIES.searchStudents, { name: input });
+      if (error) {
+        throw new Error(error.message);
+      }
+      return responseData.searchStudents;
     } catch (error) {
       console.log(error);
     }
   }
-  const { loading, error, data } = useQuery(QUERIES.listClassProjectCategory);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  async function searchTeacher(input) {
+    try {
+      const [responseData, error] = await fetchData(endpoint, QUERIES.searchTeachers, { name: input });
+      if (error) {
+        throw new Error(error.message);
+      }
+      return responseData.searchTeachers;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const createClassProject = useCallback(async (event) => {
+    try {
+      const { data } = await uploadClassProject({ variables: classProjectPayload, ignoreResults: true });
+      if (data) {
+        const formData = new FormData();
+        acceptedFiles.forEach(file => {
+          formData.append('files', file); // Append each file individually
+        });
+        axios.post('http://localhost:4000/upload', formData)
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+        onComplete();
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [classProjectPayload, acceptedFiles])
+
+  const createThesis = useCallback(async (event) => {
+    try {
+      const { data } = await uploadThesis({ variables: thesisPayload, ignoreResults: true });
+      if (data) {
+        const formData = new FormData();
+        acceptedFiles.forEach(file => {
+          formData.append('files', file); // Append each file individually
+        });
+        axios.post('http://localhost:4000/upload', formData)
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+        onComplete();
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [thesisPayload, acceptedFiles])
+
+  const onSearchStudentInputChange = async (e) => {
+    const value = e.target.value;
+    if (value.length > 2) {
+      const result = await searchStudent(value);
+      setSearchedUsers(result);
+    }
+    else if (value.length === 0) {
+      setSearchedUsers([]);
+    }
+  }
+
+  const onSearchTeacherInputChange = async (e) => {
+    const value = e.target.value;
+    if (value.length > 2) {
+      const result = await searchTeacher(value);
+      setSearchedTeacher(result);
+    }
+    else if (value.length === 0) {
+      setSearchedTeacher([]);
+    }
+  }
+
+  const removeSearchedUser = (idToRemove) => {
+    classProjectPayload.classProject.collaborators = classProjectPayload.classProject.collaborators.filter(item => item !== idToRemove);
+    thesisPayload.thesis.collaborators = thesisPayload.thesis.collaborators.filter(item => item !== idToRemove);
+    const updatedUsers = collaborator.filter(item => item.id !== idToRemove);
+    setCollaborator(updatedUsers);
+  };
+  const [file, setFile] = useState("https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg");
+  const handleImageChange = (e) => {
+    classProjectPayload.image = e.target.files[0]
+    thesisPayload.image = e.target.files[0]
+    setFile(URL.createObjectURL(e.target.files[0]))
+  }
+  if (classProjectCategory.loading || thesisCategory.loading) return <p>Loading...</p>;
+  if (classProjectCategory.error || thesisCategory.error) return <p>Error: {classProjectCategory.error.message}</p>;
   return (
     <>
       <ModalHeader className="flex flex-col gap-1">Add new post</ModalHeader>
@@ -69,18 +183,26 @@ const CreatePostForm = ({ onClose }) => {
               type="text"
               label="Title"
               onValueChange={(value) => {
-                payload.classProject.title = value
+                classProjectPayload.classProject.title = value
+                thesisPayload.thesis.title = value
               }}
             />
             <Textarea
               label="Description"
               placeholder="Enter your description"
               onValueChange={(value) => {
-                payload.classProject.description = value
+                classProjectPayload.classProject.description = value
+                thesisPayload.thesis.description = value
               }}
             />
           </div>
-          <Image className="w-full h-44 rounded-lg object-cover" src="https://cdn.dribbble.com/users/59947/screenshots/17108611/muti_2.jpg" />
+          <div className="flex items-end">
+            <Image className="w-full h-44 rounded-lg object-cover" src={file} />
+            <label className="flex items-center justify-center border-2 rounded-full bg-gray-50 text-yellow-500 ml-[-15px] mt-[-2] z-50">
+              <CameraIcon />
+              <input type="file" onChange={handleImageChange} className="hidden" />
+            </label>
+          </div>
         </div>
         <Tabs
           fullWidth
@@ -89,16 +211,16 @@ const CreatePostForm = ({ onClose }) => {
           className="mt-5"
           color="primary"
         >
-          <Tab key="login" title="Class project">
+          <Tab key="login" title="Class project" aria-label="Tabs class projext">
             <div className="grid grid-cols-3 gap-2">
               <Select
                 label="Select a category"
                 className="mb-3"
                 onChange={(e) => {
-                  payload.classProject.classProjectCategory = e.target.value;
+                  classProjectPayload.classProject.classProjectCategory = e.target.value;
                 }}
               >
-                {data.listClassProjectCategory.map((category) => {
+                {classProjectCategory.data.listClassProjectCategory.map((category) => {
                   return (
                     <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
                   )
@@ -109,7 +231,7 @@ const CreatePostForm = ({ onClose }) => {
                 type="text"
                 label="Git repository"
                 onValueChange={(value) => {
-                  payload.classProject.repositoryLink = value
+                  classProjectPayload.classProject.repositoryLink = value
                 }}
               />
               <Input
@@ -117,35 +239,86 @@ const CreatePostForm = ({ onClose }) => {
                 type="text"
                 label="Video demo link"
                 onValueChange={(value) => {
-                  payload.classProject.videoLink = value
+                  classProjectPayload.classProject.videoLink = value
                 }}
               />
             </div>
             <div className="mb-3 grid grid-cols-1 place-items-start">
               <h3 className=" font-semibold text-lg">Collaborators</h3>
-              <Autocomplete
-                label="Select an animal"
-              >
-                {amimals.map((animal) => {
+              <Input
+                isClearable
+                onClear={() => setSearchedUsers([])}
+                onChange={onSearchStudentInputChange}
+                variant="bordered"
+                radius="full"
+                size="sm"
+                placeholder="Search for user"
+                startContent={<SearchIcon />}
+              />
+              <div className="mt-1 relative w-full">
+                {searchedUsers.length !== 0 && (
+                  <Card shadow="xl" className="absolute z-50 w-full py-2 px-2">
+                    {searchedUsers.map((user) => {
+                      return (
+                        <div key={user.id} className="flex items-center justify-between gap-2 py-1 px-2 rounded-lg duration-100 hover:bg-gray-200">
+                          <div className="flex items-center gap-2">
+                            <Image className="w-10 h-10 rounded-full" src="https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg" />
+                            <div>
+                              <p className="">{user.name}</p>
+                              <p className=" text-xs text-gray-400">{user.studentId}</p>
+                            </div>
+                          </div>
+                          <Button
+                            className="border-small mr-0.5 font-medium shadow-small"
+                            radius="full"
+                            size="sm"
+                            variant="bordered"
+                            onClick={() => {
+                              if (!collaborator.includes(user)) {
+                                setCollaborator([...collaborator, user]); 
+                                classProjectPayload.classProject.collaborators.push(user.id); 
+                                thesisPayload.thesis.collaborators.push(user.id) 
+                              }
+                            }}
+                          >
+                            Add
+                          </Button>
+                        </div>
+                      )
+                    })}
+                  </Card>
+                )}
+              </div>
+              <div className="mt-2">
+                {collaborator.map((user) => {
                   return (
-                    <AutocompleteItem key={animal.name} value={animal.name} data-disabled data-selectable='none'>
-                      <span>{animal.name}</span>
-                    </AutocompleteItem>
+                    <div key={user.id} className="flex items-center">
+                      <User
+                        name={(<h1 className="font-semibold">{user.name}</h1>)}
+                        description={user.studentId}
+                        className="my-0.5 mx-3"
+                        avatarProps={{
+                          src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                          size: 'md'
+                        }}
+                      />
+                      <Button
+                        className="border-small mr-0.5 font-medium shadow-small"
+                        radius="full"
+                        color="danger"
+                        size="sm"
+                        variant="bordered"
+                        onClick={() => { removeSearchedUser(user.id) }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
                   )
                 })}
-              </Autocomplete>
-              <User
-                name={(<h1 className="font-semibold">Ty Sophearum</h1>)}
-                description="e20191219"
-                className="my-2"
-                avatarProps={{
-                  src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
-                  size: 'md'
-                }}
-              />
+              </div>
             </div>
             <h3 className=" font-semibold text-lg mb-1">Reports</h3>
-            {/* <section className="border w-full rounded-lg p-5">
+            <section className="border w-full rounded-lg p-5">
               <div {...getRootProps({ className: 'dropzone' })} className="border border-primary bg-primary-50 text-gray-500 rounded p-3">
                 <input {...getInputProps()} />
                 <div className="grid grid-cols-1 place-items-center">
@@ -156,88 +329,216 @@ const CreatePostForm = ({ onClose }) => {
               <aside className="mt-3">
                 <div className="grid grid-cols-3 gap-2">{files}</div>
               </aside>
-            </section> */}
-            <input type="file" onChange={(e) => {
-              payload.file = e.target.files
-            }} />
+            </section>
+            {/* <input type="file" multiple onChange={(e) => {}} /> */}
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={() => onClose()}>
+                Close
+              </Button>
+              <Button color="primary" onClick={(e) => createClassProject(e)}>
+                Submit
+              </Button>
+            </ModalFooter>
           </Tab>
-          <Tab key="sign-up" title="Thesis">
+          <Tab key="sign-up" title="Thesis" aria-label="Tabs thesis">
             <div className="grid grid-cols-3 gap-2">
               <Select
                 label="Select a category"
                 className="mb-3"
+                onChange={(e) => {
+                  thesisPayload.thesis.thesisCategory = e.target.value;
+                }}
               >
-                <SelectItem>
-                  Web development
-                </SelectItem>
-                <SelectItem>
-                  Mobile development
-                </SelectItem>
-                <SelectItem>
-                  DevOp
-                </SelectItem>
+                {thesisCategory.data.listThesisCategory.map((category) => {
+                  return (
+                    <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                  )
+                })}
               </Select>
-              <Input className="mb-3" type="text" label="Git repository" />
-              <Input className="mb-3" type="text" label="Video demo link" />
+              <Input
+                className="mb-3"
+                type="text"
+                label="Git repository"
+                onValueChange={(value) => {
+                  thesisPayload.thesis.repositoryLink = value
+                }}
+              />
+              <Input
+                className="mb-3"
+                type="text"
+                label="Video demo link"
+                onValueChange={(value) => {
+                  thesisPayload.thesis.videoLink = value
+                }}
+              />
             </div>
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              <div className="mb-3 grid grid-cols-1 place-items-start">
+            <div className="grid grid-cols-2 place-items-start gap-3 mt-3">
+              <div className="mb-3 grid grid-cols-1 place-items-start w-full">
                 <h3 className=" font-semibold text-lg">Teacher</h3>
-                <Autocomplete
-                  label="Select an animal"
-                >
-                  {amimals.map((animal) => {
+                <Input
+                  isClearable
+                  onClear={() => setSearchedTeacher([])}
+                  onChange={onSearchTeacherInputChange}
+                  variant="bordered"
+                  radius="full"
+                  size="sm"
+                  placeholder="Search for user"
+                  startContent={<SearchIcon />}
+                />
+                <div className="mt-1 relative w-full">
+                  {searchedTeacher.length !== 0 && (
+                    <Card shadow="xl" className="absolute z-50 w-full py-2 px-2">
+                      {searchedTeacher.map((user) => {
+                        return (
+                          <div key={user.id} className="flex items-center justify-between gap-2 py-1 px-2 rounded-lg duration-100 hover:bg-gray-200">
+                            <div className="flex items-center gap-2">
+                              <Image className="w-10 h-10 rounded-full" src="https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg" />
+                              <div>
+                                <p className="">{user.name}</p>
+                                <p className=" text-xs text-gray-400">{user.studentId}</p>
+                              </div>
+                            </div>
+                            <Button
+                              className="border-small mr-0.5 font-medium shadow-small"
+                              radius="full"
+                              size="sm"
+                              variant="bordered"
+                              onClick={() => { setTeacher(user); thesisPayload.thesis.teacher = user.id }}
+                            >
+                              Add
+                            </Button>
+                          </div>
+                        )
+                      })}
+                    </Card>
+                  )}
+                </div>
+                <div className="mt-2">
+                  {teacher && (
+                      <div key={teacher.id} className="flex items-center">
+                        <User
+                          name={(<h1 className="font-semibold">{teacher.name}</h1>)}
+                          description={teacher.studentId}
+                          className="my-0.5 mx-3"
+                          avatarProps={{
+                            src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                            size: 'md'
+                          }}
+                        />
+                        <Button
+                          className="border-small mr-0.5 font-medium shadow-small"
+                          radius="full"
+                          color="danger"
+                          size="sm"
+                          variant="bordered"
+                          onClick={() => { setTeacher(null); thesisPayload.thesis.teacher = null }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    )}
+                </div>
+              </div>
+
+              <div className="mb-3 grid grid-cols-1 place-items-start w-full">
+                <h3 className=" font-semibold text-lg">Collaborators</h3>
+                <Input
+                  isClearable
+                  onClear={() => setSearchedUsers([])}
+                  onChange={onSearchStudentInputChange}
+                  variant="bordered"
+                  radius="full"
+                  size="sm"
+                  placeholder="Search for user"
+                  startContent={<SearchIcon />}
+                />
+                <div className="mt-1 relative w-full">
+                  {searchedUsers.length !== 0 && (
+                    <Card shadow="xl" className="absolute z-50 w-full py-2 px-2">
+                      {searchedUsers.map((user) => {
+                        return (
+                          <div key={user.id} className="flex items-center justify-between gap-2 py-1 px-2 rounded-lg duration-100 hover:bg-gray-200">
+                            <div className="flex items-center gap-2">
+                              <Image className="w-10 h-10 rounded-full" src="https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg" />
+                              <div>
+                                <p className="">{user.name}</p>
+                                <p className=" text-xs text-gray-400">{user.studentId}</p>
+                              </div>
+                            </div>
+                            <Button
+                              className="border-small mr-0.5 font-medium shadow-small"
+                              radius="full"
+                              size="sm"
+                              variant="bordered"
+                              onClick={() => {
+                                if (!collaborator.includes(user)) {
+                                  setCollaborator([...collaborator, user]); 
+                                  classProjectPayload.classProject.collaborators.push(user.id); 
+                                  thesisPayload.thesis.collaborators.push(user.id) 
+                                }
+                              }}
+                            >
+                              Add
+                            </Button>
+                          </div>
+                        )
+                      })}
+                    </Card>
+                  )}
+                </div>
+                <div className="mt-2">
+                  {collaborator.map((user) => {
                     return (
-                      <AutocompleteItem value={animal.name}>{animal.name}</AutocompleteItem>
+                      <div key={user.id} className="flex items-center">
+                        <User
+                          name={(<h1 className="font-semibold">{user.name}</h1>)}
+                          description={user.studentId}
+                          className="my-0.5 mx-3"
+                          avatarProps={{
+                            src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                            size: 'md'
+                          }}
+                        />
+                        <Button
+                          className="border-small mr-0.5 font-medium shadow-small"
+                          radius="full"
+                          color="danger"
+                          size="sm"
+                          variant="bordered"
+                          onClick={() => { removeSearchedUser(user.id) }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
                     )
                   })}
-                </Autocomplete>
-                <User
-                  name={(<h1 className="font-semibold">Ty Sophearum</h1>)}
-                  description="e20191219"
-                  className="my-2"
-                  avatarProps={{
-                    src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
-                    size: 'md'
-                  }}
-                />
-              </div>
-              <div className="mb-3">
-                <h3 className=" font-semibold text-lg">Collaborators</h3>
-                <Autocomplete
-                  placeholder="Search for users"
-                  startContent={<SearchIcon />}
-                  radius="full"
-                  size="xs"
-                >
-                  {/* {users.map((user) => (
-                    <AutocompleteItem key={user.name}>
-                      dfgsf
-                    </AutocompleteItem>
-                  ))} */}
-                </Autocomplete>
-                <User
-                  name={(<h1 className="font-semibold">Ty Sophearum</h1>)}
-                  description="e20191219"
-                  className="my-2"
-                  avatarProps={{
-                    src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
-                    size: 'md'
-                  }}
-                />
+                </div>
               </div>
             </div>
+            <h3 className=" font-semibold text-lg mb-1">Reports</h3>
+            <section className="border w-full rounded-lg p-5">
+              <div {...getRootProps({ className: 'dropzone' })} className="border border-primary bg-primary-50 text-gray-500 rounded p-3">
+                <input {...getInputProps()} />
+                <div className="grid grid-cols-1 place-items-center">
+                  <UploadIcon width={60} height={60} />
+                  <p>Drag & Drop or Choose file to upload</p>
+                </div>
+              </div>
+              <aside className="mt-3">
+                <div className="grid grid-cols-3 gap-2">{files}</div>
+              </aside>
+            </section>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={() => onClose()}>
+                Close
+              </Button>
+              <Button color="primary" onClick={(e) => { createThesis(e) }}>
+                Submit
+              </Button>
+            </ModalFooter>
           </Tab>
         </Tabs>
       </ModalBody>
-      <ModalFooter>
-        <Button color="danger" variant="light" onPress={() => { console.log(data) }}>
-          Close
-        </Button>
-        <Button color="primary" onClick={() => createClassProject()}>
-          Submit
-        </Button>
-      </ModalFooter>
     </>
   )
 }
