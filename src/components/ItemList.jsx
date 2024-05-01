@@ -5,10 +5,10 @@ import ItemCard from "./ItemCard";
 import ItemCard2 from "./ItemCard2";
 import { useQuery } from "@apollo/client";
 
-const ItemList = ({ query, variable, title, baseLink }) => {
+const ItemList = ({ query, variables, title, type }) => {
   let [grid, setGrid] = useState(true);
   const [data, setData] = useState([]);
-  const { loading, error, data: response } = useQuery(query, {variables: variable});
+  const { loading, error, data: response } = useQuery(query, {variables});
 
   useEffect(() => {
     if (typeof response !== 'undefined') {
@@ -16,7 +16,7 @@ const ItemList = ({ query, variable, title, baseLink }) => {
       const [[key, res]] = resArray;
       setData(res.data);
     }
-  }, [query, variable, loading]);
+  }, [query, variables, loading]);
 
   if (loading) {
     return <p>Loading...</p>; // Render loading state
@@ -51,13 +51,13 @@ return (
       {grid ? (
         <div className="gap-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2">
           {data?.map((item, index) => (
-            <ItemCard2 baseLink={baseLink} document={item} key={index} /> // Don't forget to add key prop
+            <ItemCard2 type={type} document={item} key={index} /> // Don't forget to add key prop
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 place-items-center">
           {data?.map((item, index) => (
-            <ItemCard baseLink={baseLink} document={item} key={index} /> // Don't forget to add key prop
+            <ItemCard type={type} document={item} key={index} /> // Don't forget to add key prop
           ))}
         </div>
       )}

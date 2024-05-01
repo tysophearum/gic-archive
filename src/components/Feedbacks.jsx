@@ -1,46 +1,75 @@
 import { Avatar, Button, Textarea, User } from '@nextui-org/react';
+import { useMutation, useQuery } from '@apollo/client';
+import QUERIES from '../util/queries';
+import { useState, useEffect } from 'react';
+import { PaperPlaneIcon } from '../icons/PaperPlaneIcon';
 
-const Feedbacks = () => {
+const Feedbacks = ({id, type}) => {
+  const [data, setData] = useState([]);
+  const [feedback, setFeedback] = useState('');
+  const { data: response, loading, error, refetch } = useQuery(type === 'classProject' ? QUERIES.listClassProjectFeedback : QUERIES.listThesisFeedback, {
+    variables: {
+      documentId: id
+    }
+  });
+  const [createClassProjectFeedback] = useMutation(QUERIES.createClassProjectFeedback);
+  const [createThesisFeedback] = useMutation(QUERIES.createThesisFeedback);
+
+  const handleCreateFeedback = async () => {
+    if (feedback === '') {
+      return;
+    }
+    try {
+      if (type === 'classProject') {
+        const { data: resData } = await createClassProjectFeedback({ variables: { classProjectFeedback: {classProject: id, feedback: feedback} } });
+        if (resData) {
+          setFeedback('');
+          setData([...data, resData.createClassProjectFeedback])
+        }
+      }
+      else if (type === 'thesis') {
+        const { data: resData } = await createThesisFeedback({ variables: { thesisFeedback: {thesis: id, feedback: feedback} } });
+        if (resData) {
+          setFeedback('');
+          setData([...data, resData.createThesisFeedback])
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (response) {
+      const resArray = Object.entries(response);
+      const [[key, res]] = resArray;
+      setData(res.feedbacks);
+    }
+  }, [response])
+
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error: {error.message}</p>
   return (
     <>
-      <h2 className=" text-xl font-semibold mb-2">Feedbacks </h2>
+      <div className='flex justify-between'>
+        <h2 className=" text-xl font-semibold mb-2">Feedbacks</h2>
+        <button onClick={() => refetch()}>Refresh</button>
+      </div>
       <div>
-        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
-          <Avatar
-            className="transition-transform mr-3"
-            color="primary"
-            name="Jason Hughes"
-            size='md'
-            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
-          <div className='w-full'>
-            <span className='font-semibold'>Ty Sophearum</span>
-            <p className='text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, sint voluptas enim accusamus expedita nam asperiores aspernatur quia mollitia maxime officiis maiores suscipit possimus sequi, minima consectetur corrupti deleniti voluptatibus?</p>
+        {data && data.map(feedback => (
+          <div className="flex my-3 bg-gray-50 rounded-lg p-2">
+            <Avatar
+              className="transition-transform mr-3"
+              color="primary"
+              name="Jason Hughes"
+              size='md'
+              src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
+            <div className='w-full'>
+              <span className='font-semibold'>{feedback.user.name}</span>
+              <p className='text-sm'>{feedback.feedback}</p>
+            </div>
           </div>
-        </div>
-        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
-          <Avatar
-            className="transition-transform mr-3"
-            color="primary"
-            name="Jason Hughes"
-            size='md'
-            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
-          <div className='w-full'>
-            <span className='font-semibold'>Ty Sophearum</span>
-            <p className='text-sm'>Lorem ipsum dolor sit aoluptas enim accusamus expedita nam asperiores aspernataiores suscipit possimus sequi, minima consectetur corrupti deleniti voluptatibus?</p>
-          </div>
-        </div>
-        <div className="flex my-3 bg-gray-50 rounded-lg p-2">
-          <Avatar
-            className="transition-transform mr-3"
-            color="primary"
-            name="Jason Hughes"
-            size='md'
-            src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
-          <div className='w-full'>
-            <span className='font-semibold'>Ty Sophearum</span>
-            <p className='text-sm'>Lorem ipsum dolor sit amet s?</p>
-          </div>
-        </div>
+        ))}
       </div>
       <div className="flex mb-2">
         <Avatar
@@ -48,12 +77,21 @@ const Feedbacks = () => {
           color="primary"
           name="Jason Hughes"
           src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
-        <Textarea
-          label="Feedback"
-          placeholder="Enter your feedback"
-          className="w-full"
-          validate={'bordered'}
-          color='primary' />
+        <div className="relative w-full">
+          <Textarea
+            label="Feedback"
+            placeholder="Enter your feedback"
+            className="w-full"
+            validate={'bordered'}
+            color='primary' 
+            value={feedback}
+            onValueChange={(value) => setFeedback(value)}
+          />
+            <Button onClick={handleCreateFeedback} className="absolute flex items-center bottom-0 right-0 m-2 px-2 py-1 bg-blue-500 text-white rounded">
+              <PaperPlaneIcon /> 
+              <span>Send</span>
+            </Button>
+        </div>
       </div>
     </>
   )

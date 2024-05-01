@@ -7,7 +7,7 @@ import { StarIcon } from '../icons/StarIcon';
 import { Link } from 'react-router-dom'
 import unixToTime from '../util/unixToTime';
 
-const ItemCard = ({ document, baseLink }) => {
+const ItemCard = ({ document, type }) => {
   // // Initialize state for the liked status
   // const [liked, setLiked] = useState(false);
 
@@ -18,7 +18,7 @@ const ItemCard = ({ document, baseLink }) => {
   // };
 
   return (
-    <Link to={baseLink+'/'+document.id} className='rounded-xl mb-4 duration-150 hover:shadow-gray-100 hover:shadow-xl w-full'>
+    <Link to={'/'+type+'/'+document.id} className='rounded-xl mb-4 duration-150 hover:shadow-gray-100 hover:shadow-xl w-full'>
       <Card shadow='sm'>
         <CardBody className='grid md:grid-cols-[17%,57%,17%] gap-7 place-items-start p-4 sm:grid-cols-1s'>
           <Image isZoomed className='rounded object-cover md:w-56 w-full h-44' alt='#' src='https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg' />
@@ -26,7 +26,7 @@ const ItemCard = ({ document, baseLink }) => {
             <h5 className='text-xl font-medium text-gray-900'>{document.title}</h5>
             <div className='flex items-center text-sm text-gray-600 my-2'>
               <Avatar className="w-6 h-6 text-tiny" />
-              <a href='www.example.com' className='ml-2 hover:underline'>{document.user.name}</a>
+              <Link to={'/profile/' + document.user.id} className='ml-2 hover:underline'>{document.user.name}</Link>
               <DotIcon />
               <span>{unixToTime(document.createdAt)}</span>
             </div>
@@ -43,7 +43,6 @@ const ItemCard = ({ document, baseLink }) => {
               className={`text-white ${document.liked ? 'bg-yellow-500 text-white' : 'text-yellow-600'} mb-3`}
               variant='bordered'
               startContent={<StarIcon height={20} width={20} />}
-            // onClick={handleLikeClick}
             >
               {document.likeAmount}
             </Button>

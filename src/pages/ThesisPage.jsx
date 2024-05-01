@@ -11,6 +11,7 @@ const ThesisPage = () => {
   const [listDataQuery, setListDataQuery] = useState(QUERIES.listApprovedThesis);
   const [variables, setVariables] = useState();
   const { loading, error, data } = useQuery(QUERIES.listThesisCategory);
+  const featuredThesis = useQuery(QUERIES.listFeaturedThesis);
 
   useEffect(() => {
     if (selectCategory.id) {
@@ -19,10 +20,13 @@ const ThesisPage = () => {
     }
   }, [selectCategory]);
 
-  if (loading) {
+  if (loading || featuredThesis.loading) {
     return <p>Loading...</p>;
   }
-  if (error) return <p>Error: {error.message}</p>;
+  if (error || featuredThesis.error) return (
+    <><p>Error: {error.message}</p>
+    <p>Error: {featuredThesis.error.message}</p></>
+  );
   return (
     <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
       <div className="mt-3 flex justify-start">
@@ -48,8 +52,8 @@ const ThesisPage = () => {
           )
         })}
       </div>
-      <Banner />
-      <ItemList baseLink={'/thesis'} query={listDataQuery} variable={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
+      <Banner type={'thesis'}/>
+      <ItemList type={'thesis'} query={listDataQuery} variable={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
     </div>
   );
 };

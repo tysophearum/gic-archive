@@ -1,5 +1,4 @@
 import { Image } from "@nextui-org/react";
-import { EmailIcon } from "../icons/EmailIcon";
 import { AddIcon } from "../icons/AddIcon";
 import { CameraIcon } from "../icons/CameraIcon";
 import {
@@ -11,142 +10,194 @@ import {
   Textarea,
   Select,
   SelectItem,
-  Chip,
+  Tooltip,
+  Avatar
 } from "@nextui-org/react";
-import React, { useState } from "react";
-import { useDropzone } from 'react-dropzone';
+import { DeleteIcon } from "../icons/DeleteIcon";
+import React, { useCallback, useState } from "react";
+import QUERIES from "../util/queries";
+import { useMutation } from "@apollo/client";
 
-const EditProfileForm = ({ onClose }) => {
-  const [file, setFile] = useState("https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg");
+const EditProfileForm = ({ onClose, user }) => {
+  const [image, setImage] = useState("https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg");
+  const [coverImage, setCoverImage] = useState("https://www.creativefabrica.com/wp-content/uploads/2021/08/16/flat-landscape-the-mountains-color-blue-Graphics-15913422-1.jpg");
+  const [name, setName] = useState(user.name);
+  const [studentId, setStudentId] = useState(user.studentId);
+  const [bio, setBio] = useState(user.bio);
+  const [gender, setGender] = useState(user.gender);
+  const [email, setEmail] = useState(user.email);
+  const [contacts, setContact] = useState(user.contacts);
+  const [tags, setTags] = useState(user.tags);
+  const [updateMyProfile] = useMutation(QUERIES.updateMyProfile);
+
   const handleChange = (e) => {
-    setFile(URL.createObjectURL(e.target.files[0]))
+    setImage(URL.createObjectURL(e.target.files[0]))
   }
+  const handleCoverChange = (e) => {
+    setCoverImage(URL.createObjectURL(e.target.files[0]))
+  }
+  const handleContactTypeChange = (index, newValue) => {
+    const newArray = [...contacts];
+    newArray[index].type = newValue;
+    setContact(newArray);
+  };
+  const handleContactValueChange = (index, newValue) => {
+    const newArray = [...contacts];
+    newArray[index].value = newValue;
+    setContact(newArray);
+  };
+  const handleTagChange = (index, newValue) => {
+    const newArray = [...tags];
+    newArray[index] = newValue;
+    setTags(newArray);
+  };
+
+  const updateProfile = useCallback(async () => {
+    try {
+      const contactNoTypename = contacts.map(({ __typename, ...rest }) => rest);
+      const user = {
+        name,
+        studentId,
+        bio,
+        gender,
+        email,
+        contacts: contactNoTypename,
+        tags,
+      };
+      const response = await updateMyProfile({
+        variables: {user},
+        ignoreResults: true
+      });
+      onClose();
+    } catch (error) {
+      console.log(JSON.stringify(error, null, 2));
+    }
+  }, [name, studentId, bio, gender, email, contacts, tags])
+
   return (
     <>
       <ModalBody>
-        <div className="flex items-center justify-between px-5">
-          <div className="flex flex-col">
-            <input value="Ty Sophearum" className=" text-4xl font-semibold" /><div className="h-5"></div>
-            <span className="text-xl">ID: <input value="e20191219" /></span>
+        <div className="flex flex-col items-center px-5">
+          <div className="flex flex-col items-end mb-[-140px]">
+            <Image radius="lg" className="h-[40vh] md:w-[80vw] w-[100vw] object-cover z-0" src={coverImage} />
+            <label className="flex items-center justify-center border-2 rounded-full bg-gray-50 text-yellow-500 mt-[-15px] z-50">
+              <CameraIcon />
+              <input type="file" onChange={handleCoverChange} className="hidden" />
+            </label>
           </div>
           <div className="flex items-end">
-            <Image
-              isBlurred
-              width={150}
-              height={150}
-              radius="full"
-              src={file}
-              alt="NextUI Album Cover"
-              className="mt-5 ml-5 object-cover"
-            />
-            <label className="flex items-center justify-center border-2 rounded-full bg-gray-50 text-yellow-500 ml-[-15px] mt-[-2] z-50">
+            <Avatar
+              className="w-40 h-40"
+              src={image} />
+            <label className="flex items-center justify-center border-2 rounded-full bg-gray-50 text-yellow-500 ml-[-40px] mt-[-2] z-50">
               <CameraIcon />
               <input type="file" onChange={handleChange} className="hidden" />
             </label>
-            {/* <Button type="file" className="ml-[-15px] mt-[-2] z-50" radius="full" isIconOnly color="warning" size="sm" variant="faded" aria-label="Take a photo">
-              <CameraIcon />
-            </Button> */}
+          </div>
+          <div className="flex flex-col items-center mt-2 gap-1">
+            <input value={name} onChange={(e) => setName(e.target.value)} className="text-xl font-semibold text-center border-b outline-none focus:border-blue-500" />
+            <input value={studentId} onChange={(e) => setStudentId(e.target.value)} className=" text-center border-b outline-none focus:border-blue-500" />
           </div>
         </div>
         <Divider />
-        <div className="grid grid-cols-2 gap-1 px-5">
-          <div className="grid grid-cols-1 gap-4">
-            <div>
-              <h3 className=" font-semibold text-lg mb-1">Bio</h3>
-              <Textarea
-                placeholder="Enter your description"
-                value="Built with a native <input> element.
-                Visual and ARIA labeling support.
-                Change, clipboard, composition, selection, and input event support."
-                className="max-w-xs"
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <h3 className=" font-semibold text-lg mb-1">Bio</h3>
+            <Textarea
+              value={bio}
+              onValueChange={(value) => setBio(value)}
+              placeholder="Enter your description"
+            />
+          </div>
+          <div>
+            <h3 className=" font-semibold text-lg mb-1">Gender</h3>
+            <Select
+              label="Select a gender"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <SelectItem value="male">
+                male
+              </SelectItem>
+              <SelectItem value="female">
+                female
+              </SelectItem>
+            </Select>
+          </div>
+          <div>
+            <h3 className=" font-semibold text-lg mb-1">Contacts</h3>
+            <div className="grid grid-cols-[20%,80%] gap-x-1 gap-y-2 place-items-center">
+              <Input
+                isReadOnly
+                type="email"
+                variant="bordered"
+                defaultValue="Email"
+              />
+              <Input
+                type="email"
+                variant="bordered"
+                placeholder="Enter your email"
+                onValueChange={(value) => setEmail(value)}
+                value={email}
               />
             </div>
-            <div>
-              <h3 className=" font-semibold text-lg mb-1">Gender</h3>
-              <Select
-                label="Select a gender"
-                className="max-w-xs"
-              >
-                <SelectItem value="male">
-                  male
-                </SelectItem>
-                <SelectItem value="female">
-                  female
-                </SelectItem>
-              </Select>
-            </div>
-            <div>
-              <h3 className=" font-semibold text-lg mb-1">Year</h3>
-              <Select
-                label="Select a gender"
-                className="max-w-xs"
-              >
-                <SelectItem value="male">
-                  I1
-                </SelectItem>
-                <SelectItem value="female">
-                  I2
-                </SelectItem>
-                <SelectItem value="male">
-                  I3
-                </SelectItem>
-                <SelectItem value="female">
-                  I4
-                </SelectItem>
-                <SelectItem value="male">
-                  I5
-                </SelectItem>
-                <SelectItem value="female">
-                  M1
-                </SelectItem>
-                <SelectItem value="female">
-                  M2
-                </SelectItem>
-              </Select>
+            {contacts.map((contact, index) => (
+              <div key={index} className="grid grid-cols-[20%,72%,8%] place-items-center gap-x-1 gap-y-2 mt-2">
+                <Input
+                  type="email"
+                  variant="bordered"
+                  value={contact.type}
+                  onValueChange={(value) => handleContactTypeChange(index, value)}
+                />
+                <Input
+                  variant="bordered"
+                  value={contact.value}
+                  onValueChange={(value) => handleContactValueChange(index, value)}
+                />
+                <Tooltip color="danger" content="Delete contact">
+                  <span onClick={() => setContact(contacts.filter((_, i) => i !== index))} className="text-lg text-danger cursor-pointer active:opacity-50">
+                    <DeleteIcon />
+                  </span>
+                </Tooltip>
+              </div>
+            ))}
+            <div className="pt-3 flex justify-center ">
+              {contacts.some(contact => contact.type === "" || contact.value === "") ?
+                (
+                  <Tooltip placement="right" color="danger" content="There's an empty contact field">
+                    <button className="hover:text-red-600 my-1"><AddIcon width={25} height={25} /></button>
+                  </Tooltip>
+                ) : (
+                  <Tooltip placement="right" color="primary" content="Add contact">
+                    <button onClick={() => setContact([...contacts, { type: '', value: '' }])} className="hover:text-blue-600"><AddIcon width={25} height={25} /></button>
+                  </Tooltip>
+                )
+              }
             </div>
           </div>
           <div>
-            <div className="grid grid-cols-1">
-              <div>
-                <h3 className=" font-semibold text-lg mb-1">Contacts</h3>
-                <div className="grid grid-cols-[10%,20%,70%] gap-x-1 gap-y-2 place-items-center">
-                  <EmailIcon width={30} height={30} />
-                  <Input
-                    isReadOnly
-                    type="email"
-                    variant="bordered"
-                    defaultValue="Email"
-                    className="max-w-xs"
-                  />
-                  <Input
-                    isReadOnly
-                    type="email"
-                    variant="bordered"
-                    defaultValue="junior@nextui.org"
-                    className="max-w-xs"
-                  />
-                  <AddIcon width={30} height={30} />
-                  <Input
-                    type="email"
-                    variant="bordered"
-                    defaultValue="Email"
-                    className="max-w-xs"
-                  />
-                  <Input
-                    type="email"
-                    variant="bordered"
-                    defaultValue="junior@nextui.org"
-                    className="max-w-xs"
-                  />
-                </div>
+            <h3 className=" font-semibold text-lg my-1">Tags</h3>
+            {tags.map((tag, index) => (
+              <div key={index} className="flex items-center">
+                <input type="text" value={tag} onChange={(e) => handleTagChange(index, e.target.value)} className="mr-2 bg-blue-500 border-2 border-blue-500 text-white text-center my-1 py-1 rounded-full outline-none focus:bg-white focus:text-black" />
+                <Tooltip color="danger" content="Delete tag">
+                  <span onClick={() => setTags(tags.filter((_, i) => i !== index))} className="text-lg text-danger cursor-pointer active:opacity-50">
+                    <DeleteIcon />
+                  </span>
+                </Tooltip>
               </div>
-              <h3 className=" font-semibold text-lg my-1">Tags</h3>
-              <div>
-                <Chip color="primary" size="lg" className="my-1">Web Developer</Chip><br />
-                <Chip color="primary" size="lg" className="my-1">DevOp</Chip><br />
-                <Chip color="primary" size="lg" className="my-1">Another Skill</Chip><br />
-              </div>
-            </div>
+            ))}
+            {tags.includes('') ?
+              (
+                <Tooltip placement="under" color="danger" content="There's an empty tag">
+                  <button className="hover:text-red-600 my-1"><AddIcon width={25} height={25} /></button>
+                </Tooltip>
+              ) : (
+                <Tooltip placement="under" color="primary" content="Add tag">
+                  <button onClick={() => setTags([...tags, ''])} className="hover:text-blue-600 my-1"><AddIcon width={25} height={25} /></button>
+                </Tooltip>
+              )
+            }
           </div>
         </div>
       </ModalBody>
@@ -154,7 +205,7 @@ const EditProfileForm = ({ onClose }) => {
         <Button color="danger" variant="light" onPress={onClose}>
           Close
         </Button>
-        <Button color="primary" onPress={onClose}>
+        <Button color="primary" onPress={updateProfile}>
           Save
         </Button>
       </ModalFooter>

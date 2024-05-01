@@ -1,15 +1,25 @@
 import React from "react";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Input, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Image } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Input, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Image, Button } from "@nextui-org/react";
 import { DownLine } from "../icons/DownLine";
 import { SearchIcon } from "../icons/SearchIcon";
 import { useState } from "react";
 import {useTheme} from "next-themes";
 import { Link } from "react-router-dom";
+import QUERIES from "../util/queries";
+import { useQuery } from "@apollo/client";
+import { useLocation } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [tab, setTab] = useState('home')
-  const { setTheme } = useTheme()
+  const [tab, setTab] = useState('home');
+  const { setTheme } = useTheme();
+  const { loading, error, data } = useQuery(QUERIES.getMe);
+  const location = useLocation();
+
+  const handleLogOut = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/thesis';
+  }
 
   return (
     <Navbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen} maxWidth="xl" height={'4.5rem'}>
@@ -26,18 +36,18 @@ const Header = () => {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-12" justify="end">
-        <NavbarItem isActive={tab==='home'} onClick={() => setTab('home')} >
-          <Link to='/home' className={`${tab==='home' ? 'text-blue-500' : ''} cursor-pointer`}>
+        <NavbarItem isActive={location.pathname.startsWith('/home')} onClick={() => setTab('home')} >
+          <Link to='/home' className={`${location.pathname.startsWith('/home') ? 'text-blue-500' : ''} cursor-pointer`}>
               Home
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={tab==='classProject'} onClick={() => setTab('classProject')} className={`${tab==='classProject' ? 'text-blue-500' : ''} cursor-pointer`}>
-          <Link to='/classProject' className={`${tab==='classProject' ? 'text-blue-500' : ''} cursor-pointer`}>
+        <NavbarItem isActive={location.pathname.startsWith('/classProject')} onClick={() => setTab('classProject')} className={`${tab==='classProject' ? 'text-blue-500' : ''} cursor-pointer`}>
+          <Link to='/classProject' className={`${location.pathname.startsWith('/classProject') ? 'text-blue-500' : ''} cursor-pointer`}>
             Class Project
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={tab==='thesis'} onClick={() => setTab('thesis')} className={`${tab==='thesis' ? 'text-blue-500' : ''} cursor-pointer`}>
-          <Link to='/thesis' className={`${tab==='thesis' ? 'text-blue-500' : ''} cursor-pointer`}>
+        <NavbarItem isActive={location.pathname.startsWith('/thesis')} onClick={() => setTab('thesis')} className={`${tab==='thesis' ? 'text-blue-500' : ''} cursor-pointer`}>
+          <Link to='/thesis' className={`${location.pathname.startsWith('/thesis') ? 'text-blue-500' : ''} cursor-pointer`}>
             Thesis
           </Link>
         </NavbarItem>
@@ -61,35 +71,43 @@ const Header = () => {
           startContent={<SearchIcon size={18} />}
           type="search"
         />
-        <Dropdown placement="bottom-end">
-          <DropdownTrigger>
-            <Avatar
-              isBordered
-              as="button"
-              className="transition-transform"
-              color="primary"
-              name="Jason Hughes"
-              size="sm"
-              src="https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg"
-            />
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="gap-2">
-              <Link to='/profile'>
-                <div className="border w-80 rounded-lg h-fit flex flex-col items-center">
-                  <Image className="w-16 rounded-full mb-2 mt-4" src="https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg"/>
-                  <h2 className="text-lg font-semibold mt-2 mb-4">Ty Sophearum</h2>
-                </div>
-              </Link>
-            </DropdownItem>
-            <DropdownItem key="settings"><Link to='/profile'>My Profile</Link></DropdownItem>
-            <DropdownItem onClick={() => setTheme('light')} key="settings">Light Mode</DropdownItem>
-            <DropdownItem onClick={() => setTheme('dark')} key="settings">Dark Mode</DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        {data ? (
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                isBordered
+                as="button"
+                className="transition-transform"
+                color="primary"
+                name="Jason Hughes"
+                size="sm"
+                src="https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg"
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem key="profile" className="gap-2">
+                <Link to='/profile'>
+                  <div className="border w-80 rounded-lg h-fit flex flex-col items-center">
+                    <Image className="w-16 rounded-full mb-2 mt-4" src="https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg"/>
+                    <h2 className="text-lg font-semibold mt-2 mb-4">{data?.getMe.name}</h2>
+                  </div>
+                </Link>
+              </DropdownItem>
+              {data.getMe.role == 'teacher' && (
+                <DropdownItem key="settings"><Link to='/teacherDashboard'>Teacher dashboard</Link></DropdownItem>
+              )}
+              <DropdownItem onClick={() => setTheme('light')} key="settings">Light Mode</DropdownItem>
+              <DropdownItem onClick={() => setTheme('dark')} key="settings">Dark Mode</DropdownItem>
+              <DropdownItem key="logout" color="danger" onClick={handleLogOut}>
+                Log Out
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        ) : (
+          <Link to='/login'>
+            <div>Log in</div>
+          </Link>
+        )}
       </NavbarContent>
       <NavbarMenu>
         <NavbarMenuItem >

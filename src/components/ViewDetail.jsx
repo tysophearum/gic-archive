@@ -5,6 +5,7 @@ import { GithubIcon } from '../icons/GithubIcon';
 import ViewTextArea from './ViewTextArea';
 import unixToTime from '../util/unixToTime';
 import { useQuery } from '@apollo/client';
+import { Link } from 'react-router-dom';
 
 const ViewDetail = ({ query, variables }) => {
   const [data, setData] = useState(null);
@@ -43,41 +44,49 @@ const ViewDetail = ({ query, variables }) => {
           </div>
           <h2 className=" text-xl font-semibold mt-10 mb-2">Posted by </h2>
           <div className="flex items-center">
-            <User
-              key={data.user.id}
-              name={(<h1 className="font-semibold">{data.user.name}</h1>)}
-              description={data.user.studentId}
-              className="my-2 text-lg"
-              avatarProps={{
-                src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
-              }} />
+            <Link to={'/profile/' + data.user.id}>
+              <User
+                key={data.user.id}
+                name={(<h1 className="font-semibold">{data.user.name}</h1>)}
+                description={data.user.studentId}
+                className="my-2 text-lg"
+                avatarProps={{
+                  src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                }} />
+            </Link>
           </div>
           {data.teacher && (
             <>
               <h2 className=" text-xl font-semibold mt-4 mb-2">Teacher </h2>
               <div className="flex items-center">
-                <User
-                  key={data.teacher.id}
-                  name={(<h1 className="font-semibold">{data.teacher.name}</h1>)}
-                  description={data.teacher.studentId}
-                  className="my-2 text-lg"
-                  avatarProps={{
-                    src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
-                  }} />
+                <Link to={'/profile/' + data.teacher.id}>
+                  <User
+                    key={data.teacher.id}
+                    name={(<h1 className="font-semibold">{data.teacher.name}</h1>)}
+                    description={data.teacher.studentId}
+                    className="my-2 text-lg"
+                    avatarProps={{
+                      src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                    }} />
+                </Link>
               </div>
             </>
           )}
           <h2 className=" text-xl font-semibold mt-4 mb-2">Collaborated by </h2>
           <div className='grid grid-cols-1 gap-1 place-items-start'>
             {data.collaborators.map((collaborator) => {
-              return (<User
-                key={collaborator.id}
-                name={(<h1 className="font-semibold">{collaborator.name}</h1>)}
-                description={collaborator.studentId}
-                className="my-1 text-lg"
-                avatarProps={{
-                  src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
-                }} />);
+              return (
+                <Link key={collaborator.id} to={'/profile/' + collaborator.id}>
+                  <User
+                    key={collaborator.id}
+                    name={(<h1 className="font-semibold">{collaborator.name}</h1>)}
+                    description={collaborator.studentId}
+                    className="my-1 text-lg"
+                    avatarProps={{
+                      src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                    }} />
+                </Link>
+              );
             })}
           </div><h2 className=" text-xl font-semibold mt-10 mb-2">Citation </h2><p className="text-zinc-700 mb-10">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas, in. Sapiente, sed perspiciatis, neque quam quisquam animi nisi soluta sunt dolor, ea esse consectetur. Sunt aliquam harum iste expedita quo?</p>
         </>

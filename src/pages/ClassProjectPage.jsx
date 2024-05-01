@@ -11,6 +11,7 @@ const ClassProjectPage = () => {
   const [listDataQuery, setListDataQuery] = useState(QUERIES.listApprovedClassProject);
   const [variables, setVariables] = useState();
   const { loading, error, data } = useQuery(QUERIES.listClassProjectCategory);
+  const featuredClassProject = useQuery(QUERIES.listFeaturedClassProject);
 
   useEffect(() => {
     if (selectCategory.id) {
@@ -19,9 +20,11 @@ const ClassProjectPage = () => {
     }
   }, [selectCategory]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  if (!data) return <p>No data</p>;
+  if (loading || featuredClassProject.loading) return <p>Loading...</p>;
+  if (error || featuredClassProject.error) return (
+    <><p>Error: {error.message}</p>
+    <p>Error: {featuredClassProject.error.message}</p></>
+  );
   return (
     <>
       <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
@@ -50,8 +53,8 @@ const ClassProjectPage = () => {
             })
           }
         </div>
-        <Banner />
-        <ItemList baseLink={'/classProject'} query={listDataQuery} variable={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
+        <Banner type={'classProject'}/>
+        <ItemList type={'classProject'} query={listDataQuery} variables={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
       </div>
     </>
   );

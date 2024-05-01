@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, useDisclosure, Modal, ModalContent } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, useDisclosure, Modal, ModalContent, Pagination } from "@nextui-org/react";
 import { EditIcon } from "../icons/EditIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { EyeIcon } from "../icons/EyeIcon";
@@ -15,12 +15,14 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-export default function PendingPostTable({fetchData}) {
-  const viewPopup = useDisclosure();
+export default function PendingPostTable({ fetchData }) {
+  const viewThesisPopup = useDisclosure();
+  const viewClassProjectPopup = useDisclosure();
   const classProjectResponse = useQuery(QUERIES.listMyUnapprovedClassProject);
   const thesisResponse = useQuery(QUERIES.listMyUnapprovedThesis);
   const [variable, setVariable] = useState(null);
   const [viewQuery, setViewQuery] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const [deleteClassProject] = useMutation(QUERIES.deleteClassProject);
   const [deleteThesis] = useMutation(QUERIES.deleteThesis);
 
@@ -32,7 +34,7 @@ export default function PendingPostTable({fetchData}) {
   const handleDeleteClassProject = async (classProjectId) => {
     console.log("here");
     try {
-      const {data} = await deleteClassProject({ variables: { classProjectId } });
+      const { data } = await deleteClassProject({ variables: { classProjectId } });
       classProjectResponse.refetch()
       console.log(data);
     } catch (error) {
@@ -43,7 +45,7 @@ export default function PendingPostTable({fetchData}) {
   const handleDeleteThesis = async (thesisId) => {
     console.log("here");
     try {
-      const {data} = await deleteThesis({ variables: { thesisId } });
+      const { data } = await deleteThesis({ variables: { thesisId } });
       thesisResponse.refetch()
       console.log(data);
     } catch (error) {
@@ -94,19 +96,19 @@ export default function PendingPostTable({fetchData}) {
                   <div className="relative flex items-center gap-2">
                     <Tooltip content="Details">
                       <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => {
-                        setVariable({thesisId: thesis.id}); 
+                        setSelectedId(thesis.id);
                         setViewQuery(QUERIES.getThesisById);
-                        viewPopup.onOpen()
+                        viewThesisPopup.onOpen()
                       }}>
                         <EyeIcon />
                       </span>
                     </Tooltip>
-                    <Tooltip content="Edit user">
+                    <Tooltip content="Edit document">
                       <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                         <EditIcon />
                       </span>
                     </Tooltip>
-                    <Tooltip color="danger" content="Delete user">
+                    <Tooltip color="danger" content="Delete document">
                       <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteThesis(thesis.id)}>
                         <DeleteIcon />
                       </span>
@@ -142,9 +144,9 @@ export default function PendingPostTable({fetchData}) {
                   <div className="relative flex items-center gap-2">
                     <Tooltip content="Details">
                       <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => {
-                        setVariable({classProjectId: classProject.id}); 
+                        setSelectedId(classProject.id);
                         setViewQuery(QUERIES.getClassProjectById);
-                        viewPopup.onOpen()
+                        viewClassProjectPopup.onOpen()
                       }}>
                         <EyeIcon />
                       </span>
@@ -167,8 +169,8 @@ export default function PendingPostTable({fetchData}) {
         </TableBody>
       </Table>
       <Modal
-        isOpen={viewPopup.isOpen}
-        onOpenChange={viewPopup.onOpenChange}
+        isOpen={viewThesisPopup.isOpen}
+        onOpenChange={viewThesisPopup.onOpenChange}
         size="full"
         placement='bottom'
         motionProps={{
@@ -195,8 +197,43 @@ export default function PendingPostTable({fetchData}) {
         <ModalContent className="h-[97%] overflow-scroll !rounded-t-3xl">
           {() => (
             <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
-              <ViewDetail query={viewQuery} variables={variable} />
-              <Feedbacks />
+              <ViewDetail query={viewQuery} variables={{ thesisId: selectedId }} />
+              <Feedbacks type={'thesis'} id={selectedId}/>
+            </div>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={viewClassProjectPopup.isOpen}
+        onOpenChange={viewClassProjectPopup.onOpenChange}
+        size="full"
+        placement='bottom'
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeIn",
+              },
+            },
+            exit: {
+              y: 20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeOut",
+              },
+            }
+          }
+        }}
+      >
+        <ModalContent className="h-[97%] overflow-scroll !rounded-t-3xl">
+          {() => (
+            <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
+              <ViewDetail query={viewQuery} variables={{ classProjectId: selectedId }} />
+              <Feedbacks type={'classProject'} id={selectedId}/>
             </div>
           )}
         </ModalContent>

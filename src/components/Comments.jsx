@@ -1,7 +1,7 @@
 import { Avatar, Button, Textarea, User } from '@nextui-org/react';
 import React, { useState, useEffect } from "react";
 import fetchData from "../util/fetchData";
-import { PaperPlaneIcon } from '../icons/PaperPlaceIcon';
+import { PaperPlaneIcon } from '../icons/PaperPlaneIcon';
 import { useMutation } from '@apollo/client';
 import QUERIES from '../util/queries';
 
@@ -54,16 +54,16 @@ const Comments = ({ id, type }) => {
         }
       }
       else if (type === 'thesis') {
-        const { data } = await createThesisComment({ variables: { thesisComment: {thesis: id, comment: comment} } });
-        if (data) {
+        const { data: resData } = await createThesisComment({ variables: { thesisComment: {thesis: id, comment: comment} } });
+        if (resData) {
           setComment('');
-          getData();
+          setData([resData.createThesisComment, ...data])
         }
       }
     } catch (error) {
       console.log(error);
     }
-    };
+  };
 
   useEffect(() => {
     getData();
