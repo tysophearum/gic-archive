@@ -13,19 +13,16 @@ import {
   Modal,
   ModalContent,
   Pagination,
-  Breadcrumbs,
-  BreadcrumbItem,
 } from "@nextui-org/react";
-import { Link, useParams } from "react-router-dom";
-import { DeleteIcon } from "../../icons/DeleteIcon";
-import { EyeIcon } from "../../icons/EyeIcon";
-import { CheckIcon } from "../../icons/CheckIcon";
-import ViewDetail from "../../components/ViewDetail";
-import Feedbacks from "../../components/Feedbacks";
-import QUERIES from "../../util/queries";
+import { DeleteIcon } from "../icons/DeleteIcon";
+import { EyeIcon } from "../icons/EyeIcon";
+import { CheckIcon } from "../icons/CheckIcon";
+import ViewDetail from "../components/ViewDetail";
+import Feedbacks from "../components/Feedbacks";
+import QUERIES from "../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import unixToTime from "../../util/unixToTime";
+import unixToTime from "../util/unixToTime";
 
 const statusColorMap = {
   active: "success",
@@ -33,14 +30,13 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const ManageClassProject = () => {
-  const param = useParams();
+const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
   const viewPopup = useDisclosure();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const classProjectResponse = useQuery(QUERIES.listUnapprovedClassProjectByCategory, {
     variables: {
-      categoryId: param.classProjectCategoryId,
+      categoryId: classProjectCategoryId,
       pager: {
         page: page,
         limit: parseInt(limit),
@@ -49,7 +45,7 @@ const ManageClassProject = () => {
   });
   const classProjectCategoryResponse = useQuery(QUERIES.getClassProjectCategoryById, {
     variables: {
-      categoryId: param.classProjectCategoryId,
+      categoryId: classProjectCategoryId,
     },
   })
   const [viewQuery, setViewQuery] = useState(null);
@@ -90,22 +86,7 @@ const ManageClassProject = () => {
     return <p>Error: {classProjectResponse.error.message}</p>; // Render error state
   }
   return (
-    <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
-      <Breadcrumbs size='lg' className="mt-2">
-        <BreadcrumbItem>
-          <Link to={'/teacherDashboard'}>
-            Dashboard
-          </Link>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
-          <Link to={'/teacherDashboard/manageProject'}>
-            Manage Project
-          </Link>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
-          {classProjectCategoryResponse.data.getClassProjectCategoryById.name}
-        </BreadcrumbItem>
-      </Breadcrumbs>
+    <>
       <Table
         aria-label="Example table with custom cells"
         topContent={
@@ -226,8 +207,8 @@ const ManageClassProject = () => {
           )}
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 }
 
-export default ManageClassProject;
+export default ManageUnapprovedClassProjectTable;

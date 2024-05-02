@@ -9,13 +9,24 @@ import UserProfilePage from './pages/UserProfilePage';
 import Index from './pages/Index';
 import Test from './pages/Test';
 import LogInPage from './pages/LogInPage';
-import TeacherDashboard from './pages/dashboard/TeacherDashboard';
-import ManageClassProject from './pages/dashboard/ManageClassProject';
-import FeaturedProject from './pages/dashboard/FeaturedProject';
-import ClassProject from './pages/dashboard/ClassProject';
-import ManageFeaturedClassProject from './pages/dashboard/ManageFeaturedClassProject';
-import ManageThesis from './pages/dashboard/ManageThesis';
-import ManageFeaturedThesis from './pages/dashboard/ManageFeaturedThesis';
+
+import TeacherDashboard from './pages/dashboard/teacher/TeacherDashboard';
+import ManageUnapprovedClassProject from './pages/dashboard/teacher/ManageUnapprovedClassProject';
+import ApprovedClassProject from './pages/dashboard/teacher/ApprovedClassProject';
+import UnapprovedClassProject from './pages/dashboard/teacher/UnapprovedClassProject';
+import ManageApprovedClassProject from './pages/dashboard/teacher/ManageApprovedClassProject';
+import ManageUnapprovedThesis from './pages/dashboard/teacher/ManageUnapprovedThesis';
+import ManageApprovedThesis from './pages/dashboard/teacher/ManageApprovedThesis';
+
+import AdminDashboard from './pages/dashboard/admin/AdminDashboard';
+import AllApprovedClassProject from './pages/dashboard/admin/AllApprovedClassProject';
+import AllUnapprovedClassProject from './pages/dashboard/admin/AllUnapprovedClassProject';
+import ManageAllUnapprovedClassProject from './pages/dashboard/admin/ManageAllUnapprovedClassProject';
+import ManageAllApprovedClassProject from './pages/dashboard/admin/ManageAllApprovedClassProject';
+import ManageAllApprovedThesis from './pages/dashboard/admin/ManageAllApprovedThesis';
+import ManageAllUnapprovedThesis from './pages/dashboard/admin/ManageAllUnapprovedThesis';
+import ManageClassProjectCategory from './pages/dashboard/admin/ManageClassProjectCategory';
+import ManageThesisCategory from './pages/dashboard/admin/ManageThesisCategory';
 
 import TeacherDashboard2 from './pages/dashboard/test/TeacherDashboard2';
 import TeacherDashboard2CP from './pages/dashboard/test/TeacherDashboard2CP';
@@ -75,28 +86,64 @@ const Router = createBrowserRouter([
         element: <TeacherDashboard2T />,
       },
       {
-        path: "/teacherDashboard/manageFeaturedProject",
-        element: <FeaturedProject />,
+        path: "/teacherDashboard/manageApprovedProject",
+        element: <ApprovedClassProject />,
       },
       {
-        path: "/teacherDashboard/manageFeaturedProject/:classProjectCategoryId",
-        element: <ManageFeaturedClassProject />,
+        path: "/teacherDashboard/manageApprovedProject/:classProjectCategoryId",
+        element: <ManageApprovedClassProject />,
       },
       {
-        path: "/teacherDashboard/manageProject",
-        element: <ClassProject />,
+        path: "/teacherDashboard/manageUnapprovedProject",
+        element: <UnapprovedClassProject />,
       },
       {
-        path: "/teacherDashboard/manageProject/:classProjectCategoryId",
-        element: <ManageClassProject />,
+        path: "/teacherDashboard/manageUnapprovedProject/:classProjectCategoryId",
+        element: <ManageUnapprovedClassProject />,
       },
       {
-        path: "/teacherDashboard/manageThesis",
-        element: <ManageThesis />,
+        path: "/teacherDashboard/manageUnapprovedThesis",
+        element: <ManageUnapprovedThesis />,
       },
       {
-        path: "/teacherDashboard/manageFeaturedThesis",
-        element: <ManageFeaturedThesis />,
+        path: "/teacherDashboard/manageApprovedThesis",
+        element: <ManageApprovedThesis />,
+      },
+      {
+        path: "/adminDashboard",
+        element: <AdminDashboard />,
+      },
+      {
+        path: "/adminDashboard/manageApprovedProject",
+        element: <AllApprovedClassProject />,
+      },
+      {
+        path: "/adminDashboard/manageApprovedProject/:classProjectCategoryId",
+        element: <ManageAllApprovedClassProject />,
+      },
+      {
+        path: "/adminDashboard/manageUnapprovedProject",
+        element: <AllUnapprovedClassProject />,
+      },
+      {
+        path: "/adminDashboard/manageUnapprovedProject/:classProjectCategoryId",
+        element: <ManageAllUnapprovedClassProject />,
+      },
+      {
+        path: "/adminDashboard/manageApprovedThesis",
+        element: <ManageAllApprovedThesis />,
+      },
+      {
+        path: "/adminDashboard/manageUnapprovedThesis",
+        element: <ManageAllUnapprovedThesis />,
+      },
+      {
+        path: "/adminDashboard/manageProjectCategory",
+        element: <ManageClassProjectCategory />,
+      },
+      {
+        path: "/adminDashboard/manageThesisCategory",
+        element: <ManageThesisCategory />,
       },
     ]
   },

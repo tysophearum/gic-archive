@@ -1,9 +1,9 @@
 import { Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, CardFooter, Image, Divider } from "@nextui-org/react";
 import { Link, useParams } from "react-router-dom";
-import QUERIES from "../../util/queries";
+import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 
-const ClassProject = () => {
+const UnapprovedClassProject = () => {
   const { data, loading, error } = useQuery(QUERIES.getMe);
 
   if (loading) return <p>Loading...</p>;
@@ -17,7 +17,7 @@ const ClassProject = () => {
             </Link>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            Manage Project
+            Manage Unapproved Project
           </BreadcrumbItem>
         </Breadcrumbs>
       <div>
@@ -25,7 +25,7 @@ const ClassProject = () => {
         <Divider />
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-4 mt-4">
           {data.getMe.classProjectCategory.map((category) => (
-            <Link to={`/teacherDashboard/manageProject/${category.id}`} key={category.id}>
+            <Link to={`/teacherDashboard/manageUnapprovedProject/${category.id}`} key={category.id}>
               <Card className="p-4 border hover:border-blue-500">
                 <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-green-500 to-emerald-500">
                   <h1 className="text-3xl font-bold">{category.name}</h1>
@@ -39,4 +39,4 @@ const ClassProject = () => {
   )
 }
 
-export default ClassProject;
+export default UnapprovedClassProject;

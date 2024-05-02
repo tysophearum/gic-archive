@@ -17,14 +17,14 @@ import {
   BreadcrumbItem,
 } from "@nextui-org/react";
 import { Link, useParams } from "react-router-dom";
-import { EyeIcon } from "../../icons/EyeIcon";
-import { StarIconFill } from "../../icons/StarIconFill";
-import ViewDetail from "../../components/ViewDetail";
-import Feedbacks from "../../components/Feedbacks";
-import QUERIES from "../../util/queries";
+import { EyeIcon } from "../../../icons/EyeIcon";
+import { StarIconFill } from "../../../icons/StarIconFill";
+import ViewDetail from "../../../components/ViewDetail";
+import Feedbacks from "../../../components/Feedbacks";
+import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import unixToTime from "../../util/unixToTime";
+import unixToTime from "../../../util/unixToTime";
 
 const statusColorMap = {
   active: "success",
@@ -32,72 +32,65 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const ManageFeaturedClassProject = () => {
-  const param = useParams();
+const ManageApprovedThesis = () => {
   const viewPopup = useDisclosure();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-  const featuredClassProjectResponse = useQuery(QUERIES.listFeaturedClassProject)
-  const classProjectResponse = useQuery(QUERIES.listApprovedClassProjectByCategory, {
+  const featuredThesisResponse = useQuery(QUERIES.listFeaturedThesis)
+  const thesisResponse = useQuery(QUERIES.listApprovedThesisByTeacherId, {
     variables: {
-      categoryId: param.classProjectCategoryId,
       pager: {
         page: page,
         limit: parseInt(limit),
       }
     },
   });
-  const classProjectCategoryResponse = useQuery(QUERIES.getClassProjectCategoryById, {
-    variables: {
-      categoryId: param.classProjectCategoryId,
-    },
-  })
   const [variable, setVariable] = useState(null);
   const [viewQuery, setViewQuery] = useState(null);
-  const [deleteClassProject] = useMutation(QUERIES.deleteClassProject);
-  const [addFeaturedClassProject] = useMutation(QUERIES.addFeaturedClassProject);
-  const [removeFeaturedClassProject] = useMutation(QUERIES.removeFeaturedClassProject);
+  const [deleteThesis] = useMutation(QUERIES.deleteThesis);
+  const [addFeaturedThesis] = useMutation(QUERIES.addFeaturedThesis);
+  const [removeFeaturedThesis] = useMutation(QUERIES.removeFeaturedThesis);
 
   useEffect(() => {
     try {
-      classProjectResponse.refetch()
+      thesisResponse.refetch()
     } catch (error) {
       console.log(error);
     }
   }, [page, limit])
 
-  const handleDeleteClassProject = async (classProjectId) => {
+  const handleDeleteThesis = async (thesisId) => {
     try {
-      const { data } = await deleteClassProject({ variables: { classProjectId } });
-      classProjectResponse.refetch()
+      const { data } = await deleteThesis({ variables: { thesisId } });
+      thesisResponse.refetch()
     } catch (error) {
       console.log(error);
     }
   }
 
-  const handleClassProjectFeature = async (classProjectId) => {
+  const handleThesisFeature = async (thesisId) => {
     try {
-      const { data } = await addFeaturedClassProject({ variables: { classProjectId } });
-      featuredClassProjectResponse.refetch()
+      const { data } = await addFeaturedThesis({ variables: { thesisId } });
+      featuredThesisResponse.refetch()
     } catch (error) {
       console.log(error);
     }
   }
 
-  const handleRemoveClassProjectFeature = async (classProjectId) => {
+  const handleRemoveThesisFeature = async (thesisId) => {
     try {
-      const { data } = await removeFeaturedClassProject({ variables: { classProjectId } });
-      featuredClassProjectResponse.refetch()
+      const { data } = await removeFeaturedThesis({ variables: { thesisId } });
+      featuredThesisResponse.refetch()
     } catch (error) {
       console.log(error);
     }
   }
 
-  if (classProjectResponse.loading || classProjectCategoryResponse.loading || featuredClassProjectResponse.loading) {
+  if (thesisResponse.loading) {
     return <p>Loading...</p>; // Render loading state
   }
-  if (classProjectResponse.error || classProjectCategoryResponse.error || featuredClassProjectResponse.error) {
-    return <p>Error: {classProjectResponse.error.message}</p>; // Render error state
+  if (thesisResponse.error) {
+    return <p>Error: {thesisResponse.error.message}</p>; // Render error state
   }
   return (
     <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
@@ -108,27 +101,22 @@ const ManageFeaturedClassProject = () => {
           </Link>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <Link to={'/teacherDashboard/manageFeaturedProject'}>
-            Manage Featuerd Project
-          </Link>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
-          {classProjectCategoryResponse.data.getClassProjectCategoryById.name}
+          Manage Approved Thesis
         </BreadcrumbItem>
       </Breadcrumbs>
       <Table
         aria-label="Example table with custom cells"
         topContent={
           <>
-            <h1 className="text-2xl font-semibold">Featured {classProjectCategoryResponse.data.getClassProjectCategoryById.name}</h1>
+            <h1 className="text-2xl font-semibold">Manage Approved Thesis</h1>
           </>
         }
         bottomContent={
           <div className="flex">
             <Pagination
-              total={classProjectResponse.data.listApprovedClassProjectByCategory.pagination.totalPages}
+              total={thesisResponse.data.listApprovedThesisByTeacherId.pagination.totalPages}
               initialPage={1}
-              shadow
+              //shadow
               onChange={(page) => setPage(page)}
               showControls />
             <label className="flex items-center text-default-400 text-small ml-3">
@@ -152,14 +140,14 @@ const ManageFeaturedClassProject = () => {
           <TableColumn>ACTION</TableColumn>
         </TableHeader>
         <TableBody>
-          {featuredClassProjectResponse.data.listFeaturedClassProject.map((classProject) => {
+          {featuredThesisResponse.data.listFeaturedThesis.map((thesis) => {
             return (
-              <TableRow key={classProject.id}>
+              <TableRow key={thesis.id}>
                 <TableCell>
                   <User
                     avatarProps={{ radius: "lg", src: "https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" }}
-                    description={classProject.description.substring(0, 10)}
-                    name={classProject.title}
+                    description={thesis.description.substring(0, 10)}
+                    name={thesis.title}
                   >
                     some
                   </User>
@@ -167,33 +155,28 @@ const ManageFeaturedClassProject = () => {
                 <TableCell>
                   <div className="flex items-center">
                     <Avatar className="w-6 h-6 text-tiny" />
-                    <p className="text-bold text-sm capitalize ml-1">{classProject.user.name}</p>
+                    <p className="text-bold text-sm capitalize ml-1">{thesis.user.name}</p>
                   </div>
                 </TableCell>
                 <TableCell>
-                  {unixToTime(classProject.createdAt)}
+                  {unixToTime(thesis.createdAt)}
                 </TableCell>
                 <TableCell>
                   <div className="relative flex items-center gap-2">
                     <Tooltip content="View project">
                       <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => {
-                        setVariable({ classProjectId: classProject.id });
-                        setViewQuery(QUERIES.getClassProjectById);
+                        setVariable({ thesisId: thesis.id });
+                        setViewQuery(QUERIES.getThesisById);
                         viewPopup.onOpen()
                       }}>
                         <EyeIcon />
                       </span>
                     </Tooltip>
                     <Tooltip color="primary" content="Feature project" className="bg-yellow-500">
-                      <span onClick={() => {handleRemoveClassProjectFeature(classProject.id)}} className="text-lg cursor-pointer active:opacity-50 text-white border p-1 rounded-full bg-yellow-500">
+                      <span onClick={() => {handleRemoveThesisFeature(thesis.id)}} className="text-lg cursor-pointer active:opacity-50 text-white border p-1 rounded-full bg-yellow-500">
                         <StarIconFill />
                       </span>
                     </Tooltip>
-                    {/* <Tooltip color="danger" content="Delete project">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteClassProject(classProject.id)}>
-                        <DeleteIcon />
-                      </span>
-                    </Tooltip> */}
                   </div>
                 </TableCell>
               </TableRow>
@@ -205,15 +188,15 @@ const ManageFeaturedClassProject = () => {
         aria-label="Example table with custom cells"
         topContent={
           <>
-            <h1 className="text-2xl font-semibold">{classProjectCategoryResponse.data.getClassProjectCategoryById.name}</h1>
+            <h1 className="text-2xl font-semibold">Manage Featuerd Thesis</h1>
           </>
         }
         bottomContent={
           <div className="flex">
             <Pagination
-              total={classProjectResponse.data.listApprovedClassProjectByCategory.pagination.totalPages}
+              total={thesisResponse.data.listApprovedThesisByTeacherId.pagination.totalPages}
               initialPage={1}
-              shadow
+              //shadow
               onChange={(page) => setPage(page)}
               showControls />
             <label className="flex items-center text-default-400 text-small ml-3">
@@ -237,14 +220,14 @@ const ManageFeaturedClassProject = () => {
           <TableColumn>ACTION</TableColumn>
         </TableHeader>
         <TableBody>
-          {classProjectResponse.data.listApprovedClassProjectByCategory.data.map((classProject) => {
+          {thesisResponse.data.listApprovedThesisByTeacherId.data.map((thesis) => {
             return (
-              <TableRow key={classProject.id}>
+              <TableRow key={thesis.id}>
                 <TableCell>
                   <User
                     avatarProps={{ radius: "lg", src: "https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" }}
-                    description={classProject.description.substring(0, 10)}
-                    name={classProject.title}
+                    description={thesis.description.substring(0, 10)}
+                    name={thesis.title}
                   >
                     some
                   </User>
@@ -252,30 +235,30 @@ const ManageFeaturedClassProject = () => {
                 <TableCell>
                   <div className="flex items-center">
                     <Avatar className="w-6 h-6 text-tiny" />
-                    <p className="text-bold text-sm capitalize ml-1">{classProject.user.name}</p>
+                    <p className="text-bold text-sm capitalize ml-1">{thesis.user.name}</p>
                   </div>
                 </TableCell>
                 <TableCell>
-                  {unixToTime(classProject.createdAt)}
+                  {unixToTime(thesis.createdAt)}
                 </TableCell>
                 <TableCell>
                   <div className="relative flex items-center gap-2">
                     <Tooltip content="View project">
                       <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => {
-                        setVariable({ classProjectId: classProject.id });
-                        setViewQuery(QUERIES.getClassProjectById);
+                        setVariable({ thesisId: thesis.id });
+                        setViewQuery(QUERIES.getThesisById);
                         viewPopup.onOpen()
                       }}>
                         <EyeIcon />
                       </span>
                     </Tooltip>
                     <Tooltip color="primary" content="Feature project" className="bg-yellow-500">
-                      <span onClick={() => {handleClassProjectFeature(classProject.id)}} className="text-lg cursor-pointer active:opacity-50 text-yellow-500 border p-1 rounded-full border-yellow-500">
+                      <span onClick={() => {handleThesisFeature(thesis.id)}} className="text-lg cursor-pointer active:opacity-50 text-yellow-500 border p-1 rounded-full border-yellow-500">
                         <StarIconFill />
                       </span>
                     </Tooltip>
                     {/* <Tooltip color="danger" content="Delete project">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteClassProject(classProject.id)}>
+                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteThesis(thesis.id)}>
                         <DeleteIcon />
                       </span>
                     </Tooltip> */}
@@ -325,4 +308,4 @@ const ManageFeaturedClassProject = () => {
   );
 }
 
-export default ManageFeaturedClassProject;
+export default ManageApprovedThesis;

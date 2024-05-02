@@ -24,8 +24,8 @@ const QUERIES = {
   }
   `,
   listApprovedThesis: gql`
-  {
-    listApprovedThesis {
+  query ListApprovedThesis($pager: PaginationInput) {
+    listApprovedThesis(pager: $pager) {
       data {
         id
         title
@@ -35,6 +35,63 @@ const QUERIES = {
           id
           name
           studentId
+          email
+          gender
+          image
+          createdAt
+          updatedAt
+        }
+        thesisCategory {
+          id
+          name
+          description
+          createdAt
+          updatedAt
+        }
+        thesisLink
+        repositoryLink
+        videoLink
+        isApproved
+        likeAmount
+        liked
+        createdAt
+        updatedAt
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
+    }
+  }
+  `,
+  listUnapprovedThesis: gql`
+  query ListUnapprovedThesis($pager: PaginationInput) {
+    listUnapprovedThesis(pager: $pager) {
+      data {
+        id
+        title
+        description
+        image
+        user {
+          id
+          name
+          studentId
+          email
+          gender
+          image
+          createdAt
+          updatedAt
+        }
+        thesisCategory {
+          id
+          name
+          description
+          createdAt
+          updatedAt
         }
         thesisLink
         repositoryLink

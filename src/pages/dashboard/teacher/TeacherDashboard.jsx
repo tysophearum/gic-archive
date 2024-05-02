@@ -11,20 +11,20 @@ const TeacherDashboard = () => {
         <h1 className=" font-semibold text-2xl mb-4">Class project</h1>
         <Divider />
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-4 mt-4">
-          <Link to={'/teacherDashboard/manageFeaturedProject'}>
+          <Link to={'/teacherDashboard/manageApprovedProject'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-green-500 to-emerald-500">
                 <h1 className="text-3xl font-bold">Class project</h1>
               </CardBody>
-              <h4 className="font-bold text-large pt-2 text-center">Manage Featured Project</h4>
+              <h4 className="font-bold text-large pt-2">Manage Approved Project</h4>
             </Card>
           </Link>
-          <Link to={'/teacherDashboard/manageProject'}>
+          <Link to={'/teacherDashboard/manageUnapprovedProject'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-green-500 to-emerald-500">
                 <h1 className="text-3xl font-bold">Class project</h1>
               </CardBody>
-              <h4 className="font-bold text-large pt-2 text-center">Manage Project</h4>
+              <h4 className="font-bold text-large pt-2">Manage Unpproved Project</h4>
             </Card>
           </Link>
         </div>
@@ -34,20 +34,20 @@ const TeacherDashboard = () => {
         <h1 className=" font-semibold text-2xl mb-4">Thesis</h1>
         <Divider />
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-4 mt-4">
-          <Link to={'/teacherDashboard/manageFeaturedThesis'}>
+          <Link to={'/teacherDashboard/manageApprovedThesis'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-yellow-500 to-amber-600">
                 <h1 className="text-3xl font-bold">Thesis</h1>
               </CardBody>
-              <h4 className="font-bold text-large pt-2 text-center">Manage Featured Thesis</h4>
+              <h4 className="font-bold text-large pt-2">Manage Approved Thesis</h4>
             </Card>
           </Link>
-          <Link to={'/teacherDashboard/manageThesis'}>
+          <Link to={'/teacherDashboard/manageUnapprovedThesis'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-yellow-500 to-amber-600">
                 <h1 className="text-3xl font-bold">Thesis</h1>
               </CardBody>
-              <h4 className="font-bold text-large pt-2 text-center">Manage Thesis</h4>
+              <h4 className="font-bold text-large pt-2">Manage Unapproved Thesis</h4>
             </Card>
           </Link>
         </div>

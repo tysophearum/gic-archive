@@ -17,27 +17,21 @@ import {
   BreadcrumbItem,
 } from "@nextui-org/react";
 import { Link, useParams } from "react-router-dom";
-import { EyeIcon } from "../../icons/EyeIcon";
-import { StarIconFill } from "../../icons/StarIconFill";
-import ViewDetail from "../../components/ViewDetail";
-import Feedbacks from "../../components/Feedbacks";
-import QUERIES from "../../util/queries";
+import { EyeIcon } from "../../../icons/EyeIcon";
+import { StarIconFill } from "../../../icons/StarIconFill";
+import ViewDetail from "../../../components/ViewDetail";
+import Feedbacks from "../../../components/Feedbacks";
+import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import unixToTime from "../../util/unixToTime";
+import unixToTime from "../../../util/unixToTime";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-
-const ManageFeaturedThesis = () => {
+const ManageAllApprovedThesis = () => {
   const viewPopup = useDisclosure();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const featuredThesisResponse = useQuery(QUERIES.listFeaturedThesis)
-  const thesisResponse = useQuery(QUERIES.listApprovedThesisByTeacherId, {
+  const thesisResponse = useQuery(QUERIES.listApprovedThesis, {
     variables: {
       pager: {
         page: page,
@@ -96,25 +90,25 @@ const ManageFeaturedThesis = () => {
     <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
       <Breadcrumbs size='lg' className="mt-2">
         <BreadcrumbItem>
-          <Link to={'/teacherDashboard'}>
+          <Link to={'/adminDashboard'}>
             Dashboard
           </Link>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          Manage Featuerd Thesis
+          Manage Approved Thesis
         </BreadcrumbItem>
       </Breadcrumbs>
       <Table
         aria-label="Example table with custom cells"
         topContent={
           <>
-            <h1 className="text-2xl font-semibold">Manage Featuerd Thesis</h1>
+            <h1 className="text-2xl font-semibold">Manage Approved Thesis</h1>
           </>
         }
         bottomContent={
           <div className="flex">
             <Pagination
-              total={thesisResponse.data.listApprovedThesisByTeacherId.pagination.totalPages}
+              total={thesisResponse.data.listApprovedThesis.pagination.totalPages}
               initialPage={1}
               //shadow
               onChange={(page) => setPage(page)}
@@ -194,7 +188,7 @@ const ManageFeaturedThesis = () => {
         bottomContent={
           <div className="flex">
             <Pagination
-              total={thesisResponse.data.listApprovedThesisByTeacherId.pagination.totalPages}
+              total={thesisResponse.data.listApprovedThesis.pagination.totalPages}
               initialPage={1}
               //shadow
               onChange={(page) => setPage(page)}
@@ -220,7 +214,7 @@ const ManageFeaturedThesis = () => {
           <TableColumn>ACTION</TableColumn>
         </TableHeader>
         <TableBody>
-          {thesisResponse.data.listApprovedThesisByTeacherId.data.map((thesis) => {
+          {thesisResponse.data.listApprovedThesis.data.map((thesis) => {
             return (
               <TableRow key={thesis.id}>
                 <TableCell>
@@ -308,4 +302,4 @@ const ManageFeaturedThesis = () => {
   );
 }
 
-export default ManageFeaturedThesis;
+export default ManageAllApprovedThesis;

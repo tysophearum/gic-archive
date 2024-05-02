@@ -18,15 +18,15 @@ import {
   button,
 } from "@nextui-org/react";
 import { Link, useParams } from "react-router-dom";
-import { DeleteIcon } from "../../icons/DeleteIcon";
-import { EyeIcon } from "../../icons/EyeIcon";
-import { CheckIcon } from "../../icons/CheckIcon";
-import ViewDetail from "../../components/ViewDetail";
-import Feedbacks from "../../components/Feedbacks";
-import QUERIES from "../../util/queries";
+import { DeleteIcon } from "../../../icons/DeleteIcon";
+import { EyeIcon } from "../../../icons/EyeIcon";
+import { CheckIcon } from "../../../icons/CheckIcon";
+import ViewDetail from "../../../components/ViewDetail";
+import Feedbacks from "../../../components/Feedbacks";
+import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import unixToTime from "../../util/unixToTime";
+import unixToTime from "../../../util/unixToTime";
 
 const statusColorMap = {
   active: "success",
@@ -34,12 +34,12 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const ManageThesis = () => {
+const ManageUnapprovedThesis = () => {
   const param = useParams();
   const viewPopup = useDisclosure();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-  const thesisResponse = useQuery(QUERIES.listUnapprovedThesisByTeacherId, {
+  const thesisResponse = useQuery(QUERIES.listUnapprovedThesis, {
     variables: {
       pager: {
         page: page,
@@ -88,25 +88,25 @@ const ManageThesis = () => {
     <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
       <Breadcrumbs size='lg' className="mt-2">
         <BreadcrumbItem>
-          <Link to={'/teacherDashboard'}>
+          <Link to={'/adminDashboard'}>
             Dashboard
           </Link>
         </BreadcrumbItem>
         <BreadcrumbItem>
-            Manage Thesis
+            Manage Unapproved Thesis
         </BreadcrumbItem>
       </Breadcrumbs>
       <Table
         aria-label="Example table with custom cells"
         topContent={
           <>
-            <h1 className="text-2xl font-semibold">Manage Thesis</h1>
+            <h1 className="text-2xl font-semibold">Manage Unapproved Thesis</h1>
           </>
         }
         bottomContent={
           <div className="flex">
             <Pagination
-              total={thesisResponse.data.listUnapprovedThesisByTeacherId.pagination.totalPages}
+              total={thesisResponse.data.listUnapprovedThesis.pagination.totalPages}
               initialPage={1}
               shadow
               onChange={(page) => setPage(page)}
@@ -133,7 +133,7 @@ const ManageThesis = () => {
           <TableColumn>ACTION</TableColumn>
         </TableHeader>
         <TableBody>
-          {thesisResponse.data.listUnapprovedThesisByTeacherId.data.map((thesis) => {
+          {thesisResponse.data.listUnapprovedThesis.data.map((thesis) => {
             return (
               <TableRow key={thesis.id}>
                 <TableCell>
@@ -222,4 +222,4 @@ const ManageThesis = () => {
   );
 }
 
-export default ManageThesis;
+export default ManageUnapprovedThesis;
