@@ -72,23 +72,28 @@ const ViewDetail = ({ query, variables }) => {
               </div>
             </>
           )}
-          <h2 className=" text-xl font-semibold mt-4 mb-2">Collaborated by </h2>
-          <div className='grid grid-cols-1 gap-1 place-items-start'>
-            {data.collaborators.map((collaborator) => {
-              return (
-                <Link key={collaborator.id} to={'/profile/' + collaborator.id}>
-                  <User
-                    key={collaborator.id}
-                    name={(<h1 className="font-semibold">{collaborator.name}</h1>)}
-                    description={collaborator.studentId}
-                    className="my-1 text-lg"
-                    avatarProps={{
-                      src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
-                    }} />
-                </Link>
-              );
-            })}
-          </div><h2 className=" text-xl font-semibold mt-10 mb-2">Citation </h2><p className="text-zinc-700 mb-10">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas, in. Sapiente, sed perspiciatis, neque quam quisquam animi nisi soluta sunt dolor, ea esse consectetur. Sunt aliquam harum iste expedita quo?</p>
+          {data.collaborators.length > 0 && (
+            <>
+              <h2 className=" text-xl font-semibold mt-4 mb-2">Collaborators </h2>
+              <div className="flex items-center">
+                {data.collaborators.map((collaborator) => {
+                  return (
+                    <Link key={collaborator.id} to={'/profile/' + collaborator.id}>
+                      <User
+                        key={collaborator.id}
+                        name={(<h1 className="font-semibold">{collaborator.name}</h1>)}
+                        description={collaborator.studentId}
+                        className="my-2 text-lg"
+                        // avatarProps={{
+                        //   src: `${collaborator.image}`,
+                        // }} 
+                        />
+                    </Link>
+                  );
+                })}
+              </div>
+            </>)}
+          <h2 className=" text-xl font-semibold mt-10 mb-2">Citation </h2><p className="text-zinc-700 mb-10">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas, in. Sapiente, sed perspiciatis, neque quam quisquam animi nisi soluta sunt dolor, ea esse consectetur. Sunt aliquam harum iste expedita quo?</p>
         </>
       )}
     </>

@@ -24,7 +24,7 @@ const ProfilePage = () => {
   const postPopup = useDisclosure();
   const [complete, setComplete] = useState(0);
   const [showMore, setShowMore] = useState(false);
-  const { loading, error, data } = useQuery(QUERIES.getMe)
+  const { loading, error, data, refetch } = useQuery(QUERIES.getMe)
   const contributionResponse = useQuery(QUERIES.getMyContribution)
 
   if (loading || contributionResponse.loading) {
@@ -32,15 +32,15 @@ const ProfilePage = () => {
   }
   if (error || contributionResponse.error) return (
     <>
-      <p>Error: {error.message}</p>
-      <p>Error: {contributionResponse.error.message}</p>
+      <p>Error: {JSON.stringify(error)}</p>
+      <p>Error: {JSON.stringify(contributionResponse.error)}</p>
     </>
   );
   return (
     <div className="flex flex-col items-center md:mt-8">
       <Image radius="none" className="h-[40vh] md:w-[80vw] w-[100vw] object-cover z-0 rounded-t-lg" src="https://www.creativefabrica.com/wp-content/uploads/2021/08/16/flat-landscape-the-mountains-color-blue-Graphics-15913422-1.jpg" />
       <div className="md:w-[80vw] w-[100vw] bg-white px-12">
-        <Avatar className="w-40 h-40 mt-[-110px]" src="https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg" />
+        <Avatar className="w-40 h-40 mt-[-110px]" src={data.getMe.image} />
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <div>
@@ -57,7 +57,7 @@ const ProfilePage = () => {
             >
               <ModalContent>
                 {(onClose) => (
-                  <EditProfileForm onClose={onClose} user={data.getMe} />
+                  <EditProfileForm onClose={onClose} onComplete={refetch} user={data.getMe} />
                 )}
               </ModalContent>
             </Modal>

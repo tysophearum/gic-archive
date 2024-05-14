@@ -38,7 +38,7 @@ const ItemCard2 = ({ document, type }) => {
               width="100%"
               alt="{item.title}"
               className="w-full object-cover h-56"
-              src="https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" />
+              src={document.image || 'https://cdn.dribbble.com/users/6944734/screenshots/17665290/media/97649adc40b4df0b29b59d57f7657b2c.png'} />
           </CardBody>
           <CardFooter className="absolute bg-black/40 bottom-0 duration-150 z-10 dark:border-default-100">
             <h1 className=" text-white font-semibold">{document.title}</h1>

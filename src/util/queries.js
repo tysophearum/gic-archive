@@ -497,15 +497,15 @@ const QUERIES = {
   }
   `,
   createClassProject: gql`
-  mutation CreateClassProject($classProject: CreateClassProjectInput!, $image: Upload) {
-    createClassProject(classProject: $classProject, image: $image) {
+  mutation CreateClassProject($classProject: CreateClassProjectInput!) {
+    createClassProject(classProject: $classProject) {
       id
     }
   }
   `,
   createThesis: gql`
-  mutation CreateThesis($thesis: CreateThesisInput!, $image: Upload) {
-    createThesis(thesis: $thesis, image: $image) {
+  mutation CreateThesis($thesis: CreateThesisInput!) {
+  createThesis(thesis: $thesis) {
       id
     }
   }
@@ -681,13 +681,6 @@ const QUERIES = {
         type
         value
       }
-      classProjectCategory {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
       image
       coverImage
       role
@@ -720,13 +713,6 @@ const QUERIES = {
       image
       coverImage
       role
-      classProjectCategory {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
       tags
     }
   }
@@ -1168,6 +1154,115 @@ const QUERIES = {
         updatedAt
       }
       feedback
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  listTeacherClassProjectCategory: gql`
+  query ListTeacherClassProjectCategory {
+    listTeacherClassProjectCategory {
+      id
+      name
+      description 
+      createdAt
+      updatedAt
+      teachers {
+        id
+        name
+        studentId
+        email
+        gender
+        image
+        createdAt
+        updatedAt
+      }
+    }
+  }
+  `,
+  createClassProjectCategory: gql`
+  mutation CreateClassProjectCategory($classProject: CreateClassProjectCategoryInput!) {
+    createClassProjectCategory(classProject: $classProject) {
+      id
+      name
+      description
+      createdAt
+      updatedAt
+      teachers
+    }
+  }
+  `,
+  createThesisCategory: gql`
+  mutation CreateThesisCategory($thesis: CreateThesisCategoryInput!) {
+    createThesisCategory(thesis: $thesis) {
+      id
+      name
+      description
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  updateClassProjectCategory: gql`
+  mutation UpdateClassProjectCategory($classProject: UpdateClassProjectCategoryInput!) {
+    updateClassProjectCategory(classProject: $classProject) {
+      id
+      name
+      description
+      teachers
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  updateThesisCategory: gql`
+  mutation UpdateThesisCategory($thesis: UpdateThesisCategoryInput!) {
+    updateThesisCategory(thesis: $thesis) {
+      id
+      name
+      description
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  deleteClassProjectCategory: gql`
+  mutation DeleteClassProjectCategory($classProjectId: String!) {
+    deleteClassProjectCategory(classProjectId: $classProjectId)
+  }
+  `,
+  deleteThesisCategory: gql`
+  mutation DeleteThesisCategory($thesisId: String!) {
+    deleteThesisCategory(thesisId: $thesisId)
+  }
+  `,
+  getClassProjectCategoryById: gql`
+  query GetClassProjectCategoryById($categoryId: String!) {
+    getClassProjectCategoryById(categoryId: $categoryId) {
+      id
+      name
+      description
+      teachers {
+        id
+        name
+        studentId
+        email
+        gender
+        image
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+  `,
+  getThesisCategoryById: gql`
+  query GetThesisCategoryById($categoryId: String!) {
+    getThesisCategoryById(categoryId: $categoryId) {
+      id
+      name
+      description
       createdAt
       updatedAt
     }

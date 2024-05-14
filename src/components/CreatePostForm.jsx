@@ -12,12 +12,10 @@ import {
   Select,
   SelectItem,
   ModalHeader,
-  Autocomplete,
   User,
   Card,
-  CardBody
 } from "@nextui-org/react";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useDropzone } from 'react-dropzone';
 import fetchData from '../util/fetchData';
 import QUERIES from '../util/queries';
@@ -34,7 +32,6 @@ let classProjectPayload = {
     videoLink: '',
     collaborators: [],
   },
-  image: null
 }
 let thesisPayload = {
   thesis: {
@@ -47,9 +44,9 @@ let thesisPayload = {
     teacher: '',
     collaborators: [],
   },
-  file: null,
-  image: null
 }
+let image = null;
+
 const CreatePostForm = ({ onClose, onComplete }) => {
   const endpoint = process.env.REACT_APP_ENDPOINT;
   const [uploadClassProject] = useMutation(QUERIES.createClassProject);
@@ -93,19 +90,21 @@ const CreatePostForm = ({ onClose, onComplete }) => {
 
   const createClassProject = useCallback(async (event) => {
     try {
-      const { data } = await uploadClassProject({ variables: classProjectPayload, ignoreResults: true });
+      console.log("1", classProjectPayload);
+      const { data } = await uploadClassProject({ variables: classProjectPayload })
+      console.log("2", classProjectPayload);
       if (data) {
-        const formData = new FormData();
-        acceptedFiles.forEach(file => {
-          formData.append('files', file); // Append each file individually
-        });
-        axios.post('http://localhost:4000/upload', formData)
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          })
+        if (image) {
+          let formData = new FormData();
+          formData.append('classProjectId', data.createClassProject.id);
+          // acceptedFiles.forEach(file => {
+          //   formData.append('files', file); // Append each file individually
+          // });
+
+          formData.append('image', image)
+          console.log(image);
+          // await axios.post('http://localhost:4000/upload/classProject/image', formData)
+        }
         onComplete();
         onClose();
       }
@@ -116,19 +115,19 @@ const CreatePostForm = ({ onClose, onComplete }) => {
 
   const createThesis = useCallback(async (event) => {
     try {
-      const { data } = await uploadThesis({ variables: thesisPayload, ignoreResults: true });
+      const { data } = await uploadThesis({ variables: thesisPayload })
       if (data) {
-        const formData = new FormData();
-        acceptedFiles.forEach(file => {
-          formData.append('files', file); // Append each file individually
-        });
-        axios.post('http://localhost:4000/upload', formData)
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          })
+        if (image) {
+          let formData = new FormData();
+          formData.append('thesisId', data.createThesis.id);
+          // acceptedFiles.forEach(file => {
+          //   formData.append('files', file); // Append each file individually
+          // });
+
+          formData.append('image', image)
+          console.log(image);
+          await axios.post('http://localhost:4000/upload/thesis/image', formData)
+        }
         onComplete();
         onClose();
       }
@@ -165,11 +164,11 @@ const CreatePostForm = ({ onClose, onComplete }) => {
     const updatedUsers = collaborator.filter(item => item.id !== idToRemove);
     setCollaborator(updatedUsers);
   };
-  const [file, setFile] = useState("https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg");
+  const [imageLink, setImageLink] = useState("https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png");
   const handleImageChange = (e) => {
-    classProjectPayload.image = e.target.files[0]
-    thesisPayload.image = e.target.files[0]
-    setFile(URL.createObjectURL(e.target.files[0]))
+    image = e.target.files[0]
+    console.log(image);
+    setImageLink(URL.createObjectURL(e.target.files[0]))
   }
   if (classProjectCategory.loading || thesisCategory.loading) return <p>Loading...</p>;
   if (classProjectCategory.error || thesisCategory.error) return <p>Error: {classProjectCategory.error.message}</p>;
@@ -197,7 +196,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
             />
           </div>
           <div className="flex items-end">
-            <Image className="w-full h-44 rounded-lg object-cover" src={file} />
+            <Image className="w-full h-44 rounded-lg object-cover" src={imageLink} />
             <label className="flex items-center justify-center border-2 rounded-full bg-gray-50 text-yellow-500 ml-[-15px] mt-[-2] z-50">
               <CameraIcon />
               <input type="file" onChange={handleImageChange} className="hidden" />

@@ -82,7 +82,7 @@ const ManageUnapprovedThesis = () => {
     return <p>Loading...</p>; // Render loading state
   }
   if (thesisResponse.error) {
-    return <p>Error: {thesisResponse.error.message}</p>; // Render error state
+    return <p>Error: {JSON.stringify(thesisResponse.error)}</p>; // Render error state
   }
   return (
     <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">

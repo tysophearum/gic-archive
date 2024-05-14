@@ -17,9 +17,10 @@ import { DeleteIcon } from "../icons/DeleteIcon";
 import React, { useCallback, useState } from "react";
 import QUERIES from "../util/queries";
 import { useMutation } from "@apollo/client";
+import axios from "axios";
 
-const EditProfileForm = ({ onClose, user }) => {
-  const [image, setImage] = useState("https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg");
+const EditProfileForm = ({ onClose, onComplete, user }) => {
+  const [image, setImage] = useState(user.image);
   const [coverImage, setCoverImage] = useState("https://www.creativefabrica.com/wp-content/uploads/2021/08/16/flat-landscape-the-mountains-color-blue-Graphics-15913422-1.jpg");
   const [name, setName] = useState(user.name);
   const [studentId, setStudentId] = useState(user.studentId);
@@ -30,8 +31,14 @@ const EditProfileForm = ({ onClose, user }) => {
   const [tags, setTags] = useState(user.tags);
   const [updateMyProfile] = useMutation(QUERIES.updateMyProfile);
 
-  const handleChange = (e) => {
+  const handleImageChange = (e) => {
+    // alert("herhe")
     setImage(URL.createObjectURL(e.target.files[0]))
+
+    let formData = new FormData();
+    formData.append('userId', user.id)
+    formData.append('image', e.target.files[0])
+    axios.post('http://localhost:4000/upload/profile/image', formData)
   }
   const handleCoverChange = (e) => {
     setCoverImage(URL.createObjectURL(e.target.files[0]))
@@ -68,6 +75,7 @@ const EditProfileForm = ({ onClose, user }) => {
         variables: {user},
         ignoreResults: true
       });
+      onComplete()
       onClose();
     } catch (error) {
       console.log(JSON.stringify(error, null, 2));
@@ -91,7 +99,7 @@ const EditProfileForm = ({ onClose, user }) => {
               src={image} />
             <label className="flex items-center justify-center border-2 rounded-full bg-gray-50 text-yellow-500 ml-[-40px] mt-[-2] z-50">
               <CameraIcon />
-              <input type="file" onChange={handleChange} className="hidden" />
+              <input type="file" onChange={handleImageChange} className="hidden" />
             </label>
           </div>
           <div className="flex flex-col items-center mt-2 gap-1">

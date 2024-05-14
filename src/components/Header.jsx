@@ -81,14 +81,14 @@ const Header = () => {
                 color="primary"
                 name="Jason Hughes"
                 size="sm"
-                src="https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg"
+                src={data.getMe.image}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="gap-2">
                 <Link to='/profile'>
                   <div className="border w-80 rounded-lg h-fit flex flex-col items-center">
-                    <Image className="w-16 rounded-full mb-2 mt-4" src="https://i.pinimg.com/736x/32/7e/db/327edb9a15b304efc264668ada03f725.jpg"/>
+                    <Image className="w-16 rounded-full mb-2 mt-4" src={data.getMe.image}/>
                     <h2 className="text-lg font-semibold mt-2 mb-4">{data?.getMe.name}</h2>
                   </div>
                 </Link>

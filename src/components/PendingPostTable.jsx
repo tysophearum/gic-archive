@@ -20,7 +20,6 @@ export default function PendingPostTable({ fetchData }) {
   const viewClassProjectPopup = useDisclosure();
   const classProjectResponse = useQuery(QUERIES.listMyUnapprovedClassProject);
   const thesisResponse = useQuery(QUERIES.listMyUnapprovedThesis);
-  const [variable, setVariable] = useState(null);
   const [viewQuery, setViewQuery] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [deleteClassProject] = useMutation(QUERIES.deleteClassProject);
@@ -32,11 +31,9 @@ export default function PendingPostTable({ fetchData }) {
   }, [fetchData])
 
   const handleDeleteClassProject = async (classProjectId) => {
-    console.log("here");
     try {
       const { data } = await deleteClassProject({ variables: { classProjectId } });
       classProjectResponse.refetch()
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +72,7 @@ export default function PendingPostTable({ fetchData }) {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: "https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" }}
+                    avatarProps={{ radius: "lg", src: thesis.image }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   >
@@ -123,7 +120,7 @@ export default function PendingPostTable({ fetchData }) {
               <TableRow key={classProject.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: "https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" }}
+                    avatarProps={{ radius: "lg", src: classProject.image }}
                     description={classProject.description.substring(0, 10)}
                     name={classProject.title}
                   >

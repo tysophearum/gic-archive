@@ -1,12 +1,49 @@
-import { Divider, Breadcrumbs, BreadcrumbItem, Table, TableHeader, TableBody, TableRow, TableColumn, TableCell, Tooltip } from "@nextui-org/react";
+import React, { useState } from "react";
+import { Divider, 
+  Breadcrumbs, 
+  BreadcrumbItem, 
+  Table, 
+  TableHeader, 
+  TableBody, 
+  TableRow, 
+  TableColumn, 
+  TableCell, 
+  Tooltip,
+  Button,
+  useDisclosure,
+  Modal,
+  ModalContent,
+} from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import { EditIcon } from "../../../icons/EditIcon";
 import { DeleteIcon } from "../../../icons/DeleteIcon";
 import { useQuery } from "@apollo/client";
 import QUERIES from "../../../util/queries";
+import CreateThesisCategoryForm from "../../../components/CreateThesisCategoryForm";
+import { useMutation } from "@apollo/client";
+import EditThesisCategoryForm from "../../../components/EditThesisCategoryForm";
 
 const ManageThesisCategory = () => {
-  const { data, error, loading } = useQuery(QUERIES.listThesisCategory);
+  const { data, error, loading, refetch } = useQuery(QUERIES.listThesisCategory);
+  const createModal = useDisclosure();
+  const editModal = useDisclosure();
+  const [editId, setEditId] = useState(null);
+  const [deleteThesisCategory] = useMutation(QUERIES.deleteThesisCategory);
+
+
+  const handleDeleteThesisCategory = (thesisId) => {
+    deleteThesisCategory({
+      variables: {
+        thesisId,
+      },
+    })
+      .then(() => {
+        refetch();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   if (loading) {
     return <p>Loading...</p>; // Render loading state
@@ -26,8 +63,23 @@ const ManageThesisCategory = () => {
       </Breadcrumbs>
       <div>
         <h1 className=" font-semibold text-2xl mb-4">Manage Thesis Category</h1>
+        <Modal size="2xl" placement="center" isOpen={createModal.isOpen} onOpenChange={createModal.onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <CreateThesisCategoryForm onClose={onClose} onComplete={refetch} />
+            )}
+          </ModalContent>
+        </Modal>
         <Divider />
-        <Table className=" mt-4" aria-label="Example table with dynamic content">
+        <Table
+          topContent={
+            <div className="flex justify-between items-center">
+              <h1 className="font-semibold text-xl">Thesis Categories</h1>
+              <Button onPress={createModal.onOpen} startContent={<h1 className="text-xl">+</h1>} color="primary" className="text-white font-semibold">Create</Button>
+            </div>
+          }
+          className=" mt-4"
+          aria-label="Example table with dynamic content">
           <TableHeader>
             <TableColumn>Name</TableColumn>
             <TableColumn>Description</TableColumn>
@@ -42,12 +94,16 @@ const ManageThesisCategory = () => {
                   <TableCell>
                     <div className="relative flex items-center gap-2">
                       <Tooltip color="primary" content="Edit">
-                        <span className="text-lg cursor-pointer active:opacity-50 text-primary">
+                        <span 
+                          onClick={() => { editModal.onOpen(); setEditId(category.id) }}
+                          className="text-lg cursor-pointer active:opacity-50 text-primary">
                           <EditIcon height={18} width={18} />
                         </span>
                       </Tooltip>
                       <Tooltip color="danger" content="Delete">
-                        <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                        <span 
+                          onClick={() => handleDeleteThesisCategory(category.id)}
+                          className="text-lg text-danger cursor-pointer active:opacity-50">
                           <DeleteIcon />
                         </span>
                       </Tooltip>
@@ -58,6 +114,13 @@ const ManageThesisCategory = () => {
             })}
           </TableBody>
         </Table>
+        <Modal size="2xl" placement="center" isOpen={editModal.isOpen} onOpenChange={editModal.onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <EditThesisCategoryForm onClose={onClose} onComplete={refetch} categoryId={editId} />
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     </div>
   )

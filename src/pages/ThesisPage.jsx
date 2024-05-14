@@ -25,7 +25,8 @@ const ThesisPage = () => {
   }
   if (error || featuredThesis.error) return (
     <><p>Error: {error.message}</p>
-    <p>Error: {featuredThesis.error.message}</p></>
+    <p>Error: {featuredThesis.error.message}</p>
+    </>
   );
   return (
     <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
@@ -53,7 +54,7 @@ const ThesisPage = () => {
         })}
       </div>
       <Banner type={'thesis'}/>
-      <ItemList type={'thesis'} query={listDataQuery} variable={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
+      <ItemList type={'thesis'} query={listDataQuery} variables={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
     </div>
   );
 };
