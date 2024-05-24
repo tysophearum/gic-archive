@@ -8,16 +8,16 @@ import QUERIES from "../util/queries";
 import { useCallback } from "react";
 import { data } from "autoprefixer";
 
-const ItemCard2 = ({ document, type }) => {
+const ItemCard2 = ({ document }) => {
   const [like, setLike] = useState(document.liked)
   const [likeAmount, setLikeAmount] = useState(document.likeAmount)
   const [likeClassProject] = useMutation(QUERIES.likeClassProject);
   const [likeThesis] = useMutation(QUERIES.likeThesis);
 
   const handleLike = useCallback(async () => {
-    if (type === 'classProject') {
+    if (document.__typename.toLowerCase().includes('classproject')) {
       likeClassProject({ variables: { classProjectId: document.id } })
-    } else if (type === 'thesis') {
+    } else if (document.__typename.toLowerCase().includes('thesis')) {
       likeThesis({ variables: { thesisId: document.id } })
     }
     setLike(!like);
@@ -25,7 +25,7 @@ const ItemCard2 = ({ document, type }) => {
   }, [like])
   return (
     <div>
-      <Link to={'/' + type + '/' + document.id}>
+      <Link to={document.__typename.toLowerCase().includes('thesis') ? `/thesis/${document.id}` : document.__typename.toLowerCase().includes('classproject') ? `/classProject/${document.id}`: ''}>
         <Card
           className="h-fit min-w-60 w-full border-[#d9ecff] bg-transparent"
           shadow="none"
@@ -47,7 +47,7 @@ const ItemCard2 = ({ document, type }) => {
       </Link>
       <div className="flex justify-between w-full items-center my-2">
         <div className="flex items-center">
-          <Avatar className="w-6 h-6 text-tiny" />
+          <Avatar className="w-6 h-6 text-tiny" src={`${document.user.image}`} />
           <Link to={'/profile/' + document.user.id} className="hover:underline font-semibold ml-1">
             {document.user.name}
           </Link>

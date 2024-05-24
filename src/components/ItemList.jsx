@@ -27,6 +27,7 @@ const ItemList = ({ query, variables, title, type }) => {
   }
 return (
       <>
+      {/* {JSON.stringify(data)} */}
       <div className="flex justify-between my-4 w-full">
         {title}
         <div className="sm:flex items-center hidden">
@@ -51,13 +52,13 @@ return (
       {grid ? (
         <div className="gap-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2">
           {data?.map((item, index) => (
-            <ItemCard2 type={type} document={item} key={index} /> // Don't forget to add key prop
+            <ItemCard2 document={item} key={index} /> // Don't forget to add key prop
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 place-items-center">
           {data?.map((item, index) => (
-            <ItemCard type={type} document={item} key={index} /> // Don't forget to add key prop
+            <ItemCard document={item} key={index} /> // Don't forget to add key prop
           ))}
         </div>
       )}

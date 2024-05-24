@@ -53,7 +53,7 @@ const ThesisPage = () => {
           )
         })}
       </div>
-      <Banner type={'thesis'}/>
+      <Banner query={QUERIES.listFeaturedThesis}/>
       <ItemList type={'thesis'} query={listDataQuery} variables={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
     </div>
   );

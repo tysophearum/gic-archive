@@ -1,8 +1,8 @@
-import { Avatar, Button, Textarea, User } from '@nextui-org/react';
+import { Avatar, Button, Textarea } from '@nextui-org/react';
 import React, { useState, useEffect } from "react";
 import fetchData from "../util/fetchData";
 import { PaperPlaneIcon } from '../icons/PaperPlaneIcon';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import QUERIES from '../util/queries';
 
 const Comments = ({ id, type }) => {
@@ -15,6 +15,7 @@ const Comments = ({ id, type }) => {
   const [createClassProjectComment] = useMutation(QUERIES.createClassProjectComment);
   const [createThesisComment] = useMutation(QUERIES.createThesisComment);
   const [comment, setComment] = useState('');
+  const {data: myData, loading: myLoading, error: myError} = useQuery(QUERIES.getMe)
 
   async function getData() {
     try {
@@ -84,7 +85,7 @@ const Comments = ({ id, type }) => {
           className="transition-transform h-14 w-14 mr-3"
           color="primary"
           name="Jason Hughes"
-          src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
+          src={myData.getMe?.image || null} />
         <div className="relative w-full">
           <Textarea
             label="Comment"
@@ -100,9 +101,6 @@ const Comments = ({ id, type }) => {
             </Button>
         </div>
       </div>
-      {/* <div className="flex justify-end px-4">
-        <button className='mt-[-100px] z-50'>Send</button>
-      </div> */}
       <div>
         {data.map((userComment) => {
           return (
@@ -112,7 +110,7 @@ const Comments = ({ id, type }) => {
               color="primary"
               name="Jason Hughes"
               size='md'
-              src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
+              src={`${userComment.user.image}`} />
             <div className='w-full'>
               <span className='font-semibold'>{userComment.user.name}</span>
               <p className='text-sm'>{userComment.comment}</p>

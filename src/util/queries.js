@@ -407,8 +407,8 @@ const QUERIES = {
   }
   `,
   listMyApprovedClassProject: gql`
-  query ListMyApprovedClassProject {
-    listMyApprovedClassProject {
+  query ListMyApprovedClassProject($pager: PaginationInput) {
+    listMyApprovedClassProject(pager: $pager) {
       data {
         id
         title
@@ -452,8 +452,8 @@ const QUERIES = {
   }
   `,
   listMyApprovedThesis: gql`
-  query ListMyApprovedThesis {
-    listMyApprovedThesis {
+  query ListMyApprovedThesis($pager: PaginationInput) {
+    listMyApprovedThesis(pager: $pager) {
       data {
         id
         title
@@ -511,8 +511,8 @@ const QUERIES = {
   }
   `,
   listMyUnapprovedClassProject: gql`
-  query ListMyUnapprovedClassProject {
-    listMyUnapprovedClassProject {
+  query ListMyUnapprovedClassProject($pager: PaginationInput) {
+    listMyUnapprovedClassProject(pager: $pager) {
       data {
         id
         title
@@ -546,8 +546,8 @@ const QUERIES = {
   }
   `,
   listMyUnapprovedThesis: gql`
-  query ListMyUnapprovedThesis {
-    listMyUnapprovedThesis {
+  query ListMyUnapprovedThesis($pager: PaginationInput) {
+    listMyUnapprovedThesis(pager: $pager) {
       data {
         id
         title
@@ -818,8 +818,8 @@ const QUERIES = {
   }
   `,
   listClassProjectByUser: gql`
-  query ListClassProjectByUser($userId: String!) {
-    listClassProjectByUser(userId: $userId) {
+  query ListClassProjectByUser($userId: String!, $pager: PaginationInput) {
+    listClassProjectByUser(userId: $userId, pager: $pager) {
       data {
         id
         title
@@ -863,8 +863,8 @@ const QUERIES = {
   }
   `,
   listThesisByUser: gql`
-  query ListThesisByUser($userId: String!) {
-    listThesisByUser(userId: $userId) {
+  query ListThesisByUser($userId: String!, $pager: PaginationInput) {
+    listThesisByUser(userId: $userId, pager: $pager) {
       data {
         id
         title
@@ -1265,6 +1265,245 @@ const QUERIES = {
       description
       createdAt
       updatedAt
+    }
+  }
+  `,
+  listFeaturedDocuments: gql`
+  query ListFeaturedDocuments {
+    listFeaturedDocuments {
+      ... on MinClassProject {
+        id
+        title
+        description
+        image
+        user {
+          id
+          name
+          studentId
+          email
+          gender
+          image
+          createdAt
+          updatedAt
+        }
+        classProjectCategory {
+          id
+          name
+          description
+          teachers
+          createdAt
+          updatedAt
+        }
+        classProjectLink
+        repositoryLink
+        videoLink
+        isApproved
+        likeAmount
+        liked
+        createdAt
+        updatedAt
+      }
+      ... on MinThesis {
+        id
+        title
+        description
+        image
+        user {
+          id
+          name
+          studentId
+          email
+          gender
+          image
+          createdAt
+          updatedAt
+        }
+        thesisCategory {
+          id
+          name
+          description
+          createdAt
+          updatedAt
+        }
+        thesisLink
+        repositoryLink
+        videoLink
+        isApproved
+        likeAmount
+        liked
+        createdAt
+        updatedAt
+      }
+    }
+  }
+  `,
+  listMostLikedDocuments: gql`
+  query ListMostLikedDocuments($pager: PaginationInput) {
+    listMostLikedDocuments(pager: $pager) {
+      data {
+        ... on MinClassProject {
+          id
+          title
+          description
+          image
+          user {
+            id
+            name
+            studentId
+            email
+            gender
+            image
+            createdAt
+            updatedAt
+          }
+          classProjectCategory {
+            id
+            name
+            description
+            teachers
+            createdAt
+            updatedAt
+          }
+          classProjectLink
+          repositoryLink
+          videoLink
+          isApproved
+          likeAmount
+          liked
+          createdAt
+          updatedAt
+        }
+        ... on MinThesis {
+          id
+          title
+          description
+          image
+          user {
+            id
+            name
+            studentId
+            email
+            gender
+            image
+            createdAt
+            updatedAt
+          }
+          thesisCategory {
+            id
+            name
+            description
+            createdAt
+            updatedAt
+          }
+          thesisLink
+          repositoryLink
+          videoLink
+          isApproved
+          likeAmount
+          liked
+          createdAt
+          updatedAt
+        }
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
+    }
+  }
+  `,
+  searchThesis: gql`
+  query SearchThesis($title: String!, $pager: PaginationInput) {
+    searchThesis(title: $title, pager: $pager) {
+      data {
+        id
+        title
+        description
+        image
+        user {
+          id
+          name
+          studentId
+          email
+          gender
+          image
+          createdAt
+          updatedAt
+        }
+        thesisCategory {
+          id
+          name
+          description
+          createdAt
+          updatedAt
+        }
+        thesisLink
+        repositoryLink
+        videoLink
+        isApproved
+        likeAmount
+        liked
+        createdAt
+        updatedAt
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
+    }
+  }
+  `,
+  searchClassProject: gql`
+  query SearchClassProject($title: String!, $pager: PaginationInput) {
+    searchClassProject(title: $title, pager: $pager) {
+      data {
+        id
+        title
+        description
+        image
+        user {
+          id
+          name
+          studentId
+          email
+          gender
+          image
+          createdAt
+          updatedAt
+        }
+        classProjectCategory {
+          id
+          name
+          description
+          teachers
+          createdAt
+          updatedAt
+        }
+        classProjectLink
+        repositoryLink
+        videoLink
+        isApproved
+        likeAmount
+        liked
+        createdAt
+        updatedAt
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
     }
   }
   `

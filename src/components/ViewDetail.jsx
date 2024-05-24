@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Avatar, Button, User } from '@nextui-org/react';
+import React, { useState, useEffect } from 'react';
+import { Button, User } from '@nextui-org/react';
 import { PaperIcon } from '../icons/PaperIcon';
 import { GithubIcon } from '../icons/GithubIcon';
 import ViewTextArea from './ViewTextArea';
@@ -51,7 +51,7 @@ const ViewDetail = ({ query, variables }) => {
                 description={data.user.studentId}
                 className="my-2 text-lg"
                 avatarProps={{
-                  src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                  src: `${data.user.image}`,
                 }} />
             </Link>
           </div>
@@ -66,7 +66,7 @@ const ViewDetail = ({ query, variables }) => {
                     description={data.teacher.studentId}
                     className="my-2 text-lg"
                     avatarProps={{
-                      src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                      src: `${data.teacher.image}`,
                     }} />
                 </Link>
               </div>
@@ -75,7 +75,7 @@ const ViewDetail = ({ query, variables }) => {
           {data.collaborators.length > 0 && (
             <>
               <h2 className=" text-xl font-semibold mt-4 mb-2">Collaborators </h2>
-              <div className="flex items-center">
+              <div className="flex flex-col">
                 {data.collaborators.map((collaborator) => {
                   return (
                     <Link key={collaborator.id} to={'/profile/' + collaborator.id}>
@@ -84,9 +84,9 @@ const ViewDetail = ({ query, variables }) => {
                         name={(<h1 className="font-semibold">{collaborator.name}</h1>)}
                         description={collaborator.studentId}
                         className="my-2 text-lg"
-                        // avatarProps={{
-                        //   src: `${collaborator.image}`,
-                        // }} 
+                        avatarProps={{
+                          src: `${collaborator.image}`,
+                        }} 
                         />
                     </Link>
                   );

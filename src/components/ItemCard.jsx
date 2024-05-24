@@ -7,7 +7,7 @@ import { StarIcon } from '../icons/StarIcon';
 import { Link } from 'react-router-dom'
 import unixToTime from '../util/unixToTime';
 
-const ItemCard = ({ document, type }) => {
+const ItemCard = ({ document }) => {
   // // Initialize state for the liked status
   // const [liked, setLiked] = useState(false);
 
@@ -18,7 +18,9 @@ const ItemCard = ({ document, type }) => {
   // };
 
   return (
-    <Link to={'/'+type+'/'+document.id} className='rounded-xl mb-4 duration-150 hover:shadow-gray-100 hover:shadow-xl w-full'>
+    <Link 
+      to={document.__typename.toLowerCase().includes('thesis') ? `/thesis/${document.id}` : document.__typename.toLowerCase().includes('classproject') ? `/classProject/${document.id}`: ''} 
+      className='rounded-xl mb-4 duration-150 hover:shadow-gray-100 hover:shadow-xl w-full'>
       <Card shadow='sm'>
         <CardBody className='grid md:grid-cols-[17%,57%,17%] gap-7 place-items-start p-4 sm:grid-cols-1s'>
           <Image isZoomed className='rounded object-cover md:w-56 w-full h-44' alt='#' src={document.image || 'https://cdn.dribbble.com/users/6944734/screenshots/17665290/media/97649adc40b4df0b29b59d57f7657b2c.png'} />

@@ -6,8 +6,8 @@ import { useQuery } from '@apollo/client';
 import QUERIES from '../util/queries';
 import { Link } from 'react-router-dom';
 
-const Banner = ({type}) => {
-  const { loading, error, data: response } = useQuery((type === 'classProject') ? QUERIES.listFeaturedClassProject : QUERIES.listFeaturedThesis);
+const Banner = ({query}) => {
+  const { loading, error, data: response } = useQuery(query);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Banner = ({type}) => {
   return (
     <Carousel infiniteLoop autoPlay showStatus={false} showThumbs={false}>
       {data.map((item, index) => (
-        <Link to={`/${type}/${item.id}`} key={index}>
+        <Link to={item.__typename.toLowerCase().includes('thesis') ? `/thesis/${item.id}` : item.__typename.toLowerCase().includes('classproject') ? `/classProject/${item.id}`: ''} key={index}>
           <div key={index} className="my-4">
             <Card isFooterBlurred className="w-full h-[350px] col-span-12 sm:col-span-7">
               <Image

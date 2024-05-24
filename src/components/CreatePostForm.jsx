@@ -103,7 +103,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
 
           formData.append('image', image)
           console.log(image);
-          // await axios.post('http://localhost:4000/upload/classProject/image', formData)
+          await axios.post('http://localhost:4000/upload/classProject/image', formData)
         }
         onComplete();
         onClose();

@@ -53,8 +53,8 @@ const ClassProjectPage = () => {
             })
           }
         </div>
-        <Banner type={'classProject'}/>
-        <ItemList type={'classProject'} query={listDataQuery} variables={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
+        <Banner query={QUERIES.listFeaturedClassProject}/>
+        <ItemList query={listDataQuery} variables={variables} title={<h1 className='text-3xl font-semibold'>{selectCategory.name}</h1>} />
       </div>
     </>
   );
