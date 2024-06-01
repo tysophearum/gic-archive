@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, User } from '@nextui-org/react';
+import { Button, User, Modal, ModalContent, ModalHeader, ModalBody, Card, useDisclosure } from '@nextui-org/react';
 import { PaperIcon } from '../icons/PaperIcon';
 import { GithubIcon } from '../icons/GithubIcon';
 import ViewTextArea from './ViewTextArea';
@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 const ViewDetail = ({ query, variables }) => {
   const [data, setData] = useState(null);
   const { loading, error, data: response } = useQuery(query, { variables });
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   useEffect(() => {
     if (!loading) {
       const resArray = Object.entries(response);
@@ -39,8 +39,26 @@ const ViewDetail = ({ query, variables }) => {
           <ViewTextArea text={data.description} maxLines={6} />
           <h2 className=" text-xl font-semibold mt-8 mb-2">Resource </h2>
           <div className="flex">
-            <Button radius='sm' className='bg-primary-500 text-white my-0.5 w-32 mr-2' startContent={<PaperIcon height={20} width={20} />}>Paper</Button>
-            <Button radius='sm' className='bg-black text-white ml-2 w-32' startContent={<GithubIcon height={20} width={20} />}>Code</Button>
+            <Button onPress={onOpen} radius='sm' className='bg-primary-500 text-white my-0.5 w-32 mr-2' startContent={<PaperIcon height={20} width={20} />}>Paper</Button>
+            <Modal isOpen={isOpen} size='xl' onOpenChange={onOpenChange}>
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">Report Documents</ModalHeader>
+                    <ModalBody className='mb-4'>
+                      <div className='grid grid-cols-1 w-full gap-4'>
+                        {data.classProjectLink.map((reportDocument) => (
+                          <Card shadow='sm' key={reportDocument} isPressable variant="bordered" className='w-full py-3 px-3'>
+                            {getLinkName(reportDocument)}
+                          </Card>
+                        ))}
+                      </div>
+                    </ModalBody>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
+            <a target="_blank" href={data.repositoryLink.includes('https://') ? data.repositoryLink : `https://${data.repositoryLink}`}><Button radius='sm' className='bg-black text-white ml-2 w-32' startContent={<GithubIcon height={20} width={20} />}>Code</Button></a>
           </div>
           <h2 className=" text-xl font-semibold mt-10 mb-2">Posted by </h2>
           <div className="flex items-center">
@@ -86,8 +104,8 @@ const ViewDetail = ({ query, variables }) => {
                         className="my-2 text-lg"
                         avatarProps={{
                           src: `${collaborator.image}`,
-                        }} 
-                        />
+                        }}
+                      />
                     </Link>
                   );
                 })}
@@ -101,3 +119,8 @@ const ViewDetail = ({ query, variables }) => {
 };
 
 export default ViewDetail;
+
+function getLinkName(link) {
+  const linkName = link.split('/').pop().slice(13);
+  return linkName;
+}

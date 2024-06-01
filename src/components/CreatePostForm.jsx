@@ -90,28 +90,50 @@ const CreatePostForm = ({ onClose, onComplete }) => {
 
   const createClassProject = useCallback(async (event) => {
     try {
-      console.log("1", classProjectPayload);
-      const { data } = await uploadClassProject({ variables: classProjectPayload })
-      console.log("2", classProjectPayload);
+      // Step 1: Upload the class project data
+      const { data } = await uploadClassProject({ variables: classProjectPayload });
       if (data) {
-        if (image) {
-          let formData = new FormData();
-          formData.append('classProjectId', data.createClassProject.id);
-          // acceptedFiles.forEach(file => {
-          //   formData.append('files', file); // Append each file individually
-          // });
-
-          formData.append('image', image)
-          console.log(image);
-          await axios.post('http://localhost:4000/upload/classProject/image', formData)
+        // Step 2: Prepare formData for files
+        let formData = new FormData();
+        formData.append('classProjectId', data.createClassProject.id);
+  
+        acceptedFiles.forEach(file => {
+          formData.append('files', file); // Append each file individually
+        });
+  
+        try {
+          // Step 3: Upload files
+          await axios.post('http://localhost:4000/upload/classProject/files', formData);
+        } catch (fileUploadError) {
+          console.error('Error uploading files:', fileUploadError);
+          return; // Exit the function if file upload fails
         }
+  
+        if (image) {
+          try {
+            // Step 4: Prepare formData for image
+            formData = new FormData();
+            formData.append('classProjectId', data.createClassProject.id);
+            formData.append('image', image);
+            console.log(image);
+  
+            // Step 5: Upload image
+            await axios.post('http://localhost:4000/upload/classProject/image', formData);
+          } catch (imageUploadError) {
+            console.error('Error uploading image:', imageUploadError);
+            return; // Exit the function if image upload fails
+          }
+        }
+  
+        // Step 6: Call completion handlers if all uploads are successful
         onComplete();
         onClose();
       }
     } catch (error) {
-      console.log(error);
+      // General error handling for the initial class project creation
+      console.error('Error creating class project:', error);
     }
-  }, [classProjectPayload, acceptedFiles])
+  }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);  
 
   const createThesis = useCallback(async (event) => {
     try {
