@@ -93,7 +93,7 @@ const ViewDetail = ({ query, variables }) => {
                 })}
               </div>
             </>)}
-          <h2 className=" text-xl font-semibold mt-10 mb-2">Citation </h2><p className="text-zinc-700 mb-10">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas, in. Sapiente, sed perspiciatis, neque quam quisquam animi nisi soluta sunt dolor, ea esse consectetur. Sunt aliquam harum iste expedita quo?</p>
+          {/* <h2 className=" text-xl font-semibold mt-10 mb-2">Citation </h2><p className="text-zinc-700 mb-10">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas, in. Sapiente, sed perspiciatis, neque quam quisquam animi nisi soluta sunt dolor, ea esse consectetur. Sunt aliquam harum iste expedita quo?</p> */}
         </>
       )}
     </>

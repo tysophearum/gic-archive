@@ -95,7 +95,10 @@ const SearchModal = ({onClose}) => {
       <ModalBody className="pb-6">
         {!thesis.loading && !classProject.loading ? (
           (classProject.data.searchClassProject.data.length === 0 && thesis.data.searchThesis.data.length === 0) && (
-            <p className="my-12 text-center">No results found.</p>
+            <div className="flex flex-col items-center">
+              <img className="w-[100px] opacity-50" src='https://media.tenor.com/zLE8iO4GSAcAAAAi/ghost-photographer.gif' alt="loading..." />
+              <p className="mb-12 text-center text-xl text-gray-600">No results found.</p>
+            </div>
           )
         ) : (
           <p className="my-12 text-center">Loading...</p>

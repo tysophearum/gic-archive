@@ -14,6 +14,7 @@ const Feedbacks = ({id, type}) => {
   });
   const [createClassProjectFeedback] = useMutation(QUERIES.createClassProjectFeedback);
   const [createThesisFeedback] = useMutation(QUERIES.createThesisFeedback);
+  const {data: myData, loading: myLoading, error: myError} = useQuery(QUERIES.getMe)
 
   const handleCreateFeedback = async () => {
     if (feedback === '') {
@@ -24,6 +25,7 @@ const Feedbacks = ({id, type}) => {
         const { data: resData } = await createClassProjectFeedback({ variables: { classProjectFeedback: {classProject: id, feedback: feedback} } });
         if (resData) {
           setFeedback('');
+          resData.createClassProjectFeedback.user.image = myData.getMe.image
           setData([...data, resData.createClassProjectFeedback])
         }
       }
@@ -31,6 +33,7 @@ const Feedbacks = ({id, type}) => {
         const { data: resData } = await createThesisFeedback({ variables: { thesisFeedback: {thesis: id, feedback: feedback} } });
         if (resData) {
           setFeedback('');
+          resData.createClassProjectFeedback.user.image = myData.getMe.image
           setData([...data, resData.createThesisFeedback])
         }
       }
@@ -57,13 +60,13 @@ const Feedbacks = ({id, type}) => {
       </div>
       <div>
         {data && data.map(feedback => (
-          <div className="flex my-3 bg-gray-50 rounded-lg p-2">
+          <div className={`flex my-3 rounded-lg p-2 ${feedback.user.id === myData.getMe.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
             <Avatar
               className="transition-transform mr-3"
               color="primary"
               name="Jason Hughes"
               size='md'
-              src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
+              src={feedback.user.image} />
             <div className='w-full'>
               <span className='font-semibold'>{feedback.user.name}</span>
               <p className='text-sm'>{feedback.feedback}</p>
@@ -76,7 +79,7 @@ const Feedbacks = ({id, type}) => {
           className="transition-transform h-14 w-14 mr-3"
           color="primary"
           name="Jason Hughes"
-          src="https://wallpapers-clan.com/wp-content/uploads/2022/07/funny-cat-9.jpg" />
+          src={myData?.getMe?.image || null} />
         <div className="relative w-full">
           <Textarea
             label="Feedback"

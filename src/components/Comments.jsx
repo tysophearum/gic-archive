@@ -51,6 +51,7 @@ const Comments = ({ id, type }) => {
         const { data: resData } = await createClassProjectComment({ variables: { classProjectComment: {classProject: id, comment: comment} } });
         if (resData) {
           setComment('');
+          resData.createClassProjectComment.user.image = myData.getMe.image
           setData([resData.createClassProjectComment, ...data])
         }
       }
@@ -58,6 +59,7 @@ const Comments = ({ id, type }) => {
         const { data: resData } = await createThesisComment({ variables: { thesisComment: {thesis: id, comment: comment} } });
         if (resData) {
           setComment('');
+          resData.createClassProjectComment.user.image = myData.getMe.image
           setData([resData.createThesisComment, ...data])
         }
       }
@@ -85,7 +87,7 @@ const Comments = ({ id, type }) => {
           className="transition-transform h-14 w-14 mr-3"
           color="primary"
           name="Jason Hughes"
-          src={myData.getMe?.image || null} />
+          src={myData?.getMe?.image || null} />
         <div className="relative w-full">
           <Textarea
             label="Comment"

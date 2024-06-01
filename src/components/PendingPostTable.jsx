@@ -100,8 +100,8 @@ export default function PendingPostTable({ fetchData }) {
                         <EyeIcon />
                       </span>
                     </Tooltip>
-                    <Tooltip content="Edit document">
-                      <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                    <Tooltip color="primary" content="Edit document">
+                      <span className="text-lg text-primary cursor-pointer active:opacity-50">
                         <EditIcon />
                       </span>
                     </Tooltip>
@@ -148,12 +148,12 @@ export default function PendingPostTable({ fetchData }) {
                         <EyeIcon />
                       </span>
                     </Tooltip>
-                    <Tooltip content="Edit user">
-                      <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                    <Tooltip color="primary" content="Edit document">
+                      <span className="text-lg text-primary cursor-pointer active:opacity-50">
                         <EditIcon />
                       </span>
                     </Tooltip>
-                    <Tooltip color="danger" content="Delete user">
+                    <Tooltip color="danger" content="Delete document">
                       <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteClassProject(classProject.id)}>
                         <DeleteIcon />
                       </span>
@@ -230,7 +230,9 @@ export default function PendingPostTable({ fetchData }) {
           {() => (
             <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
               <ViewDetail query={viewQuery} variables={{ classProjectId: selectedId }} />
-              <Feedbacks type={'classProject'} id={selectedId}/>
+              <div className="mt-6">
+                <Feedbacks type={'classProject'} id={selectedId}/>
+              </div>
             </div>
           )}
         </ModalContent>

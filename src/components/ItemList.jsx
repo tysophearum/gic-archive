@@ -8,7 +8,7 @@ import { useQuery } from "@apollo/client";
 const ItemList = ({ query, variables, title, type }) => {
   let [grid, setGrid] = useState(true);
   const [data, setData] = useState([]);
-  const { loading, error, data: response } = useQuery(query, {variables});
+  const { loading, error, data: response } = useQuery(query, { variables });
 
   useEffect(() => {
     if (typeof response !== 'undefined') {
@@ -25,9 +25,17 @@ const ItemList = ({ query, variables, title, type }) => {
   if (error) {
     return <p>Error: {error.message}</p>; // Render error state
   }
-return (
-      <>
-      {/* {JSON.stringify(data)} */}
+
+  if (data.length === 0) {
+    return (
+      <div className="flex flex-col justify-center items-center h-[50vh]">
+        <img className="w-[100px]" src='https://media.tenor.com/zLE8iO4GSAcAAAAi/ghost-photographer.gif' alt="loading..." />
+        <p className="text-2xl text-gray-700">No document found.</p>
+      </div>
+    );
+  }
+  return (
+    <>
       <div className="flex justify-between my-4 w-full">
         {title}
         <div className="sm:flex items-center hidden">
@@ -62,7 +70,7 @@ return (
           ))}
         </div>
       )}
-      </>
+    </>
   );
 }
 
