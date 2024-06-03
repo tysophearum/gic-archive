@@ -144,7 +144,7 @@ const ManageUnapprovedThesis = () => {
                   />
                 </TableCell>
                 <TableCell>
-                  {thesis.thesisCategory.name}
+                  {thesis.category.name}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center">

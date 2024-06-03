@@ -26,8 +26,8 @@ let classProjectPayload = {
   classProject: {
     title: '',
     description: '',
-    classProjectCategory: '',
-    classProjectLink: '',
+    category: '',
+    files: '',
     repositoryLink: '',
     videoLink: '',
     collaborators: [],
@@ -37,8 +37,8 @@ let thesisPayload = {
   thesis: {
     title: '',
     description: '',
-    thesisCategory: '',
-    thesisLink: '',
+    category: '',
+    files: '',
     repositoryLink: '',
     videoLink: '',
     teacher: '',
@@ -131,32 +131,56 @@ const CreatePostForm = ({ onClose, onComplete }) => {
       }
     } catch (error) {
       // General error handling for the initial class project creation
-      console.error('Error creating class project:', error);
+      console.log('Error creating class project:', error);
     }
   }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);  
 
   const createThesis = useCallback(async (event) => {
     try {
-      const { data } = await uploadThesis({ variables: thesisPayload })
+      // Step 1: Upload the class project data
+      const { data } = await uploadThesis({ variables: thesisPayload });
       if (data) {
-        if (image) {
-          let formData = new FormData();
-          formData.append('thesisId', data.createThesis.id);
-          // acceptedFiles.forEach(file => {
-          //   formData.append('files', file); // Append each file individually
-          // });
-
-          formData.append('image', image)
-          console.log(image);
-          await axios.post('http://localhost:4000/upload/thesis/image', formData)
+        // Step 2: Prepare formData for files
+        let formData = new FormData();
+        formData.append('thesisId', data.createThesis.id);
+  
+        acceptedFiles.forEach(file => {
+          formData.append('files', file); // Append each file individually
+        });
+  
+        try {
+          // Step 3: Upload files
+          await axios.post('http://localhost:4000/upload/thesis/files', formData);
+        } catch (fileUploadError) {
+          console.error('Error uploading files:', fileUploadError);
+          return; // Exit the function if file upload fails
         }
+  
+        if (image) {
+          try {
+            // Step 4: Prepare formData for image
+            formData = new FormData();
+            formData.append('thesisId', data.createThesis.id);
+            formData.append('image', image);
+            console.log(image);
+  
+            // Step 5: Upload image
+            await axios.post('http://localhost:4000/upload/thesis/image', formData);
+          } catch (imageUploadError) {
+            console.error('Error uploading image:', imageUploadError);
+            return; // Exit the function if image upload fails
+          }
+        }
+  
+        // Step 6: Call completion handlers if all uploads are successful
         onComplete();
         onClose();
       }
     } catch (error) {
-      console.log(error);
+      // General error handling for the initial class project creation
+      console.log('Error creating class project:', error);
     }
-  }, [thesisPayload, acceptedFiles])
+  }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);  
 
   const onSearchStudentInputChange = async (e) => {
     const value = e.target.value;
@@ -238,7 +262,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
                 label="Select a category"
                 className="mb-3"
                 onChange={(e) => {
-                  classProjectPayload.classProject.classProjectCategory = e.target.value;
+                  classProjectPayload.classProject.category = e.target.value;
                 }}
               >
                 {classProjectCategory.data.listClassProjectCategory.map((category) => {
@@ -367,7 +391,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
                 label="Select a category"
                 className="mb-3"
                 onChange={(e) => {
-                  thesisPayload.thesis.thesisCategory = e.target.value;
+                  thesisPayload.thesis.category = e.target.value;
                 }}
               >
                 {thesisCategory.data.listThesisCategory.map((category) => {

@@ -81,7 +81,7 @@ export default function PendingPostTable({ fetchData }) {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-col">
-                    <p className="text-bold text-sm capitalize">{thesis.thesisCategory.name}</p>
+                    <p className="text-bold text-sm capitalize">{thesis.category.name}</p>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -129,7 +129,7 @@ export default function PendingPostTable({ fetchData }) {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-col">
-                    <p className="text-bold text-sm capitalize">{classProject.classProjectCategory.name}</p>
+                    <p className="text-bold text-sm capitalize">{classProject.category.name}</p>
                   </div>
                 </TableCell>
                 <TableCell>

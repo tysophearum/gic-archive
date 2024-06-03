@@ -71,12 +71,11 @@ const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
   }
 
   const handleApproveClassProject = async (classProjectId) => {
-    try {
-      const { data } = await approveClassProject({ variables: { classProjectId,  approval: true } });
-      classProjectResponse.refetch()
-    } catch (error) {
-      console.log(error);
+    const { data, errors } = await approveClassProject({ variables: { classProjectId,  approval: true } });
+    if (errors) {
+      console.log(errors);
     }
+    classProjectResponse.refetch()
   }
 
   if (classProjectResponse.loading || classProjectCategoryResponse.loading) {

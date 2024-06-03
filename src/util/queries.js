@@ -41,14 +41,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -86,14 +86,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -131,7 +131,7 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        classProjectLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -229,7 +229,7 @@ const QUERIES = {
         liked
         createdAt
         updatedAt
-        classProjectCategory {
+        category {
           id
           name
           description
@@ -265,7 +265,7 @@ const QUERIES = {
         createdAt
         updatedAt
       }
-      classProjectCategory {
+      category {
         id
         name
         description
@@ -282,7 +282,7 @@ const QUERIES = {
         createdAt
         updatedAt
       }
-      classProjectLink
+      files
       repositoryLink
       videoLink
       isApproved
@@ -349,7 +349,7 @@ const QUERIES = {
         createdAt
         updatedAt
       }
-      thesisCategory {
+      category {
         id
         name
         description
@@ -366,7 +366,7 @@ const QUERIES = {
         createdAt
         updatedAt
       }
-      thesisLink
+      files
       repositoryLink
       videoLink
       isApproved
@@ -424,14 +424,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        classProjectCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        classProjectLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -469,14 +469,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -518,14 +518,14 @@ const QUERIES = {
         title
         description
         image
-        classProjectCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        classProjectLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -553,14 +553,14 @@ const QUERIES = {
         title
         description
         image
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -734,14 +734,14 @@ const QUERIES = {
         createdAt
         updatedAt
       }
-      classProjectCategory {
+      category {
         id
         name
         description
         createdAt
         updatedAt
       }
-      classProjectLink
+      files
       repositoryLink
       videoLink
       isApproved
@@ -769,14 +769,14 @@ const QUERIES = {
         createdAt
         updatedAt
       }
-      thesisCategory {
+      category {
         id
         name
         description
         createdAt
         updatedAt
       }
-      thesisLink
+      files
       repositoryLink
       videoLink
       isApproved
@@ -835,14 +835,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        classProjectCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        classProjectLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -880,14 +880,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -987,14 +987,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -1032,14 +1032,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -1286,7 +1286,7 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        classProjectCategory {
+        category {
           id
           name
           description
@@ -1294,7 +1294,7 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        classProjectLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -1318,14 +1318,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -1356,7 +1356,7 @@ const QUERIES = {
             createdAt
             updatedAt
           }
-          classProjectCategory {
+          category {
             id
             name
             description
@@ -1364,7 +1364,7 @@ const QUERIES = {
             createdAt
             updatedAt
           }
-          classProjectLink
+          files
           repositoryLink
           videoLink
           isApproved
@@ -1388,14 +1388,14 @@ const QUERIES = {
             createdAt
             updatedAt
           }
-          thesisCategory {
+          category {
             id
             name
             description
             createdAt
             updatedAt
           }
-          thesisLink
+          files
           repositoryLink
           videoLink
           isApproved
@@ -1434,14 +1434,14 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        thesisCategory {
+        category {
           id
           name
           description
           createdAt
           updatedAt
         }
-        thesisLink
+        files
         repositoryLink
         videoLink
         isApproved
@@ -1479,7 +1479,7 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        classProjectCategory {
+        category {
           id
           name
           description
@@ -1487,7 +1487,7 @@ const QUERIES = {
           createdAt
           updatedAt
         }
-        classProjectLink
+        files
         repositoryLink
         videoLink
         isApproved
