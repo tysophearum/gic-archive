@@ -28,9 +28,7 @@ import ManageAllUnapprovedThesis from './pages/dashboard/admin/ManageAllUnapprov
 import ManageClassProjectCategory from './pages/dashboard/admin/ManageClassProjectCategory';
 import ManageThesisCategory from './pages/dashboard/admin/ManageThesisCategory';
 
-import TeacherDashboard2 from './pages/dashboard/test/TeacherDashboard2';
-import TeacherDashboard2CP from './pages/dashboard/test/TeacherDashboard2CP';
-import TeacherDashboard2T from './pages/dashboard/test/TeacherDashboard2T';
+import ManageAllStudents from './pages/dashboard/admin/ManageAllStudents';
 
 const Router = createBrowserRouter([
   {
@@ -72,18 +70,6 @@ const Router = createBrowserRouter([
       {
         path: "/teacherDashboard",
         element: <TeacherDashboard />,
-      },
-      {
-        path: "/teacherDashboard2",
-        element: <TeacherDashboard2 />,
-      },
-      {
-        path: "/teacherDashboard2/classProject",
-        element: <TeacherDashboard2CP />,
-      },
-      {
-        path: "/teacherDashboard2/thesis",
-        element: <TeacherDashboard2T />,
       },
       {
         path: "/teacherDashboard/manageApprovedProject",
@@ -144,6 +130,10 @@ const Router = createBrowserRouter([
       {
         path: "/adminDashboard/manageThesisCategory",
         element: <ManageThesisCategory />,
+      },
+      {
+        path: "/adminDashboard/manageStudents",
+        element: <ManageAllStudents />,
       },
     ]
   },

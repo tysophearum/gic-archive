@@ -1,6 +1,31 @@
 import { gql } from '@apollo/client';
 
 const QUERIES = {
+  register: gql`
+  mutation Register($user: UserRegisterInput!) {
+    register(user: $user) {
+      user {
+        id
+        name
+        studentId
+        bio
+        email
+        gender
+        contacts {
+          type
+          value
+        }
+        image
+        coverImage
+        role
+        tags
+        createdAt
+        updatedAt
+      }
+      token
+    }
+  }
+  `,
   listThesisCategory: gql`
   {
     listThesisCategory {
@@ -1506,7 +1531,38 @@ const QUERIES = {
       }
     }
   }
-  `
+  `,
+  listStudents: gql`
+  query ListStudents($pager: PaginationInput) {
+    listStudents(pager: $pager) {
+      users {
+        id
+        name
+        studentId
+        bio
+        email
+        gender
+        contacts {
+          type
+          value
+        }
+        image
+        coverImage
+        role
+        tags
+        createdAt
+        updatedAt
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
+    }
+  }`
 }
 
 export default QUERIES;
