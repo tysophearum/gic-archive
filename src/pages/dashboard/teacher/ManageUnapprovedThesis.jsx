@@ -138,7 +138,7 @@ const ManageUnapprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: "https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   />

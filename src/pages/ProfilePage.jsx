@@ -41,6 +41,7 @@ const ProfilePage = () => {
       <Image radius="none" className="h-[40vh] md:w-[80vw] w-[100vw] object-cover z-0 rounded-t-lg" src="https://www.creativefabrica.com/wp-content/uploads/2021/08/16/flat-landscape-the-mountains-color-blue-Graphics-15913422-1.jpg" />
       <div className="md:w-[80vw] w-[100vw] bg-white px-12">
         <Avatar className="w-40 h-40 mt-[-110px]" src={data.getMe.image} />
+        {/* <img src={data.getMe.image} alt="" className="w-40 h-40 mt-[-110px]" /> */}
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <div>

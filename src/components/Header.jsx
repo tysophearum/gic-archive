@@ -127,8 +127,8 @@ const Header = () => {
               {data.getMe.role == 'admin' && (
                 <DropdownItem key="settings"><Link to='/adminDashboard'>Admin dashboard</Link></DropdownItem>
               )}
-              <DropdownItem onClick={() => setTheme('light')} key="settings">Light Mode</DropdownItem>
-              <DropdownItem onClick={() => setTheme('dark')} key="settings">Dark Mode</DropdownItem>
+              {/* <DropdownItem onClick={() => setTheme('light')} key="settings">Light Mode</DropdownItem>
+              <DropdownItem onClick={() => setTheme('dark')} key="settings">Dark Mode</DropdownItem> */}
               <DropdownItem key="logout" color="danger" onClick={handleLogOut}>
                 Log Out
               </DropdownItem>

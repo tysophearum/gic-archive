@@ -308,6 +308,7 @@ const QUERIES = {
         updatedAt
       }
       files
+      fileLinks
       repositoryLink
       videoLink
       isApproved
@@ -392,6 +393,7 @@ const QUERIES = {
         updatedAt
       }
       files
+      fileLinks
       repositoryLink
       videoLink
       isApproved

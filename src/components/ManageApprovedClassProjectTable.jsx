@@ -95,7 +95,7 @@ const ManageApprovedClassProjectTable = ({classProjectCategoryId}) => {
         aria-label="Example table with custom cells"
         topContent={
           <>
-            <h1 className="text-2xl font-semibold">Featured {classProjectCategoryResponse.data.getClassProjectCategoryById.name}</h1>
+            <h1 className="text-2xl font-semibold">Featured Class Projects</h1>
           </>
         }
         bottomContent={
@@ -291,7 +291,6 @@ const ManageApprovedClassProjectTable = ({classProjectCategoryId}) => {
           {() => (
             <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw]">
               <ViewDetail query={viewQuery} variables={variable} />
-              <Feedbacks />
             </div>
           )}
         </ModalContent>

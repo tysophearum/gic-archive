@@ -25,16 +25,14 @@ const Feedbacks = ({id, type}) => {
         const { data: resData } = await createClassProjectFeedback({ variables: { classProjectFeedback: {classProject: id, feedback: feedback} } });
         if (resData) {
           setFeedback('');
-          resData.createClassProjectFeedback.user.image = myData.getMe.image
-          setData([...data, resData.createClassProjectFeedback])
+          refetch()
         }
       }
       else if (type === 'thesis') {
         const { data: resData } = await createThesisFeedback({ variables: { thesisFeedback: {thesis: id, feedback: feedback} } });
         if (resData) {
           setFeedback('');
-          resData.createClassProjectFeedback.user.image = myData.getMe.image
-          setData([...data, resData.createThesisFeedback])
+          refetch()
         }
       }
     } catch (error) {

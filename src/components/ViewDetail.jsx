@@ -47,10 +47,12 @@ const ViewDetail = ({ query, variables }) => {
                     <ModalHeader className="flex flex-col gap-1">Report Documents</ModalHeader>
                     <ModalBody className='mb-4'>
                       <div className='grid grid-cols-1 w-full gap-4'>
-                        {data.files.map((reportDocument) => (
-                          <Card shadow='sm' key={reportDocument} isPressable variant="bordered" className='w-full py-3 px-3'>
-                            {getLinkName(reportDocument)}
-                          </Card>
+                        {data.files.map((reportDocument, i) => (
+                          <a target="_blank" href={data.fileLinks?.[i]}>
+                            <Card shadow='sm' key={reportDocument} isPressable variant="bordered" className='w-full py-3 px-3'>
+                              {getLinkName(reportDocument)}
+                            </Card>
+                          </a>
                         ))}
                       </div>
                     </ModalBody>

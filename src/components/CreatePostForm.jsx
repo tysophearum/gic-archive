@@ -437,7 +437,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
                         return (
                           <div key={user.id} className="flex items-center justify-between gap-2 py-1 px-2 rounded-lg duration-100 hover:bg-gray-200">
                             <div className="flex items-center gap-2">
-                              <Image className="w-10 h-10 rounded-full" src="https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg" />
+                              <Image className="w-10 h-10 rounded-full" src={user.image} />
                               <div>
                                 <p className="">{user.name}</p>
                                 <p className=" text-xs text-gray-400">{user.studentId}</p>

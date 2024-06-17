@@ -67,9 +67,6 @@ const LogInPage = () => {
                   </button>
                 </div>
               </form>
-              <div className="mt-12 text-sm font-display font-semibold text-gray-700 text-center">
-                Don't have an account ? <a className="cursor-pointer text-blue-600 hover:text-blue-800">Sign up</a>
-              </div>
             </div>
           </div>
         </div>

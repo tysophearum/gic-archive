@@ -22,7 +22,8 @@ import {
   Tabs,
   Tab
 } from "@nextui-org/react";
-import { UploadIcon } from "../icons/UploadIcon";
+import { EditIcon } from "../icons/EditIcon";
+import { DeleteIcon } from "../icons/DeleteIcon";
 import { EyeIcon } from "../icons/EyeIcon";
 import { useMutation, useQuery } from "@apollo/client";
 import QUERIES from "../util/queries";
@@ -229,7 +230,7 @@ const ManageStudentsTable = () => {
                 <TableCell>
                   <User
                     avatarProps={{ radius: "lg" }}
-                    description={student.id}
+                    description={student.studentId}
                     name={student.name}
                   >
                     some
@@ -243,9 +244,19 @@ const ManageStudentsTable = () => {
                 </TableCell>
                 <TableCell>
                   <div className="relative flex items-center gap-2">
-                    <Tooltip content="View project">
+                    <Tooltip content="View user">
                       <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                         <EyeIcon />
+                      </span>
+                    </Tooltip>
+                    <Tooltip color="primary" content="Edit document">
+                      <span className="text-lg text-primary cursor-pointer active:opacity-50">
+                        <EditIcon />
+                      </span>
+                    </Tooltip>
+                    <Tooltip color="danger" content="Delete document">
+                      <span className="text-lg text-danger cursor-pointer active:opacity-50" >
+                        <DeleteIcon />
                       </span>
                     </Tooltip>
                   </div>

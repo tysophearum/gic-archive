@@ -14,17 +14,15 @@ const TeacherDashboard = () => {
           <Link to={'/teacherDashboard/manageApprovedProject'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-green-500 to-emerald-500">
-                <h1 className="text-3xl font-bold">Class project</h1>
+                <h1 className="text-3xl font-bold">Approved</h1>
               </CardBody>
-              <h4 className="font-bold text-large pt-2">Manage Approved Project</h4>
             </Card>
           </Link>
           <Link to={'/teacherDashboard/manageUnapprovedProject'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-green-500 to-emerald-500">
-                <h1 className="text-3xl font-bold">Class project</h1>
+                <h1 className="text-3xl font-bold">Unpproved</h1>
               </CardBody>
-              <h4 className="font-bold text-large pt-2">Manage Unpproved Project</h4>
             </Card>
           </Link>
         </div>
@@ -37,17 +35,15 @@ const TeacherDashboard = () => {
           <Link to={'/teacherDashboard/manageApprovedThesis'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-yellow-500 to-amber-600">
-                <h1 className="text-3xl font-bold">Thesis</h1>
+                <h1 className="text-3xl font-bold">Approved</h1>
               </CardBody>
-              <h4 className="font-bold text-large pt-2">Manage Approved Thesis</h4>
             </Card>
           </Link>
           <Link to={'/teacherDashboard/manageUnapprovedThesis'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-yellow-500 to-amber-600">
-                <h1 className="text-3xl font-bold">Thesis</h1>
+                <h1 className="text-3xl font-bold">Unapproved</h1>
               </CardBody>
-              <h4 className="font-bold text-large pt-2">Manage Unapproved Thesis</h4>
             </Card>
           </Link>
         </div>
