@@ -3,7 +3,6 @@ import { Card, CardFooter, Image, CardHeader, Button } from "@nextui-org/react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import { useQuery } from '@apollo/client';
-import QUERIES from '../util/queries';
 import { Link } from 'react-router-dom';
 
 const Banner = ({query}) => {

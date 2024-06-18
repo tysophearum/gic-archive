@@ -107,19 +107,19 @@ const SearchModal = ({onClose}) => {
           thesis.data.searchThesis?.data.length === 0 ? null : (
             thesis.data.searchThesis.data.map((item, index) => (
               <Link to={'/thesis/'+item.id} onClick={() => {onClose()}}>
-                <div className=" bg-white rounded-xl shadow-md flex items-center hover:bg-blue-500 hover:text-white">
+                <div className="p-1 bg-white h-24 rounded-xl shadow-md flex items-center duration-150 hover:bg-blue-500 hover:text-white">
                   <img
-                    className="h-20 w-20 object-cover rounded-l-lg"
+                    className="h-full w-24 object-cover rounded-lg"
                     src={item.image || 'https://cdn.dribbble.com/users/6944734/screenshots/17665290/media/97649adc40b4df0b29b59d57f7657b2c.png'}
                   />
                   <div className="ml-4 mb-4">
-                    <h1 className="font-medium mt-2">{item.title}</h1>
+                    <h1 className="font-semibold mt-2">{item.title}</h1>
                     <p style={{
                       display: '-webkit-box',
                       WebkitLineClamp: 2, // Change 3 to the desired number of lines
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
-                    }} className="text-small text-foreground/80">{item.description}</p>
+                    }} className="text-small pt-1 tracking-wide text-foreground/80">{item.description}</p>
                   </div>
                 </div>
               </Link>
@@ -130,19 +130,19 @@ const SearchModal = ({onClose}) => {
           classProject.data.searchClassProject?.data.length === 0 ? null : (
             classProject.data.searchClassProject.data.map((item, index) => (
               <Link to={'/classProject/'+item.id} onClick={() => {onClose()}}>
-                <div className=" bg-white rounded-xl shadow-md flex items-center hover:bg-blue-500 hover:text-white">
+                <div className="p-1 bg-white h-24 rounded-xl shadow-md flex items-center duration-150 hover:bg-blue-500 hover:text-white">
                   <img
-                    className="h-20 w-20 object-cover rounded-l-lg"
+                    className="h-full w-24 object-cover rounded-lg"
                     src={item.image || 'https://cdn.dribbble.com/users/6944734/screenshots/17665290/media/97649adc40b4df0b29b59d57f7657b2c.png'}
                   />
                   <div className="ml-4 mb-4">
-                    <h1 className="font-medium mt-2">{item.title}</h1>
+                    <h1 className="font-semibold mt-2">{item.title}</h1>
                     <p style={{
                       display: '-webkit-box',
                       WebkitLineClamp: 2, // Change 3 to the desired number of lines
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
-                    }} className="text-small text-foreground/80">{item.description}</p>
+                    }} className="text-small pt-1 tracking-wide text-foreground/80">{item.description}</p>
                   </div>
                 </div>
               </Link>

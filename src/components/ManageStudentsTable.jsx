@@ -28,8 +28,10 @@ import { EyeIcon } from "../icons/EyeIcon";
 import { useMutation, useQuery } from "@apollo/client";
 import QUERIES from "../util/queries";
 import axios from "axios";
+import EditProfileForm from "../components/EditProfileForm";
 
 const ManageStudentsTable = () => {
+  const profilePopup = useDisclosure();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -39,6 +41,8 @@ const ManageStudentsTable = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [gender, setGender] = useState('');
+
+  const [selectedViewUser, setSelectedViewUser] = useState(null);
 
   const [csvFile, setCsvFile] = useState(null)
 
@@ -165,7 +169,7 @@ const ManageStudentsTable = () => {
                   <div className="h-44 border border-dashed border-gray-500 rounded-xl flex items-center justify-center">
                     {/* <label className="flex items-center justify-center border-2 rounded-full bg-gray-50 text-yellow-500 ml-[-40px] mt-[-2] z-50">
                       <Button startContent={<UploadIcon height={24} width={24} />}>Upload file</Button> */}
-                      <input type="file" onChange={(e) => {setCsvFile(e.target.files[0])}}/>
+                    <input type="file" onChange={(e) => { setCsvFile(e.target.files[0]) }} />
                     {/* </label> */}
                   </div>
                   <ModalFooter>
@@ -249,8 +253,8 @@ const ManageStudentsTable = () => {
                         <EyeIcon />
                       </span>
                     </Tooltip>
-                    <Tooltip color="primary" content="Edit document">
-                      <span className="text-lg text-primary cursor-pointer active:opacity-50">
+                    <Tooltip color="primary" content="Edit user">
+                      <span onClick={() => {setSelectedViewUser(student); profilePopup.onOpen()}} className="text-lg text-primary cursor-pointer active:opacity-50">
                         <EditIcon />
                       </span>
                     </Tooltip>
@@ -267,6 +271,20 @@ const ManageStudentsTable = () => {
           )}
         </TableBody>
       </Table>
+      <Modal
+        isOpen={profilePopup.isOpen}
+        placement='center'
+        onOpenChange={profilePopup.onOpenChange}
+        size="2xl"
+        scrollBehavior="outside"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <EditProfileForm onClose={onClose} onComplete={refetch} user={selectedViewUser} />
+            // <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio quae possimus ab quam sunt, quas aliquid tempora labore tempore perspiciatis. Dolorem accusantium dolores voluptatibus reiciendis vel itaque consequatur cupiditate fugiat?</p>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }
