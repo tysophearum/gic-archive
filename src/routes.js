@@ -29,6 +29,7 @@ import ManageClassProjectCategory from './pages/dashboard/admin/ManageClassProje
 import ManageThesisCategory from './pages/dashboard/admin/ManageThesisCategory';
 
 import ManageAllStudents from './pages/dashboard/admin/ManageAllStudents';
+import ManageAllTeachers from './pages/dashboard/admin/ManageAllTeachers';
 
 const Router = createBrowserRouter([
   {
@@ -134,6 +135,10 @@ const Router = createBrowserRouter([
       {
         path: "/adminDashboard/manageStudents",
         element: <ManageAllStudents />,
+      },
+      {
+        path: "/adminDashboard/manageTeachers",
+        element: <ManageAllTeachers />,
       },
     ]
   },

@@ -31,12 +31,12 @@ import axios from "axios";
 import EditProfileForm from "../components/EditProfileForm";
 import fetchData from '../util/fetchData';
 
-const ManageStudentsTable = () => {
+const ManageTeachersTable = () => {
   const profilePopup = useDisclosure();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
-  const [students, setStudents] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const endpoint = process.env.REACT_APP_ENDPOINT;
 
   const [name, setName] = useState('');
@@ -49,7 +49,7 @@ const ManageStudentsTable = () => {
 
   const [csvFile, setCsvFile] = useState(null)
 
-  const { data, loading, error, refetch } = useQuery(QUERIES.listStudents, {
+  const { data, loading, error, refetch } = useQuery(QUERIES.listTeachers, {
     variables: {
       pager: {
         page: page,
@@ -89,34 +89,34 @@ const ManageStudentsTable = () => {
         console.log(err);
       })
   }
-  async function searchStudent(input) {
+  async function searchTeacher(input) {
     try {
-      const [responseData, error] = await fetchData(endpoint, QUERIES.searchStudents, { name: input });
+      const [responseData, error] = await fetchData(endpoint, QUERIES.searchTeachers, { name: input });
       if (error) {
         throw new Error(error.message);
       }
-      return responseData.searchStudents;
+      return responseData.searchTeachers;
     } catch (error) {
       console.log(error);
     }
   }
-  const onSearchStudentInputChange = async (e) => {
+  const onSearchTeacherInputChange = async (e) => {
     const value = e.target.value;
     if (value.length > 2) {
-      const result = await searchStudent(value);
+      const result = await searchTeacher(value);
       console.log(result);
-      setStudents(result);
+      setTeachers(result);
     }
     else if (value.length === 0) {
       refetch();
-      setStudents(data.listStudents?.users);
+      setTeachers(data.listTeachers?.users);
     }
   }
 
   useEffect(() => {
     try {
-      if (data && data.listStudents) {
-        setStudents(data.listStudents?.users);
+      if (data && data.listTeachers) {
+        setTeachers(data.listTeachers?.users);
       }
       refetch()
     } catch (error) {
@@ -145,7 +145,7 @@ const ManageStudentsTable = () => {
                     <div className="grid grid-cols-[80%,20%] gap-3">
                       <Input
                         autoFocus
-                        placeholder="Enter student name"
+                        placeholder="Enter teacher name"
                         variant="bordered"
                         value={name}
                         onValueChange={(value) => setName(value)}
@@ -164,19 +164,19 @@ const ManageStudentsTable = () => {
                       </Select>
                     </div>
                     <Input
-                      placeholder="Enter student id"
+                      placeholder="Enter teacher id"
                       variant="bordered"
                       value={studentId}
                       onValueChange={(value) => setStudentId(value)}
                     />
                     <Input
-                      placeholder="Enter student email"
+                      placeholder="Enter teacher email"
                       variant="bordered"
                       value={email}
                       onValueChange={(value) => setEmail(value)}
                     />
                     <Input
-                      placeholder="Enter student password"
+                      placeholder="Enter teacher password"
                       variant="bordered"
                       type="password"
                       value={password}
@@ -222,10 +222,10 @@ const ManageStudentsTable = () => {
         aria-label="Example table with custom cells"
         topContent={
           <div className="flex justify-between">
-            <h1 className="text-2xl font-semibold">Manage Students</h1>
+            <h1 className="text-2xl font-semibold">Manage Teachers</h1>
             <div className="flex items-center justify-end w-1/2">
-              <Input className="mr-2 w-56" size="sm" placeholder='Search for student' onChange={onSearchStudentInputChange} />
-              <Button color="primary" onPress={onOpen} >
+              <Input className="mr-2 w-56" size="sm" placeholder='Search for teacher' onChange={onSearchTeacherInputChange} />
+              <Button color="primary" onPress={onOpen}>
                 Add User(s)
               </Button>
             </div>
@@ -234,8 +234,8 @@ const ManageStudentsTable = () => {
         bottomContent={
           <div className="flex">
             <Pagination
-              total={data.listStudents.pagination.totalPages}
-              initialPage={data.listStudents.pagination.currentPage}
+              total={data.listTeachers.pagination.totalPages}
+              initialPage={data.listTeachers.pagination.currentPage}
               shadow
               onChange={(page) => setPage(page)}
               showControls />
@@ -260,26 +260,26 @@ const ManageStudentsTable = () => {
           <TableColumn>ACTION</TableColumn>
         </TableHeader>
         <TableBody>
-          {students?.map((student) => {
+          {teachers?.map((teacher) => {
             return (
-              <TableRow key={student.id}>
+              <TableRow key={teacher.id}>
                 <TableCell>
                   <User
                     avatarProps={{ 
                       radius: "lg",
-                      src: `${student.image ? student.image : ''}`
+                      src: `${teacher.image ? teacher.image : ''}`
                     }}
-                    description={student.studentId}
-                    name={student.name}
+                    description={teacher.studentId}
+                    name={teacher.name}
                   >
                     some
                   </User>
                 </TableCell>
                 <TableCell>
-                  <p className="text-bold text-sm capitalize ml-1">{student.studentId}</p>
+                  <p className="text-bold text-sm capitalize ml-1">{teacher.studentId}</p>
                 </TableCell>
                 <TableCell>
-                  {student.gender}
+                  {teacher.gender}
                 </TableCell>
                 <TableCell>
                   <div className="relative flex items-center gap-2">
@@ -289,7 +289,7 @@ const ManageStudentsTable = () => {
                       </span>
                     </Tooltip>
                     <Tooltip color="primary" content="Edit user">
-                      <span onClick={() => {setSelectedViewUser(student); profilePopup.onOpen()}} className="text-lg text-primary cursor-pointer active:opacity-50">
+                      <span onClick={() => {setSelectedViewUser(teacher); profilePopup.onOpen()}} className="text-lg text-primary cursor-pointer active:opacity-50">
                         <EditIcon />
                       </span>
                     </Tooltip>
@@ -324,4 +324,4 @@ const ManageStudentsTable = () => {
   );
 }
 
-export default ManageStudentsTable;
+export default ManageTeachersTable;

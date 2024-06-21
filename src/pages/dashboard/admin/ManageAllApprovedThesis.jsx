@@ -134,7 +134,7 @@ const ManageAllApprovedThesis = () => {
           <TableColumn>ACTION</TableColumn>
         </TableHeader>
         <TableBody>
-          {featuredThesisResponse.data.listFeaturedThesis.map((thesis) => {
+          {featuredThesisResponse?.data?.listFeaturedThesis?.map((thesis) => {
             return (
               <TableRow key={thesis.id}>
                 <TableCell>

@@ -613,9 +613,17 @@ const QUERIES = {
       id
       name
       studentId
+      bio
       email
       gender
+      contacts {
+        type
+        value
+      }
       image
+      coverImage
+      role
+      tags
       createdAt
       updatedAt
     }
@@ -627,9 +635,17 @@ const QUERIES = {
       id
       name
       studentId
+      bio
       email
       gender
+      contacts {
+        type
+        value
+      }
       image
+      coverImage
+      role
+      tags
       createdAt
       updatedAt
     }
@@ -1537,6 +1553,37 @@ const QUERIES = {
   listStudents: gql`
   query ListStudents($pager: PaginationInput) {
     listStudents(pager: $pager) {
+      users {
+        id
+        name
+        studentId
+        bio
+        email
+        gender
+        contacts {
+          type
+          value
+        }
+        image
+        coverImage
+        role
+        tags
+        createdAt
+        updatedAt
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
+    }
+  }`,
+  listTeachers: gql`
+  query ListTeachers($pager: PaginationInput) {
+    listTeachers(pager: $pager) {
       users {
         id
         name
