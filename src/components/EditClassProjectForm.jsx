@@ -159,8 +159,7 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
   }
 
   function isFilesEmpty() {
-    const bol = newFiles.length === 0 && files?.every(file => file.isDeleted);
-    alert(bol)
+    return newFiles.length === 0 && files?.every(file => file.isDeleted);
   }
 
   if (loading) return <p>Loading...</p>;
