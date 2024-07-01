@@ -11,7 +11,6 @@ const ClassProjectPage = () => {
   const [listDataQuery, setListDataQuery] = useState(QUERIES.listApprovedClassProject);
   const [variables, setVariables] = useState();
   const { loading, error, data } = useQuery(QUERIES.listClassProjectCategory);
-  const featuredClassProject = useQuery(QUERIES.listFeaturedClassProject);
 
   useEffect(() => {
     if (selectCategory.id) {
@@ -20,10 +19,9 @@ const ClassProjectPage = () => {
     }
   }, [selectCategory]);
 
-  if (loading || featuredClassProject.loading) return <p>Loading...</p>;
-  if (error || featuredClassProject.error) return (
-    <><p>Error: {error.message}</p>
-    <p>Error: {featuredClassProject.error.message}</p></>
+  if (loading) return <p></p>;
+  if (error) return (
+    <><p>Error: {error.message}</p></>
   );
   return (
     <>

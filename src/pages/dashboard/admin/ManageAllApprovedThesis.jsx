@@ -25,6 +25,7 @@ import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../../../util/unixToTime";
+import { CrossIcon } from "../../../icons/Cross";
 
 const ManageAllApprovedThesis = () => {
   const viewPopup = useDisclosure();
@@ -102,7 +103,7 @@ const ManageAllApprovedThesis = () => {
         aria-label="Example table with custom cells"
         topContent={
           <>
-            <h1 className="text-2xl font-semibold">Manage Approved Thesis</h1>
+            <h1 className="text-2xl font-semibold">Highlight Thesis</h1>
           </>
         }
         bottomContent={
@@ -139,7 +140,7 @@ const ManageAllApprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: "https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   >
@@ -182,7 +183,7 @@ const ManageAllApprovedThesis = () => {
         aria-label="Example table with custom cells"
         topContent={
           <>
-            <h1 className="text-2xl font-semibold">Manage Featuerd Thesis</h1>
+            <h1 className="text-2xl font-semibold">Thesis</h1>
           </>
         }
         bottomContent={
@@ -219,12 +220,10 @@ const ManageAllApprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: "https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
-                  >
-                    some
-                  </User>
+                  />
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center">
@@ -251,11 +250,11 @@ const ManageAllApprovedThesis = () => {
                         <StarIconFill />
                       </span>
                     </Tooltip>
-                    {/* <Tooltip color="danger" content="Delete project">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteThesis(thesis.id)}>
-                        <DeleteIcon />
+                    <Tooltip color="danger" content="Unapprove project">
+                      <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                        <CrossIcon size={"20"} />
                       </span>
-                    </Tooltip> */}
+                    </Tooltip>
                   </div>
                 </TableCell>
               </TableRow>

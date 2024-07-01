@@ -23,6 +23,9 @@ import QUERIES from "../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../util/unixToTime";
+import ConfirmationAlert from "./ConfirmationAlert";
+import TableLoading from "./loading/TableLoading";
+import BannerLoading from "./loading/BannerLoading";
 
 const statusColorMap = {
   active: "success",
@@ -79,7 +82,7 @@ const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
   }
 
   if (classProjectResponse.loading || classProjectCategoryResponse.loading) {
-    return <p>Loading...</p>; // Render loading state
+    return <TableLoading />; // Render loading state
   }
   if (classProjectResponse.error || classProjectCategoryResponse.error) {
     return <p>Error: {classProjectResponse.error.message}</p>; // Render error state
@@ -155,13 +158,33 @@ const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
                       </span>
                     </Tooltip>
                     <Tooltip color="primary" content="Approve project">
-                      <span onClick={() => {handleApproveClassProject(classProject.id)}} className="text-lg cursor-pointer active:opacity-50 text-primary">
-                        <CheckIcon />
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Approve"
+                          color="primary"
+                          title={"Approval comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-primary cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <CheckIcon />
+                            </span>
+                          )} message={"Are you sure you want to approve this document?"}
+                          action={() => {handleApproveClassProject(classProject.id)}}
+                        />
                       </span>
                     </Tooltip>
                     <Tooltip color="danger" content="Delete project">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteClassProject(classProject.id)}>
-                        <DeleteIcon />
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Delete"
+                          color="danger"
+                          title={"Delete comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <DeleteIcon />
+                            </span>
+                          )} message={"Are you sure you want to delete this document?"}
+                          action={() => {handleDeleteClassProject(classProject.id)}}
+                        />
                       </span>
                     </Tooltip>
                   </div>

@@ -34,6 +34,7 @@ const ItemCard2 = ({ document }) => {
           <CardBody className="overflow-visible p-0 h-56">
             <Image
               shadow="none"
+              loading="eager"
               radius="sm"
               width="100%"
               alt="{item.title}"

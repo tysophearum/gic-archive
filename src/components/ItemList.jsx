@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import ItemCard from "./ItemCard";
 import ItemCard2 from "./ItemCard2";
 import { useQuery } from "@apollo/client";
+import GridLoading from "./loading/GridLoading";
 
 const ItemList = ({ query, variables, title, type }) => {
   let [grid, setGrid] = useState(true);
@@ -19,7 +20,7 @@ const ItemList = ({ query, variables, title, type }) => {
   }, [query, variables, loading]);
 
   if (loading) {
-    return <p>Loading...</p>; // Render loading state
+    return <GridLoading />; // Render loading state
   }
 
   if (error) {

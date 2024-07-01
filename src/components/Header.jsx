@@ -49,15 +49,15 @@ const Header = () => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Link to='/home' className=" text-foreground">
+          <Link to='/' className=" text-foreground">
             <h1 className="text-4xl font-bold tracking-tight">GIC Archive</h1>
           </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-12" justify="end">
-        <NavbarItem isActive={location.pathname.startsWith('/home')} onClick={() => setTab('home')} >
-          <Link to='/home' className={`${location.pathname.startsWith('/home') ? 'text-blue-500' : ''} cursor-pointer`}>
+        <NavbarItem isActive={location.pathname === '/'} onClick={() => setTab('home')} >
+          <Link to='/' className={`${location.pathname === '/' ? 'text-blue-500' : ''} cursor-pointer`}>
             Home
           </Link>
         </NavbarItem>
@@ -71,8 +71,8 @@ const Header = () => {
             Thesis
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={tab === 'aboutUs'} onClick={() => setTab('aboutUs')} className={`${tab === 'aboutUs' ? 'text-blue-500' : ''} cursor-pointer`}>
-          About us
+        <NavbarItem className={`cursor-pointer`}>
+          <a href="https://gic.itc.edu.kh/">About us</a>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent as="div" className="items-center" justify="between">

@@ -11,7 +11,6 @@ const ThesisPage = () => {
   const [listDataQuery, setListDataQuery] = useState(QUERIES.listApprovedThesis);
   const [variables, setVariables] = useState();
   const { loading, error, data } = useQuery(QUERIES.listThesisCategory);
-  const featuredThesis = useQuery(QUERIES.listFeaturedThesis);
 
   useEffect(() => {
     if (selectCategory.id) {
@@ -20,12 +19,11 @@ const ThesisPage = () => {
     }
   }, [selectCategory]);
 
-  if (loading || featuredThesis.loading) {
-    return <p>Loading...</p>;
+  if (loading) {
+    return <p></p>;
   }
-  if (error || featuredThesis.error) return (
+  if (error) return (
     <><p>Error: {error.message}</p>
-    <p>Error: {featuredThesis.error.message}</p>
     </>
   );
   return (

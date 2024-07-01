@@ -8,6 +8,8 @@ import Feedbacks from "./Feedbacks";
 import QUERIES from "../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
+import EditClassProjectForm from "./EditClassProjectForm";
+import ConfirmationAlert from "./ConfirmationAlert";
 
 const statusColorMap = {
   active: "success",
@@ -18,12 +20,16 @@ const statusColorMap = {
 export default function PendingPostTable({ fetchData }) {
   const viewThesisPopup = useDisclosure();
   const viewClassProjectPopup = useDisclosure();
+  const editClassProjectPopup = useDisclosure();
+  const editThesisPopup = useDisclosure();
   const classProjectResponse = useQuery(QUERIES.listMyUnapprovedClassProject);
   const thesisResponse = useQuery(QUERIES.listMyUnapprovedThesis);
   const [viewQuery, setViewQuery] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [deleteClassProject] = useMutation(QUERIES.deleteClassProject);
   const [deleteThesis] = useMutation(QUERIES.deleteThesis);
+  const [classProjectId, setClassProjectId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     thesisResponse.refetch()
@@ -106,8 +112,18 @@ export default function PendingPostTable({ fetchData }) {
                       </span>
                     </Tooltip>
                     <Tooltip color="danger" content="Delete document">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteThesis(thesis.id)}>
-                        <DeleteIcon />
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Delete"
+                          color="danger"
+                          title={"Delete comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <DeleteIcon />
+                            </span>
+                          )} message={"Are you sure you want to delete this document?"}
+                          action={() => {handleDeleteThesis(thesis.id)}}
+                        />
                       </span>
                     </Tooltip>
                   </div>
@@ -149,13 +165,26 @@ export default function PendingPostTable({ fetchData }) {
                       </span>
                     </Tooltip>
                     <Tooltip color="primary" content="Edit document">
-                      <span className="text-lg text-primary cursor-pointer active:opacity-50">
+                      <span className="text-lg text-primary cursor-pointer active:opacity-50"onClick={() => {
+                        setClassProjectId(classProject.id)
+                        editClassProjectPopup.onOpen()
+                      }}>
                         <EditIcon />
                       </span>
                     </Tooltip>
                     <Tooltip color="danger" content="Delete document">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteClassProject(classProject.id)}>
-                        <DeleteIcon />
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Delete"
+                          color="danger"
+                          title={"Delete comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <DeleteIcon />
+                            </span>
+                          )} message={"Are you sure you want to delete this document?"}
+                          action={() => {handleDeleteClassProject(classProject.id)}}
+                        />
                       </span>
                     </Tooltip>
                   </div>
@@ -233,6 +262,40 @@ export default function PendingPostTable({ fetchData }) {
               <div className="mt-6">
                 <Feedbacks type={'classProject'} id={selectedId}/>
               </div>
+            </div>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={editClassProjectPopup.isOpen}
+        onOpenChange={editClassProjectPopup.onOpenChange}
+        size="full"
+        placement='bottom'
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeIn",
+              },
+            },
+            exit: {
+              y: 20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeOut",
+              },
+            }
+          }
+        }}
+      >
+        <ModalContent className="h-[95%] overflow-scroll !rounded-t-3xl">
+          {(onClose) => (
+            <div className="p-3 grid grid-cols-1 w-[100vw]">
+              <EditClassProjectForm id={classProjectId} onClose={onClose} onComplete={(val) => {classProjectResponse.refetch()}}/>
             </div>
           )}
         </ModalContent>

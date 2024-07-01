@@ -1611,7 +1611,16 @@ const QUERIES = {
         hasPrevPage
       }
     }
-  }`
+  }`,
+  updateClassProject: gql`
+  mutation UpdateClassProject($classProject: UpdateClassProjectInput!) {
+  updateClassProject(classProject: $classProject) {
+    id
+    title
+    description
+  }
+}
+  `
 }
 
 export default QUERIES;

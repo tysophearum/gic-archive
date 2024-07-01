@@ -27,6 +27,7 @@ import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../../../util/unixToTime";
+import ConfirmationAlert from "../../../components/ConfirmationAlert";
 
 const statusColorMap = {
   active: "success",
@@ -167,13 +168,33 @@ const ManageUnapprovedThesis = () => {
                       </span>
                     </Tooltip>
                     <Tooltip color="primary" content="Approve project">
-                      <span onClick={() => {handleApproveThesis(thesis.id)}} className="text-lg cursor-pointer active:opacity-50 text-primary">
-                        <CheckIcon />
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Approve"
+                          color="primary"
+                          title={"Approval comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-primary cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <CheckIcon />
+                            </span>
+                          )} message={"Are you sure you want to approve this document?"}
+                          action={() => {handleApproveThesis(thesis.id)}}
+                        />
                       </span>
                     </Tooltip>
                     <Tooltip color="danger" content="Delete project">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteThesis(thesis.id)}>
-                        <DeleteIcon />
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Delete"
+                          color="danger"
+                          title={"Delete comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <DeleteIcon />
+                            </span>
+                          )} message={"Are you sure you want to delete this document?"}
+                          action={() => {handleDeleteThesis(thesis.id)}}
+                        />
                       </span>
                     </Tooltip>
                   </div>

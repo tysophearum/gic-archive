@@ -15,7 +15,6 @@ import {
   Pagination,
   Breadcrumbs,
   BreadcrumbItem,
-  button,
 } from "@nextui-org/react";
 import { Link, useParams } from "react-router-dom";
 import { DeleteIcon } from "../../../icons/DeleteIcon";
@@ -27,6 +26,7 @@ import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../../../util/unixToTime";
+import ConfirmationAlert from "../../../components/ConfirmationAlert";
 
 const statusColorMap = {
   active: "success",
@@ -138,7 +138,7 @@ const ManageUnapprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: "https://img.freepik.com/premium-photo/3d-art-with-abstract-glass-3d-sphere-with-small-balls-particles-inside_170454-33.jpg" }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   />
@@ -167,13 +167,33 @@ const ManageUnapprovedThesis = () => {
                       </span>
                     </Tooltip>
                     <Tooltip color="primary" content="Approve project">
-                      <span onClick={() => {handleApproveThesis(thesis.id)}} className="text-lg cursor-pointer active:opacity-50 text-primary">
-                        <CheckIcon />
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Approve"
+                          color="primary"
+                          title={"Approval comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-primary cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <CheckIcon />
+                            </span>
+                          )} message={"Are you sure you want to approve this document?"}
+                          action={() => {handleApproveThesis(thesis.id)}}
+                        />
                       </span>
                     </Tooltip>
                     <Tooltip color="danger" content="Delete project">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDeleteThesis(thesis.id)}>
-                        <DeleteIcon />
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Delete"
+                          color="danger"
+                          title={"Delete comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={onPress}>
+                              <DeleteIcon />
+                            </span>
+                          )} message={"Are you sure you want to delete this document?"}
+                          action={() => {handleDeleteThesis(thesis.id)}}
+                        />
                       </span>
                     </Tooltip>
                   </div>

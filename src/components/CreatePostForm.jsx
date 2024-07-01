@@ -58,6 +58,8 @@ const CreatePostForm = ({ onClose, onComplete }) => {
   const [collaborator, setCollaborator] = useState([]);
   const [teacher, setTeacher] = useState(null);
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const [loading, setLoading] = useState(false);
+  const [imageLink, setImageLink] = useState("https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png");
   const files = acceptedFiles.map(file => (
     <Card className="p-3" shadow="sm" key={file.path}>
       {file.path} - {file.size} bytes
@@ -89,96 +91,92 @@ const CreatePostForm = ({ onClose, onComplete }) => {
   }
 
   const createClassProject = useCallback(async (event) => {
-    try {
-      // Step 1: Upload the class project data
-      const { data } = await uploadClassProject({ variables: classProjectPayload });
-      if (data) {
-        // Step 2: Prepare formData for files
-        let formData = new FormData();
-        formData.append('classProjectId', data.createClassProject.id);
-  
-        acceptedFiles.forEach(file => {
-          formData.append('files', file); // Append each file individually
-        });
-  
-        try {
-          // Step 3: Upload files
-          await axios.post('http://localhost:4000/upload/classProject/files', formData);
-        } catch (fileUploadError) {
-          console.error('Error uploading files:', fileUploadError);
-          return; // Exit the function if file upload fails
-        }
-  
-        if (image) {
-          try {
-            // Step 4: Prepare formData for image
-            formData = new FormData();
-            formData.append('classProjectId', data.createClassProject.id);
-            formData.append('image', image);
-            console.log(image);
-  
-            // Step 5: Upload image
-            await axios.post('http://localhost:4000/upload/classProject/image', formData);
-          } catch (imageUploadError) {
-            console.error('Error uploading image:', imageUploadError);
-            return; // Exit the function if image upload fails
-          }
-        }
-  
-        // Step 6: Call completion handlers if all uploads are successful
-        onComplete();
-        onClose();
+    // Step 1: Upload the class project data
+    const { data, errors } = await uploadClassProject({ variables: classProjectPayload });
+    if (errors) {
+      console.log(errors);
+    }
+    if (data) {
+      // Step 2: Prepare formData for files
+      let formData = new FormData();
+      formData.append('classProjectId', data.createClassProject.id);
+
+      acceptedFiles.forEach(file => {
+        formData.append('files', file); // Append each file individually
+      });
+
+      try {
+        // Step 3: Upload files
+        await axios.post('http://localhost:4000/upload/classProject/files', formData);
+      } catch (fileUploadError) {
+        console.error('Error uploading files:', fileUploadError);
+        return; // Exit the function if file upload fails
       }
-    } catch (error) {
-      // General error handling for the initial class project creation
-      console.log('Error creating class project:', error);
+
+      if (image) {
+        try {
+          // Step 4: Prepare formData for image
+          formData = new FormData();
+          formData.append('classProjectId', data.createClassProject.id);
+          formData.append('image', image);
+          console.log(image);
+
+          // Step 5: Upload image
+          await axios.post('http://localhost:4000/upload/classProject/image', formData);
+        } catch (imageUploadError) {
+          console.error('Error uploading image:', imageUploadError);
+          return; // Exit the function if image upload fails
+        }
+      }
+
+      // Step 6: Call completion handlers if all uploads are successful
+      onComplete();
+      onClose();
     }
   }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);  
 
   const createThesis = useCallback(async (event) => {
-    try {
-      // Step 1: Upload the class project data
-      const { data } = await uploadThesis({ variables: thesisPayload });
-      if (data) {
-        // Step 2: Prepare formData for files
-        let formData = new FormData();
-        formData.append('thesisId', data.createThesis.id);
-  
-        acceptedFiles.forEach(file => {
-          formData.append('files', file); // Append each file individually
-        });
-  
-        try {
-          // Step 3: Upload files
-          await axios.post('http://localhost:4000/upload/thesis/files', formData);
-        } catch (fileUploadError) {
-          console.error('Error uploading files:', fileUploadError);
-          return; // Exit the function if file upload fails
-        }
-  
-        if (image) {
-          try {
-            // Step 4: Prepare formData for image
-            formData = new FormData();
-            formData.append('thesisId', data.createThesis.id);
-            formData.append('image', image);
-            console.log(image);
-  
-            // Step 5: Upload image
-            await axios.post('http://localhost:4000/upload/thesis/image', formData);
-          } catch (imageUploadError) {
-            console.error('Error uploading image:', imageUploadError);
-            return; // Exit the function if image upload fails
-          }
-        }
-  
-        // Step 6: Call completion handlers if all uploads are successful
-        onComplete();
-        onClose();
+    // Step 1: Upload the class project data
+    const { data, errors } = await uploadThesis({ variables: thesisPayload });
+    if (errors) {
+      console.log(errors);
+    }
+    if (data) {
+      // Step 2: Prepare formData for files
+      let formData = new FormData();
+      formData.append('thesisId', data.createThesis.id);
+
+      acceptedFiles.forEach(file => {
+        formData.append('files', file); // Append each file individually
+      });
+
+      try {
+        // Step 3: Upload files
+        await axios.post('http://localhost:4000/upload/thesis/files', formData);
+      } catch (fileUploadError) {
+        console.error('Error uploading files:', fileUploadError);
+        return; // Exit the function if file upload fails
       }
-    } catch (error) {
-      // General error handling for the initial class project creation
-      console.log('Error creating class project:', error);
+
+      if (image) {
+        try {
+          // Step 4: Prepare formData for image
+          formData = new FormData();
+          formData.append('thesisId', data.createThesis.id);
+          formData.append('image', image);
+          console.log(image);
+
+          // Step 5: Upload image
+          await axios.post('http://localhost:4000/upload/thesis/image', formData);
+        } catch (imageUploadError) {
+          console.error('Error uploading image:', imageUploadError);
+          return; // Exit the function if image upload fails
+        }
+      }
+
+      // Step 6: Call completion handlers if all uploads are successful
+      onComplete();
+      onClose();
     }
   }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);  
 
@@ -210,10 +208,8 @@ const CreatePostForm = ({ onClose, onComplete }) => {
     const updatedUsers = collaborator.filter(item => item.id !== idToRemove);
     setCollaborator(updatedUsers);
   };
-  const [imageLink, setImageLink] = useState("https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png");
   const handleImageChange = (e) => {
     image = e.target.files[0]
-    console.log(image);
     setImageLink(URL.createObjectURL(e.target.files[0]))
   }
   if (classProjectCategory.loading || thesisCategory.loading) return <p>Loading...</p>;
@@ -380,7 +376,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
               <Button color="danger" variant="light" onPress={() => onClose()}>
                 Close
               </Button>
-              <Button color="primary" onClick={(e) => createClassProject(e)}>
+              <Button isLoading={loading} color="primary" onClick={(e) => { setLoading(true); createClassProject(e) }}>
                 Submit
               </Button>
             </ModalFooter>
@@ -466,7 +462,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
                           description={teacher.studentId}
                           className="my-0.5 mx-3"
                           avatarProps={{
-                            src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                            src: `${teacher.image}`,
                             size: 'md'
                           }}
                         />
@@ -577,7 +573,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
               <Button color="danger" variant="light" onPress={() => onClose()}>
                 Close
               </Button>
-              <Button color="primary" onClick={(e) => { createThesis(e) }}>
+              <Button isLoading={loading} color="primary" onClick={(e) => { setLoading(true); createThesis(e) }}>
                 Submit
               </Button>
             </ModalFooter>

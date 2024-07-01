@@ -2,6 +2,7 @@ import React from "react";
 import {
   Breadcrumbs,
   BreadcrumbItem,
+  Skeleton
 } from "@nextui-org/react";
 import { Link, useParams } from "react-router-dom";
 import QUERIES from "../../../util/queries";
@@ -10,17 +11,14 @@ import ManageUnapprovedClassProjectTable from "../../../components/ManageUnappro
 
 const ManageUnapprovedClassProject = () => {
   const param = useParams();
-  const classProjectCategoryResponse = useQuery(QUERIES.getClassProjectCategoryById, {
+  const {data, loading, error} = useQuery(QUERIES.getClassProjectCategoryById, {
     variables: {
       categoryId: param.classProjectCategoryId,
     },
   })
 
-  if (classProjectCategoryResponse.loading) {
-    return <p>Loading...</p>; // Render loading state
-  }
-  if (classProjectCategoryResponse.error) {
-    return <p>Error: {classProjectCategoryResponse.error.message}</p>; // Render error state
+  if (error) {
+    return <p>Error: {error.message}</p>; // Render error state
   }
   return (
     <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
@@ -36,7 +34,7 @@ const ManageUnapprovedClassProject = () => {
           </Link>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          {classProjectCategoryResponse.data.getClassProjectCategoryById.name}
+          {loading ? <Skeleton className="w-36 rounded-lg ml-2"><div className="h-3 w-3/5 rounded-lg bg-default-200"></div></Skeleton> : data.getClassProjectCategoryById.name}
         </BreadcrumbItem>
       </Breadcrumbs>
       <ManageUnapprovedClassProjectTable classProjectCategoryId={param.classProjectCategoryId} />

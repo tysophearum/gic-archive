@@ -4,6 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from 'react-responsive-carousel';
 import { useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
+import BannerLoading from './loading/BannerLoading';
 
 const Banner = ({query}) => {
   const { loading, error, data: response } = useQuery(query);
@@ -18,7 +19,7 @@ const Banner = ({query}) => {
   }, [loading]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <BannerLoading />;
   }
   if (error) return (
     <><p>Error: {error.message}</p></>
