@@ -9,6 +9,7 @@ import QUERIES from "../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import EditClassProjectForm from "./EditClassProjectForm";
+import EditThesisForm from "./EditThesisForm";
 import ConfirmationAlert from "./ConfirmationAlert";
 
 const statusColorMap = {
@@ -29,6 +30,7 @@ export default function PendingPostTable({ fetchData }) {
   const [deleteClassProject] = useMutation(QUERIES.deleteClassProject);
   const [deleteThesis] = useMutation(QUERIES.deleteThesis);
   const [classProjectId, setClassProjectId] = useState(null);
+  const [thesisId, setThesisId] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -107,7 +109,10 @@ export default function PendingPostTable({ fetchData }) {
                       </span>
                     </Tooltip>
                     <Tooltip color="primary" content="Edit document">
-                      <span className="text-lg text-primary cursor-pointer active:opacity-50">
+                      <span className="text-lg text-primary cursor-pointer active:opacity-50" onClick={() => {
+                        setThesisId(thesis.id)
+                        editThesisPopup.onOpen()
+                      }}>
                         <EditIcon />
                       </span>
                     </Tooltip>
@@ -296,6 +301,40 @@ export default function PendingPostTable({ fetchData }) {
           {(onClose) => (
             <div className="p-3 grid grid-cols-1 w-[100vw]">
               <EditClassProjectForm id={classProjectId} onClose={onClose} onComplete={(val) => {classProjectResponse.refetch()}}/>
+            </div>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={editThesisPopup.isOpen}
+        onOpenChange={editThesisPopup.onOpenChange}
+        size="full"
+        placement='bottom'
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeIn",
+              },
+            },
+            exit: {
+              y: 20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeOut",
+              },
+            }
+          }
+        }}
+      >
+        <ModalContent className="h-[95%] overflow-scroll !rounded-t-3xl">
+          {(onClose) => (
+            <div className="p-3 grid grid-cols-1 w-[100vw]">
+              <EditThesisForm id={thesisId} onClose={onClose} onComplete={(val) => {thesisResponse.refetch()}}/>
             </div>
           )}
         </ModalContent>

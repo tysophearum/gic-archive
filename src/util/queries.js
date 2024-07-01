@@ -1614,12 +1614,21 @@ const QUERIES = {
   }`,
   updateClassProject: gql`
   mutation UpdateClassProject($classProject: UpdateClassProjectInput!) {
-  updateClassProject(classProject: $classProject) {
-    id
-    title
-    description
+    updateClassProject(classProject: $classProject) {
+      id
+      title
+      description
+    }
   }
-}
+  `,
+  updateThesis: gql`
+  mutation UpdateThesis($thesis: UpdateThesisInput!) {
+    updateThesis(thesis: $thesis) {
+      id
+      title
+      description
+    }
+  }
   `
 }
 
