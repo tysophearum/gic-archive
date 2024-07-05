@@ -34,7 +34,7 @@ const ManageUnapprovedClassProject = () => {
           </Link>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          {loading ? <Skeleton className="w-36 rounded-lg ml-2"><div className="h-3 w-3/5 rounded-lg bg-default-200"></div></Skeleton> : data.getClassProjectCategoryById.name}
+          {data?.getClassProjectCategoryById?.name}
         </BreadcrumbItem>
       </Breadcrumbs>
       <ManageUnapprovedClassProjectTable classProjectCategoryId={param.classProjectCategoryId} />

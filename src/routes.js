@@ -7,7 +7,6 @@ import ThesisViewDetailPage from './pages/ThesisViewDetailPage';
 import ProfilePage from './pages/ProfilePage';
 import UserProfilePage from './pages/UserProfilePage';
 import Index from './pages/Index';
-import GridLoading from './components/loading/GridLoading';
 import LogInPage from './pages/LogInPage';
 
 import TeacherDashboard from './pages/dashboard/teacher/TeacherDashboard';
@@ -30,8 +29,9 @@ import ManageThesisCategory from './pages/dashboard/admin/ManageThesisCategory';
 
 import ManageAllStudents from './pages/dashboard/admin/ManageAllStudents';
 import ManageAllTeachers from './pages/dashboard/admin/ManageAllTeachers';
-import BannerLoading from './components/loading/BannerLoading';
-import TableLoading from './components/loading/TableLoading';
+import ManageAllAdmins from './pages/dashboard/admin/ManageAllAdmins';
+
+import Test from './pages/Test';
 
 const Router = createBrowserRouter([
   {
@@ -68,7 +68,7 @@ const Router = createBrowserRouter([
       },
       {
         path: "/test",
-        element: <TableLoading />,
+        element: <Test />,
       },
       {
         path: "/teacherDashboard",
@@ -141,6 +141,10 @@ const Router = createBrowserRouter([
       {
         path: "/adminDashboard/manageTeachers",
         element: <ManageAllTeachers />,
+      },
+      {
+        path: "/adminDashboard/manageAdmins",
+        element: <ManageAllAdmins />,
       },
     ]
   },

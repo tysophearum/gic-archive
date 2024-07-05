@@ -2,11 +2,16 @@ import { Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, CardFooter, Im
 import { Link, useParams } from "react-router-dom";
 import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
+import GridLoading2 from "../../../components/loading/GridLoading2";
 
 const AllUnapprovedClassProject = () => {
   const { data, loading, error } = useQuery(QUERIES.listClassProjectCategory);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (
+    <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
+      <GridLoading2 />
+    </div>
+  );
   if (error) return <p>Error: {error.message}</p>;
   return (
     <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
@@ -16,7 +21,7 @@ const AllUnapprovedClassProject = () => {
               Dashboard
             </Link>
           </BreadcrumbItem>
-          <BreadcrumbItem>Manage Approved Project</BreadcrumbItem>
+          <BreadcrumbItem>Manage Unapproved Project</BreadcrumbItem>
         </Breadcrumbs>
       <div>
         <h1 className=" font-semibold text-2xl mb-4">Class project categories</h1>

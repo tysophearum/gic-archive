@@ -15,7 +15,6 @@ import {
   Pagination,
   Breadcrumbs,
   BreadcrumbItem,
-  button,
 } from "@nextui-org/react";
 import { Link, useParams } from "react-router-dom";
 import { DeleteIcon } from "../../../icons/DeleteIcon";
@@ -28,6 +27,7 @@ import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../../../util/unixToTime";
 import ConfirmationAlert from "../../../components/ConfirmationAlert";
+import BannerLoading from "../../../components/loading/BannerLoading";
 
 const statusColorMap = {
   active: "success",
@@ -80,7 +80,11 @@ const ManageUnapprovedThesis = () => {
   }
 
   if (thesisResponse.loading) {
-    return <p>Loading...</p>; // Render loading state
+    return (
+      <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
+        <BannerLoading />
+      </div>
+    ); // Render loading state
   }
   if (thesisResponse.error) {
     return <p>Error: {thesisResponse.error.message}</p>; // Render error state

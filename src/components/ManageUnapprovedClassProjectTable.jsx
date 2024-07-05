@@ -24,7 +24,6 @@ import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../util/unixToTime";
 import ConfirmationAlert from "./ConfirmationAlert";
-import TableLoading from "./loading/TableLoading";
 import BannerLoading from "./loading/BannerLoading";
 
 const statusColorMap = {
@@ -82,7 +81,7 @@ const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
   }
 
   if (classProjectResponse.loading || classProjectCategoryResponse.loading) {
-    return <TableLoading />; // Render loading state
+    return <BannerLoading />; // Render loading state
   }
   if (classProjectResponse.error || classProjectCategoryResponse.error) {
     return <p>Error: {classProjectResponse.error.message}</p>; // Render error state

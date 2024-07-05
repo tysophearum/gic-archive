@@ -22,6 +22,8 @@ import QUERIES from "../../../util/queries";
 import CreateThesisCategoryForm from "../../../components/CreateThesisCategoryForm";
 import { useMutation } from "@apollo/client";
 import EditThesisCategoryForm from "../../../components/EditThesisCategoryForm";
+import BannerLoading from "../../../components/loading/BannerLoading";
+import ConfirmationAlert from "../../../components/ConfirmationAlert";
 
 const ManageThesisCategory = () => {
   const { data, error, loading, refetch } = useQuery(QUERIES.listThesisCategory);
@@ -46,7 +48,11 @@ const ManageThesisCategory = () => {
   }
 
   if (loading) {
-    return <p>Loading...</p>; // Render loading state
+    return (
+      <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
+        <BannerLoading />
+      </div>
+    );
   }
   if (error) {
     return <p>Error: {error.message}</p>; // Render error state
@@ -101,10 +107,18 @@ const ManageThesisCategory = () => {
                         </span>
                       </Tooltip>
                       <Tooltip color="danger" content="Delete">
-                        <span 
-                          onClick={() => handleDeleteThesisCategory(category.id)}
-                          className="text-lg text-danger cursor-pointer active:opacity-50">
-                          <DeleteIcon />
+                        <span>
+                          <ConfirmationAlert
+                            buttonText="Delete"
+                            color="danger"
+                            title={"Delete comfirmation"}
+                            ActionButton={({ onPress }) => (
+                              <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={onPress}>
+                                <DeleteIcon />
+                              </span>
+                            )} message={"Are you sure you want to delete this category?"}
+                            action={() => { handleDeleteThesisCategory(category.id) }}
+                          />
                         </span>
                       </Tooltip>
                     </div>

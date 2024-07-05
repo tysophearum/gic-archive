@@ -25,7 +25,9 @@ import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../../../util/unixToTime";
-import { CrossIcon } from "../../../icons/Cross";
+import { CrossIcon } from "../../../icons/CrossIcon";
+import BannerLoading from "../../../components/loading/BannerLoading";
+import ConfirmationAlert from "../../../components/ConfirmationAlert";
 
 const ManageAllApprovedThesis = () => {
   const viewPopup = useDisclosure();
@@ -42,9 +44,9 @@ const ManageAllApprovedThesis = () => {
   });
   const [variable, setVariable] = useState(null);
   const [viewQuery, setViewQuery] = useState(null);
-  const [deleteThesis] = useMutation(QUERIES.deleteThesis);
   const [addFeaturedThesis] = useMutation(QUERIES.addFeaturedThesis);
   const [removeFeaturedThesis] = useMutation(QUERIES.removeFeaturedThesis);
+  const [unapproveThesis] = useMutation(QUERIES.updateThesisApproval);
 
   useEffect(() => {
     try {
@@ -54,13 +56,12 @@ const ManageAllApprovedThesis = () => {
     }
   }, [page, limit])
 
-  const handleDeleteThesis = async (thesisId) => {
-    try {
-      const { data } = await deleteThesis({ variables: { thesisId } });
-      thesisResponse.refetch()
-    } catch (error) {
-      console.log(error);
+  const handleUnapproveThesis = async (thesisId) => {
+    const { data, errors } = await unapproveThesis({ variables: { thesisId,  approval: false } });
+    if (errors) {
+      console.log(errors);
     }
+    thesisResponse.refetch()
   }
 
   const handleThesisFeature = async (thesisId) => {
@@ -82,7 +83,11 @@ const ManageAllApprovedThesis = () => {
   }
 
   if (thesisResponse.loading) {
-    return <p>Loading...</p>; // Render loading state
+    return (
+      <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
+        <BannerLoading />
+      </div>
+    );
   }
   if (thesisResponse.error) {
     return <p>Error: {thesisResponse.error.message}</p>; // Render error state
@@ -105,27 +110,6 @@ const ManageAllApprovedThesis = () => {
           <>
             <h1 className="text-2xl font-semibold">Highlight Thesis</h1>
           </>
-        }
-        bottomContent={
-          <div className="flex">
-            <Pagination
-              total={thesisResponse.data.listApprovedThesis.pagination.totalPages}
-              initialPage={1}
-              //shadow
-              onChange={(page) => setPage(page)}
-              showControls />
-            <label className="flex items-center text-default-400 text-small ml-3">
-              Rows per page:
-              <select
-                className="bg-transparent outline-none text-default-400 text-small"
-                onChange={(e) => { setLimit(e.target.value) }}
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-              </select>
-            </label>
-          </div>
         }
       >
         <TableHeader columns="{columns}">
@@ -245,14 +229,24 @@ const ManageAllApprovedThesis = () => {
                         <EyeIcon />
                       </span>
                     </Tooltip>
+                    <Tooltip color="danger" content="Unapprove">
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Unapprove"
+                          color="danger"
+                          title={"Unapproval comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <CrossIcon height={18} width={18}/>
+                            </span>
+                          )} message={"Are you sure you want to unapprove this document?"}
+                          action={() => {handleUnapproveThesis(thesis.id)}}
+                        />
+                      </span>
+                    </Tooltip>
                     <Tooltip color="primary" content="Feature project" className="bg-yellow-500">
                       <span onClick={() => {handleThesisFeature(thesis.id)}} className="text-lg cursor-pointer active:opacity-50 text-yellow-500 border p-1 rounded-full border-yellow-500">
                         <StarIconFill />
-                      </span>
-                    </Tooltip>
-                    <Tooltip color="danger" content="Unapprove project">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                        <CrossIcon size={"20"} />
                       </span>
                     </Tooltip>
                   </div>

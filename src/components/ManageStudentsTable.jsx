@@ -30,6 +30,8 @@ import QUERIES from "../util/queries";
 import axios from "axios";
 import EditProfileForm from "../components/EditProfileForm";
 import fetchData from '../util/fetchData';
+import BannerLoading from "./loading/BannerLoading";
+import ConfirmationAlert from "./ConfirmationAlert";
 
 const ManageStudentsTable = () => {
   const profilePopup = useDisclosure();
@@ -59,6 +61,16 @@ const ManageStudentsTable = () => {
   })
 
   const [createUser] = useMutation(QUERIES.register)
+  const [deleteUser] = useMutation(QUERIES.deleteUserById)
+
+  const handleDeleteUser = async (id) => {
+    const { data, errors } = await deleteUser({ variables: { userId: id } });
+    if (errors) {
+      console.log(errors);
+    }
+    refetch()
+    onClose()
+  }
 
   const handleCreateUser = async () => {
     const { data, errors } = await createUser({ variables: { user: { name, studentId, email, password, gender } } });
@@ -124,7 +136,7 @@ const ManageStudentsTable = () => {
     }
   }, [page, limit, data])
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <BannerLoading />;
   if (error) return <p>Error : {error.message}</p>;
 
   return (
@@ -283,19 +295,24 @@ const ManageStudentsTable = () => {
                 </TableCell>
                 <TableCell>
                   <div className="relative flex items-center gap-2">
-                    <Tooltip content="View user">
-                      <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                        <EyeIcon />
-                      </span>
-                    </Tooltip>
                     <Tooltip color="primary" content="Edit user">
                       <span onClick={() => {setSelectedViewUser(student); profilePopup.onOpen()}} className="text-lg text-primary cursor-pointer active:opacity-50">
                         <EditIcon />
                       </span>
                     </Tooltip>
-                    <Tooltip color="danger" content="Delete document">
-                      <span className="text-lg text-danger cursor-pointer active:opacity-50" >
-                        <DeleteIcon />
+                    <Tooltip color="danger" content="Delete user">
+                      <span>
+                        <ConfirmationAlert
+                          buttonText="Delete"
+                          color="danger"
+                          title={"Delete comfirmation"}
+                          ActionButton={({ onPress }) => (
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50"  onClick={onPress}>
+                              <DeleteIcon />
+                            </span>
+                          )} message={"Are you sure you want to delete this user?"}
+                          action={() => {handleDeleteUser(student.id)}}
+                        />
                       </span>
                     </Tooltip>
                   </div>

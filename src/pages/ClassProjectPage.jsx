@@ -43,7 +43,7 @@ const ClassProjectPage = () => {
                 <div onClick={() => {
                   setSelectCategory(category)
                 }}
-                  className='border-2 rounded-full border-primary grid place-items-center px-2 mx-1 text-primary'
+                  className='border-2 rounded-full border-primary grid place-items-center px-2 mx-1 text-primary cursor-pointer'
                   key={category.id}>
                   {category.name}
                 </div>

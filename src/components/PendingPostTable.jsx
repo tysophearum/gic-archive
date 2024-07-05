@@ -11,6 +11,8 @@ import { useMutation } from "@apollo/client";
 import EditClassProjectForm from "./EditClassProjectForm";
 import EditThesisForm from "./EditThesisForm";
 import ConfirmationAlert from "./ConfirmationAlert";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const statusColorMap = {
   active: "success",
@@ -31,7 +33,13 @@ export default function PendingPostTable({ fetchData }) {
   const [deleteThesis] = useMutation(QUERIES.deleteThesis);
   const [classProjectId, setClassProjectId] = useState(null);
   const [thesisId, setThesisId] = useState(null);
-  const [loading, setLoading] = useState(false);
+
+  const notifyDelete = (message) => toast.error(message, {
+    autoClose: 2500
+  });
+  const notifyInfo = (message) => toast.info(message, {
+    autoClose: 2500
+  });
 
   useEffect(() => {
     thesisResponse.refetch()
@@ -42,19 +50,19 @@ export default function PendingPostTable({ fetchData }) {
     try {
       const { data } = await deleteClassProject({ variables: { classProjectId } });
       classProjectResponse.refetch()
+      notifyDelete("Document deleted!")
     } catch (error) {
-      console.log(error);
+      alert(error.message);
     }
   }
 
   const handleDeleteThesis = async (thesisId) => {
-    console.log("here");
     try {
       const { data } = await deleteThesis({ variables: { thesisId } });
       thesisResponse.refetch()
-      console.log(data);
+      notifyDelete("Document deleted!")
     } catch (error) {
-      console.log(error);
+      alert(error.message);
     }
   }
 
@@ -144,9 +152,7 @@ export default function PendingPostTable({ fetchData }) {
                     avatarProps={{ radius: "lg", src: classProject.image }}
                     description={classProject.description.substring(0, 10)}
                     name={classProject.title}
-                  >
-                    some
-                  </User>
+                  />
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-col">
@@ -300,7 +306,7 @@ export default function PendingPostTable({ fetchData }) {
         <ModalContent className="h-[95%] overflow-scroll !rounded-t-3xl">
           {(onClose) => (
             <div className="p-3 grid grid-cols-1 w-[100vw]">
-              <EditClassProjectForm id={classProjectId} onClose={onClose} onComplete={(val) => {classProjectResponse.refetch()}}/>
+              <EditClassProjectForm id={classProjectId} onClose={onClose} onComplete={() => {notifyInfo("Document updated");classProjectResponse.refetch()}}/>
             </div>
           )}
         </ModalContent>
@@ -334,7 +340,7 @@ export default function PendingPostTable({ fetchData }) {
         <ModalContent className="h-[95%] overflow-scroll !rounded-t-3xl">
           {(onClose) => (
             <div className="p-3 grid grid-cols-1 w-[100vw]">
-              <EditThesisForm id={thesisId} onClose={onClose} onComplete={(val) => {thesisResponse.refetch()}}/>
+              <EditThesisForm id={thesisId} onClose={onClose} onComplete={(val) => {notifyInfo("Document updated");thesisResponse.refetch()}}/>
             </div>
           )}
         </ModalContent>

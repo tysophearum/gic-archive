@@ -21,6 +21,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import axios from "axios";
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { AddIcon } from "../icons/AddIcon";
+import ErrorAlert from "./ErrorAlert";
 
 let image = null;
 export default function EditClassProjectForm({ id, onClose, onComplete }) {
@@ -45,6 +46,7 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
     variables: { classProjectId: id }
   });
   const [updateClassProject] = useMutation(QUERIES.updateClassProject);
+  const [editLoading, setEditLoading] = useState(false);
 
   async function searchStudent(input) {
     try {
@@ -96,70 +98,68 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
     }
   }, [data])
 
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null)
+  const handleClose = () => {
+    setIsError(false);
+  };
   const updateClassProjectAction = useCallback(async (event) => {
-    const colabIds = collaborators.map(item => item.id);
-    const payload = {
-      id,
-      title,
-      description,
-      category,
-      repositoryLink,
-      videoLink,
-      collaborators: colabIds
-    }
-
-    const { data, error } = await updateClassProject({ variables: { classProject: payload } })
-    if (error) {
-      console.log(error);
-    }
-    let formData = new FormData();
-    formData.append('classProjectId', data.updateClassProject.id);
-
-    if (image) {
-      try {
-        // Step 4: Prepare formData for image
-        formData.append('image', image);
-
-        // Step 5: Upload image
-        await axios.post('http://localhost:4000/upload/classProject/image', formData);
-      } catch (imageUploadError) {
-        console.error('Error uploading image:', imageUploadError);
-        return; // Exit the function if image upload fails
+    try {
+      if (isFilesEmpty()) {
+        throw new Error('No files to upload');
       }
-    }
+      const colabIds = collaborators.map(item => item.id);
+      const payload = {
+        id,
+        title,
+        description,
+        category,
+        repositoryLink,
+        videoLink,
+        collaborators: colabIds,
+      };
 
-    if (!isFilesEmpty()) {
-      const filesToDelete = files
-        .filter(file => file.isDeleted)
-        .map(file => file.name);
+      const { data } = await updateClassProject({ variables: { classProject: payload } });
 
-      if (filesToDelete?.length > 0) {
-        try {
-          formData.append('filesToDelete', filesToDelete)
-          await axios.post('http://localhost:4000/upload/classProject/files/delete', formData)
+      if (data) {
+        let formData = new FormData();
+        formData.append('classProjectId', data.updateClassProject.id);
+        const filesToDelete = files
+          .filter(file => file.isDeleted)
+          .map(file => file.name);
 
-          if (newFiles?.length > 0) {
-            newFiles.forEach(file => {
-              formData.append('files', file); // Append each file individually
-            });
+        if (filesToDelete.length > 0) {
+          formData.append('filesToDelete', filesToDelete);
+          await axios.post('http://localhost:4000/upload/classProject/files/delete', formData);
+        }
+
+        if (newFiles.length > 0) {
+          formData = new FormData(); // Reset formData to avoid appending duplicates
+          formData.append('classProjectId', data.updateClassProject.id);
+          newFiles.forEach(file => {
+            formData.append('files', file); // Append each file individually
+          });
+
+          await axios.post('http://localhost:4000/upload/classProject/files', formData);
+        }
+        if (image) {
+          // Prepare formData for image
+          formData.append('image', image);
   
-            try {
-              await axios.post('http://localhost:4000/upload/classProject/files', formData);
-            } catch (fileUploadError) {
-              console.error('Error uploading files:', fileUploadError);
-              return; // Exit the function if file upload fails
-            }
-          }
-        } catch (imageUploadError) {
-          console.error('Error uploading image:', imageUploadError);
-          return; // Exit the function if image upload fails
+          // Upload image
+          await axios.post('http://localhost:4000/upload/classProject/image', formData);
         }
       }
-    }
 
-    onComplete("sonething");
-    onClose();
-  })
+      onComplete("something");
+      onClose();
+    } catch (error) {
+      setEditLoading(false)
+      const message = error.message
+      setErrorMessage(message)
+      setIsError(true)
+    }
+  }, [id, title, description, category, repositoryLink, videoLink, collaborators, image, files, newFiles, updateClassProject, onComplete, onClose]);
 
   const handleImageChange = (e) => {
     image = e.target.files[0]
@@ -197,7 +197,7 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
   };
   return (
     <>
-      {JSON.stringify(newFiles)}
+      <ErrorAlert open={isError} message={errorMessage} close={handleClose} />
       <ModalHeader className="flex flex-col gap-1">Edit Class Project</ModalHeader>
       <ModalBody className="flex flex-col gap-4">
         <div className="grid grid-cols-[80%,20%] gap-3">
@@ -369,7 +369,7 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
         <Button color="danger" variant="light" onPress={() => onClose()}>
           Close
         </Button>
-        <Button color="primary" onClick={(e) => { updateClassProjectAction(e) }}>
+        <Button isLoading={editLoading} color="primary" onClick={(e) => { setEditLoading(true); updateClassProjectAction(e) }}>
           Submit
         </Button>
       </ModalFooter>

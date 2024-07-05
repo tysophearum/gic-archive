@@ -26,7 +26,7 @@ const AdminDashboard = () => {
               </CardBody>
             </Card>
           </Link>
-          <Link to={'/adminDashboard/manageApprovedThesis'}>
+          <Link to={'/adminDashboard/manageAdmins'}>
             <Card className="p-4 border hover:border-blue-500">
               <CardBody className="overflow-visible py-2 h-32 grid place-items-center border text-white rounded-md bg-gradient-to-br from-red-500 to-pink-600">
                 <h1 className="text-3xl font-bold">Admin</h1>

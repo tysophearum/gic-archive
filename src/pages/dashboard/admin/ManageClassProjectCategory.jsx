@@ -24,6 +24,8 @@ import CreateClassProjectCategoryForm from "../../../components/CreateClassProje
 import { useMutation } from "@apollo/client";
 import EditClassProjectCategoryForm from "../../../components/EditClassProjectCategoryForm";
 import DeleteItemConfirmation from "../../../components/DeleteItemConfirmation";
+import BannerLoading from "../../../components/loading/BannerLoading";
+import ConfirmationAlert from "../../../components/ConfirmationAlert";
 
 const ManageClassProjectCategory = () => {
   const { data, error, loading, refetch } = useQuery(QUERIES.listClassProjectCategory);
@@ -47,7 +49,11 @@ const ManageClassProjectCategory = () => {
   }
 
   if (loading) {
-    return <p>Loading...</p>; // Render loading state
+    return (
+      <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
+        <BannerLoading />
+      </div>
+    );
   }
   if (error) {
     return <p>Error: {error.message}</p>; // Render error state
@@ -102,18 +108,28 @@ const ManageClassProjectCategory = () => {
                   <TableCell>
                     <div className="relative flex items-center gap-2">
                       <Tooltip color="primary" content="Edit">
-                        <span 
+                        <span
                           onClick={() => {
                             setEditId(category.id);
                             editModal.onOpen();
-                          }} 
+                          }}
                           className="text-lg cursor-pointer active:opacity-50 text-primary">
                           <EditIcon height={18} width={18} />
                         </span>
                       </Tooltip>
                       <Tooltip color="danger" content="Delete">
-                        <span onClick={() => handleDeleteClassProjectCategory(category.id)} className="text-lg text-danger cursor-pointer active:opacity-50">
-                          <DeleteIcon />
+                        <span>
+                          <ConfirmationAlert
+                            buttonText="Delete"
+                            color="danger"
+                            title={"Delete comfirmation"}
+                            ActionButton={({ onPress }) => (
+                              <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={onPress}>
+                                <DeleteIcon />
+                              </span>
+                            )} message={"Are you sure you want to delete this category?"}
+                            action={() => { handleDeleteClassProjectCategory(category.id) }}
+                          />
                         </span>
                       </Tooltip>
                     </div>

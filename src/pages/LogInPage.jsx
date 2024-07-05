@@ -1,12 +1,18 @@
 import { useMutation } from "@apollo/client";
 import QUERIES from "../util/queries";
 import { useState } from "react";
+import ErrorAlert from "../components/ErrorAlert";
 
 const LogInPage = () => {
   const [login] = useMutation(QUERIES.logIn);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null)
+  const handleClose = () => {
+    setIsError(false);
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -20,11 +26,14 @@ const LogInPage = () => {
       localStorage.setItem('token', data.logIn.token);
       window.location.href = '/thesis';
     } catch (error) {
-      alert(error.message);
+      const message = error.message
+      setErrorMessage(message)
+      setIsError(true)
     }
   }
   return (
     <>
+      <ErrorAlert open={isError} message={errorMessage} close={handleClose} />
       <div className="lg:flex">
         <div className="lg:w-1/2 xl:max-w-screen-sm bg-white">
           <div className="py-12 bg-blue-100 lg:bg-white flex justify-center lg:justify-start lg:px-12">

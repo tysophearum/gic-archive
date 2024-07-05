@@ -25,6 +25,7 @@ import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../../../util/unixToTime";
+import BannerLoading from "../../../components/loading/BannerLoading";
 
 const statusColorMap = {
   active: "success",
@@ -87,7 +88,11 @@ const ManageApprovedThesis = () => {
   }
 
   if (thesisResponse.loading) {
-    return <p>Loading...</p>; // Render loading state
+    return (
+      <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
+        <BannerLoading />
+      </div>
+    );
   }
   if (thesisResponse.error) {
     return <p>Error: {thesisResponse.error.message}</p>; // Render error state
@@ -114,7 +119,7 @@ const ManageApprovedThesis = () => {
         bottomContent={
           <div className="flex">
             <Pagination
-              total={thesisResponse.data.listApprovedThesisByTeacherId.pagination.totalPages}
+              total={thesisResponse.data?.listApprovedThesisByTeacherId?.pagination?.totalPages}
               initialPage={1}
               //shadow
               onChange={(page) => setPage(page)}
@@ -140,7 +145,7 @@ const ManageApprovedThesis = () => {
           <TableColumn>ACTION</TableColumn>
         </TableHeader>
         <TableBody>
-          {featuredThesisResponse.data.listFeaturedThesis.map((thesis) => {
+          {featuredThesisResponse.data?.listFeaturedThesis?.map((thesis) => {
             return (
               <TableRow key={thesis.id}>
                 <TableCell>
@@ -194,7 +199,7 @@ const ManageApprovedThesis = () => {
         bottomContent={
           <div className="flex">
             <Pagination
-              total={thesisResponse.data.listApprovedThesisByTeacherId.pagination.totalPages}
+              total={thesisResponse.data?.listApprovedThesisByTeacherId?.pagination?.totalPages}
               initialPage={1}
               //shadow
               onChange={(page) => setPage(page)}
@@ -220,7 +225,7 @@ const ManageApprovedThesis = () => {
           <TableColumn>ACTION</TableColumn>
         </TableHeader>
         <TableBody>
-          {thesisResponse.data.listApprovedThesisByTeacherId.data.map((thesis) => {
+          {thesisResponse.data?.listApprovedThesisByTeacherId?.data?.map((thesis) => {
             return (
               <TableRow key={thesis.id}>
                 <TableCell>

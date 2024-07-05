@@ -4,6 +4,7 @@ import fetchData from "../util/fetchData";
 import { PaperPlaneIcon } from '../icons/PaperPlaneIcon';
 import { useMutation, useQuery } from '@apollo/client';
 import QUERIES from '../util/queries';
+import ErrorAlert from './ErrorAlert';
 
 const Comments = ({ id, type }) => {
   const [data, setData] = useState([]);
@@ -42,6 +43,11 @@ const Comments = ({ id, type }) => {
     }
   }
 
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null)
+  const handleClose = () => {
+    setIsError(false);
+  };
   const handleComment = async () => {
     if (comment === '') {
       return;
@@ -64,7 +70,9 @@ const Comments = ({ id, type }) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      const message = error.message === "Invalid token" ? "Please login to perform this action" : error.message
+      setErrorMessage(message)
+      setIsError(true)
     }
   };
 
@@ -81,6 +89,7 @@ const Comments = ({ id, type }) => {
   }
   return (
     <>
+      <ErrorAlert open={isError} message={errorMessage} close={handleClose} />
       <h2 className=" text-xl font-semibold mb-2">Comments </h2>
       <div className="flex mb-2">
         <Avatar

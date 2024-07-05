@@ -18,6 +18,8 @@ import EditProfileForm from "../components/EditProfileForm";
 import CreatePostForm from "../components/CreatePostForm";
 import QUERIES from "../util/queries";
 import { useQuery } from "@apollo/client";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProfilePage = () => {
   const profilePopup = useDisclosure();
@@ -27,6 +29,12 @@ const ProfilePage = () => {
   const { loading, error, data, refetch } = useQuery(QUERIES.getMe)
   const contributionResponse = useQuery(QUERIES.getMyContribution)
 
+  const notifySuccess = (message) => toast.success(message, {
+    autoClose: 2500
+  });
+  const notifyInfo = (message) => toast.info(message, {
+    autoClose: 2500
+  });
   if (loading || contributionResponse.loading) {
     return <p>Loading...</p>;
   }
@@ -38,6 +46,7 @@ const ProfilePage = () => {
   );
   return (
     <div className="flex flex-col items-center md:mt-8">
+      <ToastContainer />
       <Image loading="eager" radius="none" className="h-[40vh] md:w-[80vw] w-[100vw] object-cover z-0 rounded-t-lg" src="https://www.creativefabrica.com/wp-content/uploads/2021/08/16/flat-landscape-the-mountains-color-blue-Graphics-15913422-1.jpg" />
       <div className="md:w-[80vw] w-[100vw] bg-white px-12">
         <Avatar className="w-40 h-40 mt-[-110px]" src={data.getMe.image} />
@@ -58,7 +67,7 @@ const ProfilePage = () => {
             >
               <ModalContent>
                 {(onClose) => (
-                  <EditProfileForm onClose={onClose} onComplete={refetch} user={data.getMe} />
+                  <EditProfileForm onClose={onClose} onComplete={() => {notifyInfo("Profile updated");refetch()}} user={data.getMe} />
                 )}
               </ModalContent>
             </Modal>
@@ -92,7 +101,7 @@ const ProfilePage = () => {
           >
             <ModalContent className="h-[94%] overflow-scroll !rounded-t-3xl">
               {(onClose) => (
-                <CreatePostForm onClose={onClose} onComplete={() => { setComplete(complete + 1) }} />
+                <CreatePostForm onClose={onClose} onComplete={() => {notifySuccess("Document submitted successfully."); setComplete(complete + 1) }} />
               )}
             </ModalContent>
           </Modal>

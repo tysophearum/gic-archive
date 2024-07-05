@@ -21,6 +21,7 @@ import fetchData from '../util/fetchData';
 import QUERIES from '../util/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import axios from "axios";
+import ErrorAlert from "./ErrorAlert";
 
 let classProjectPayload = {
   classProject: {
@@ -90,93 +91,104 @@ const CreatePostForm = ({ onClose, onComplete }) => {
     }
   }
 
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null)
+  const handleClose = () => {
+    setIsError(false);
+  };
   const createClassProject = useCallback(async (event) => {
-    // Step 1: Upload the class project data
-    const { data, errors } = await uploadClassProject({ variables: classProjectPayload });
-    if (errors) {
-      console.log(errors);
-    }
-    if (data) {
-      // Step 2: Prepare formData for files
-      let formData = new FormData();
-      formData.append('classProjectId', data.createClassProject.id);
-
-      acceptedFiles.forEach(file => {
-        formData.append('files', file); // Append each file individually
-      });
-
-      try {
-        // Step 3: Upload files
-        await axios.post('http://localhost:4000/upload/classProject/files', formData);
-      } catch (fileUploadError) {
-        console.error('Error uploading files:', fileUploadError);
-        return; // Exit the function if file upload fails
+    try {
+      if (!acceptedFiles.length) {
+        throw new Error('No files to upload');
       }
 
-      if (image) {
-        try {
+      // Step 1: Upload the class project data
+      const { data, errors } = await uploadClassProject({ variables: classProjectPayload });
+      if (errors) {
+        
+      }
+
+      if (data) {
+        const classProjectId = data.createClassProject.id;
+
+        // Step 2: Prepare formData for files
+        let formData = new FormData();
+        formData.append('classProjectId', classProjectId);
+        acceptedFiles.forEach(file => {
+          formData.append('files', file); // Append each file individually
+        });
+
+        // Step 3: Upload files
+        await axios.post('http://localhost:4000/upload/classProject/files', formData);
+
+        if (image) {
           // Step 4: Prepare formData for image
           formData = new FormData();
-          formData.append('classProjectId', data.createClassProject.id);
+          formData.append('classProjectId', classProjectId);
           formData.append('image', image);
           console.log(image);
 
           // Step 5: Upload image
           await axios.post('http://localhost:4000/upload/classProject/image', formData);
-        } catch (imageUploadError) {
-          console.error('Error uploading image:', imageUploadError);
-          return; // Exit the function if image upload fails
         }
-      }
 
-      // Step 6: Call completion handlers if all uploads are successful
-      onComplete();
-      onClose();
+        // Step 6: Call completion handlers if all uploads are successful
+        onComplete();
+        onClose();
+      }
+    } catch (error) {
+      setLoading(false)
+      const message = error.message
+      setErrorMessage(message)
+      setIsError(true)
     }
-  }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);  
+  }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);
 
   const createThesis = useCallback(async (event) => {
-    // Step 1: Upload the class project data
-    const { data, errors } = await uploadThesis({ variables: thesisPayload });
-    if (errors) {
-      console.log(errors);
-    }
-    if (data) {
-      // Step 2: Prepare formData for files
-      let formData = new FormData();
-      formData.append('thesisId', data.createThesis.id);
-
-      acceptedFiles.forEach(file => {
-        formData.append('files', file); // Append each file individually
-      });
-
-      try {
-        // Step 3: Upload files
-        await axios.post('http://localhost:4000/upload/thesis/files', formData);
-      } catch (fileUploadError) {
-        console.error('Error uploading files:', fileUploadError);
-        return; // Exit the function if file upload fails
+    try {
+      if (!acceptedFiles.length) {
+        throw new Error('No files to upload');
       }
 
-      if (image) {
-        try {
+      // Step 1: Upload the class project data
+      const { data, errors } = await uploadThesis({ variables: thesisPayload });
+      if (errors) {
+        
+      }
+
+      if (data) {
+        const thesisId = data.createThesis.id;
+
+        // Step 2: Prepare formData for files
+        let formData = new FormData();
+        formData.append('thesisId', thesisId);
+        acceptedFiles.forEach(file => {
+          formData.append('files', file); // Append each file individually
+        });
+
+        // Step 3: Upload files
+        await axios.post('http://localhost:4000/upload/thesis/files', formData);
+
+        if (image) {
           // Step 4: Prepare formData for image
           formData = new FormData();
-          formData.append('thesisId', data.createThesis.id);
+          formData.append('thesisId', thesisId);
           formData.append('image', image);
           console.log(image);
 
           // Step 5: Upload image
           await axios.post('http://localhost:4000/upload/thesis/image', formData);
-        } catch (imageUploadError) {
-          console.error('Error uploading image:', imageUploadError);
-          return; // Exit the function if image upload fails
         }
-      }
 
-      // Step 6: Call completion handlers if all uploads are successful
-      onComplete();
-      onClose();
+        // Step 6: Call completion handlers if all uploads are successful
+        onComplete();
+        onClose();
+      }
+    } catch (error) {
+      setLoading(false)
+      const message = error.message
+      setErrorMessage(message)
+      setIsError(true)
     }
   }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);  
 
@@ -216,6 +228,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
   if (classProjectCategory.error || thesisCategory.error) return <p>Error: {classProjectCategory.error.message}</p>;
   return (
     <>
+      <ErrorAlert open={isError} message={errorMessage} close={handleClose} />
       <ModalHeader className="flex flex-col gap-1">Add new post</ModalHeader>
       <ModalBody>
         <div className="grid grid-cols-[80%,20%] gap-3">
@@ -303,7 +316,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
                       return (
                         <div key={user.id} className="flex items-center justify-between gap-2 py-1 px-2 rounded-lg duration-100 hover:bg-gray-200">
                           <div className="flex items-center gap-2">
-                            <Image className="w-10 h-10 rounded-full" src="https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg" />
+                            <Image className="w-10 h-10 rounded-full" src={user.image} />
                             <div>
                               <p className="">{user.name}</p>
                               <p className=" text-xs text-gray-400">{user.studentId}</p>
@@ -339,7 +352,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
                         description={user.studentId}
                         className="my-0.5 mx-3"
                         avatarProps={{
-                          src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                          src: `${user.image}`,
                           size: 'md'
                         }}
                       />
@@ -500,7 +513,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
                         return (
                           <div key={user.id} className="flex items-center justify-between gap-2 py-1 px-2 rounded-lg duration-100 hover:bg-gray-200">
                             <div className="flex items-center gap-2">
-                              <Image className="w-10 h-10 rounded-full" src="https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg" />
+                              <Image className="w-10 h-10 rounded-full" src={user.image} />
                               <div>
                                 <p className="">{user.name}</p>
                                 <p className=" text-xs text-gray-400">{user.studentId}</p>
@@ -536,7 +549,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
                           description={user.studentId}
                           className="my-0.5 mx-3"
                           avatarProps={{
-                            src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                            src: `${user.image}`,
                             size: 'md'
                           }}
                         />

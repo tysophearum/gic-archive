@@ -16,9 +16,6 @@ const ManageUnapprovedClassProject = () => {
     },
   })
 
-  if (classProjectCategoryResponse.loading) {
-    return <p>Loading...</p>; // Render loading state
-  }
   if (classProjectCategoryResponse.error) {
     return <p>Error: {classProjectCategoryResponse.error.message}</p>; // Render error state
   }
@@ -36,7 +33,7 @@ const ManageUnapprovedClassProject = () => {
           </Link>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          {classProjectCategoryResponse.data.getClassProjectCategoryById.name}
+          {classProjectCategoryResponse.data?.getClassProjectCategoryById?.name}
         </BreadcrumbItem>
       </Breadcrumbs>
       <ManageUnapprovedClassProjectTable classProjectCategoryId={param.classProjectCategoryId} />

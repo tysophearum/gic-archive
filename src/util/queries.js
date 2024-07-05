@@ -26,6 +26,61 @@ const QUERIES = {
     }
   }
   `,
+  registerTeacher: gql`
+  mutation RegisterTeacher($user: UserRegisterInput!) {
+    registerTeacher(user: $user) {
+      user {
+        id
+        name
+        studentId
+        bio
+        email
+        gender
+        contacts {
+          type
+          value
+        }
+        image
+        coverImage
+        role
+        tags
+        createdAt
+        updatedAt
+      }
+      token
+    }
+  }
+  `,
+  registerAdmin: gql`
+  mutation RegisterAdmin($user: UserRegisterInput!) {
+    registerAdmin(user: $user) {
+      user {
+        id
+        name
+        studentId
+        bio
+        email
+        gender
+        contacts {
+          type
+          value
+        }
+        image
+        coverImage
+        role
+        tags
+        createdAt
+        updatedAt
+      }
+      token
+    }
+  }
+  `,
+  deleteUserById: gql`
+  mutation DeleteUserById($userId: String!) {
+    deleteUserById(userId: $userId)
+  }
+  `,
   listThesisCategory: gql`
   {
     listThesisCategory {
@@ -1584,6 +1639,37 @@ const QUERIES = {
   listTeachers: gql`
   query ListTeachers($pager: PaginationInput) {
     listTeachers(pager: $pager) {
+      users {
+        id
+        name
+        studentId
+        bio
+        email
+        gender
+        contacts {
+          type
+          value
+        }
+        image
+        coverImage
+        role
+        tags
+        createdAt
+        updatedAt
+      }
+      pagination {
+        totalItems
+        currentPage
+        pageSize
+        totalPages
+        hasNextPage
+        hasPrevPage
+      }
+    }
+  }`,
+  listAdmins: gql`
+  query ListAdmins($pager: PaginationInput) {
+    listAdmins(pager: $pager) {
       users {
         id
         name

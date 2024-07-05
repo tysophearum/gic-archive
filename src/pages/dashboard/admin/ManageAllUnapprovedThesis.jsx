@@ -27,6 +27,7 @@ import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../../../util/unixToTime";
 import ConfirmationAlert from "../../../components/ConfirmationAlert";
+import BannerLoading from "../../../components/loading/BannerLoading";
 
 const statusColorMap = {
   active: "success",
@@ -79,7 +80,11 @@ const ManageUnapprovedThesis = () => {
   }
 
   if (thesisResponse.loading) {
-    return <p>Loading...</p>; // Render loading state
+    return (
+      <div className="p-3 grid grid-cols-1 w-[100vw] px-[10vw] gap-8">
+        <BannerLoading />
+      </div>
+    );
   }
   if (thesisResponse.error) {
     return <p>Error: {JSON.stringify(thesisResponse.error)}</p>; // Render error state
