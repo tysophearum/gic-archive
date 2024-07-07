@@ -162,7 +162,7 @@ const EditClassProjectCategoryForm = ({ onClose, onComplete, categoryId }) => {
                       description={user.studentId}
                       className="my-0.5 mx-3"
                       avatarProps={{
-                        src: "https://i.pinimg.com/236x/8b/53/84/8b5384af3c5ed9b06c2aac6917b32b4c.jpg",
+                        src: `${user?.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}`,
                         size: 'md'
                       }}
                     />

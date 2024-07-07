@@ -1012,17 +1012,6 @@ const QUERIES = {
     }
   }
   `,
-  getClassProjectCategoryById: gql`
-  query GetClassProjectCategoryById($categoryId: String!) {
-    getClassProjectCategoryById(categoryId: $categoryId) {
-      id
-      name
-      description
-      createdAt
-      updatedAt
-    }
-  }
-  `,
   updateClassProjectApproval: gql`
   mutation UpdateClassProjectApproval($approval: Boolean!, $classProjectId: String!) {
     updateClassProjectApproval(approval: $approval, classProjectId: $classProjectId) {

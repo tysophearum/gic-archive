@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardBody, Button, Image, Avatar } from '@nextui-org/react';
 import { PaperIcon } from '../icons/PaperIcon';
 import { GithubIcon } from '../icons/GithubIcon';

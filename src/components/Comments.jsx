@@ -1,8 +1,8 @@
-import { Avatar, Button, Textarea } from '@nextui-org/react';
+import { Button, Textarea } from '@nextui-org/react';
 import React, { useState, useEffect } from "react";
 import fetchData from "../util/fetchData";
 import { PaperPlaneIcon } from '../icons/PaperPlaneIcon';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import QUERIES from '../util/queries';
 import ErrorAlert from './ErrorAlert';
 
@@ -16,10 +16,16 @@ const Comments = ({ id, type }) => {
   const [createClassProjectComment] = useMutation(QUERIES.createClassProjectComment);
   const [createThesisComment] = useMutation(QUERIES.createThesisComment);
   const [comment, setComment] = useState('');
-  const {data: myData, loading: myLoading, error: myError} = useQuery(QUERIES.getMe)
+  // const {data: myData, loading: myLoading, error: myError} = useQuery(QUERIES.getMe)
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null)
 
-  if (myLoading) return <p>Loading...</p>;
-  if (myError) return <p>Error: {myError.message}</p>;
+  useEffect(() => {
+    getData();
+  }, [page]);
+
+  // if (myLoading) return <p>Loading...</p>;
+  // if (myError) return <p>Error: {myError.message}</p>;
   async function getData() {
     try {
       let query = null;
@@ -45,8 +51,6 @@ const Comments = ({ id, type }) => {
     }
   }
 
-  const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null)
   const handleClose = () => {
     setIsError(false);
   };
@@ -59,7 +63,7 @@ const Comments = ({ id, type }) => {
         const { data: resData } = await createClassProjectComment({ variables: { classProjectComment: {classProject: id, comment: comment} } });
         if (resData) {
           setComment('');
-          resData.createClassProjectComment.user.image = myData.getMe.image
+          // resData.createClassProjectComment.user.image = myData.getMe.image
           setData([resData.createClassProjectComment, ...data])
         }
       }
@@ -67,7 +71,7 @@ const Comments = ({ id, type }) => {
         const { data: resData } = await createThesisComment({ variables: { thesisComment: {thesis: id, comment: comment} } });
         if (resData) {
           setComment('');
-          resData.createClassProjectComment.user.image = myData.getMe.image
+          // resData.createClassProjectComment.user.image = myData.getMe.image
           setData([resData.createThesisComment, ...data])
         }
       }
@@ -77,10 +81,6 @@ const Comments = ({ id, type }) => {
       setIsError(true)
     }
   };
-
-  useEffect(() => {
-    getData();
-  }, [page, getData]);
 
   if (loading) {
     return <p>Loading...</p>; // Render loading state
@@ -94,11 +94,11 @@ const Comments = ({ id, type }) => {
       <ErrorAlert open={isError} message={errorMessage} close={handleClose} />
       <h2 className=" text-xl font-semibold mb-2">Comments </h2>
       <div className="flex mb-2">
-        <Avatar
+        {/* <Avatar
           className="transition-transform h-14 w-14 mr-3"
           color="primary"
           name="Jason Hughes"
-          src={myData?.getMe?.image || null} />
+          src={myData?.getMe?.image || null} /> */}
         <div className="relative w-full">
           <Textarea
             label="Comment"
@@ -118,12 +118,12 @@ const Comments = ({ id, type }) => {
         {data.map((userComment) => {
           return (
           <div className="flex my-3 bg-gray-50 rounded-lg p-2" key={userComment.id}>
-            <Avatar
+            {/* <Avatar
               className="transition-transform mr-3"
               color="primary"
               name="Jason Hughes"
               size='md'
-              src={`${userComment.user.image}`} />
+              src={`${userComment.user.image}`} /> */}
             <div className='w-full'>
               <span className='font-semibold'>{userComment.user.name}</span>
               <p className='text-sm'>{userComment.comment}</p>

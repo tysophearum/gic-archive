@@ -26,12 +26,6 @@ import unixToTime from "../util/unixToTime";
 import ConfirmationAlert from "./ConfirmationAlert";
 import BannerLoading from "./loading/BannerLoading";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-
 const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
   const viewPopup = useDisclosure();
   const [page, setPage] = useState(1);
@@ -65,7 +59,7 @@ const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
 
   const handleDeleteClassProject = async (classProjectId) => {
     try {
-      const { data } = await deleteClassProject({ variables: { classProjectId } });
+      await deleteClassProject({ variables: { classProjectId } });
       classProjectResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -73,7 +67,7 @@ const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
   }
 
   const handleApproveClassProject = async (classProjectId) => {
-    const { data, errors } = await approveClassProject({ variables: { classProjectId,  approval: true } });
+    const { errors } = await approveClassProject({ variables: { classProjectId,  approval: true } });
     if (errors) {
       console.log(errors);
     }
@@ -129,7 +123,7 @@ const ManageUnapprovedClassProjectTable = ({classProjectCategoryId}) => {
               <TableRow key={classProject.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: `${classProject.image}` }}
+                    avatarProps={{ radius: "lg", src: `${classProject.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}` }}
                     description={classProject.description.substring(0, 10)}
                     name={classProject.title}
                   >

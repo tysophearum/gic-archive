@@ -14,10 +14,10 @@ const ViewDetail = ({ query, variables }) => {
   useEffect(() => {
     if (!loading) {
       const resArray = Object.entries(response);
-      const [[key, res]] = resArray;
+      const [[_, res]] = resArray;
       setData(res);
     }
-  }, [loading, query, variables]);
+  }, [loading, query, variables, response]);
 
   if (loading) {
     return <p>Loading...</p>; // Render loading state
@@ -48,7 +48,7 @@ const ViewDetail = ({ query, variables }) => {
                     <ModalBody className='mb-4'>
                       <div className='grid grid-cols-1 w-full gap-4'>
                         {data.files.map((reportDocument, i) => (
-                          <a target="_blank" href={data.fileLinks?.[i]}>
+                          <a target="_blank"  rel="noreferrer" href={data.fileLinks?.[i]}>
                             <Card shadow='sm' key={reportDocument} isPressable variant="bordered" className='w-full py-3 px-3'>
                               {getLinkName(reportDocument)}
                             </Card>
@@ -60,7 +60,7 @@ const ViewDetail = ({ query, variables }) => {
                 )}
               </ModalContent>
             </Modal>
-            <a target="_blank" href={data.repositoryLink.includes('https://') ? data.repositoryLink : `https://${data.repositoryLink}`}><Button radius='sm' className='bg-black text-white ml-2 w-32' startContent={<GithubIcon height={20} width={20} />}>Code</Button></a>
+            <a target="_blank" rel="noreferrer" href={data.repositoryLink.includes('https://') ? data.repositoryLink : `https://${data.repositoryLink}`}><Button radius='sm' className='bg-black text-white ml-2 w-32' startContent={<GithubIcon height={20} width={20} />}>Code</Button></a>
           </div>
           <h2 className=" text-xl font-semibold mt-10 mb-2">Posted by </h2>
           <div className="flex items-center">
@@ -71,7 +71,7 @@ const ViewDetail = ({ query, variables }) => {
                 description={data.user.studentId}
                 className="my-2 text-lg"
                 avatarProps={{
-                  src: `${data.user.image}`,
+                  src: `${data.user.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}`,
                 }} />
             </Link>
           </div>
@@ -86,7 +86,7 @@ const ViewDetail = ({ query, variables }) => {
                     description={data.teacher.studentId}
                     className="my-2 text-lg"
                     avatarProps={{
-                      src: `${data.teacher.image}`,
+                      src: `${data.teacher.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}`,
                     }} />
                 </Link>
               </div>
@@ -105,7 +105,7 @@ const ViewDetail = ({ query, variables }) => {
                         description={collaborator.studentId}
                         className="my-2 text-lg"
                         avatarProps={{
-                          src: `${collaborator.image}`,
+                          src: `${collaborator.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}`,
                         }}
                       />
                     </Link>

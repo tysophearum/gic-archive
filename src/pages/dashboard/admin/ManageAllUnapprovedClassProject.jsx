@@ -2,7 +2,6 @@ import React from "react";
 import {
   Breadcrumbs,
   BreadcrumbItem,
-  Skeleton
 } from "@nextui-org/react";
 import { Link, useParams } from "react-router-dom";
 import QUERIES from "../../../util/queries";
@@ -17,6 +16,9 @@ const ManageUnapprovedClassProject = () => {
     },
   })
 
+  if (loading) {
+    return <p>Loading...</p>; // Render loading state
+  }
   if (error) {
     return <p>Error: {error.message}</p>; // Render error state
   }

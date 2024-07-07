@@ -1,4 +1,4 @@
-import { Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, CardFooter, Image, Divider } from "@nextui-org/react";
+import { Breadcrumbs, BreadcrumbItem, Card, CardBody, Divider } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {

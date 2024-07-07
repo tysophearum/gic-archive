@@ -16,7 +16,7 @@ import {
   Breadcrumbs,
   BreadcrumbItem,
 } from "@nextui-org/react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { EyeIcon } from "../../../icons/EyeIcon";
 import { StarIconFill } from "../../../icons/StarIconFill";
 import ViewDetail from "../../../components/ViewDetail";
@@ -57,7 +57,7 @@ const ManageAllApprovedThesis = () => {
   }, [page, limit])
 
   const handleUnapproveThesis = async (thesisId) => {
-    const { data, errors } = await unapproveThesis({ variables: { thesisId,  approval: false } });
+    const { errors } = await unapproveThesis({ variables: { thesisId,  approval: false } });
     if (errors) {
       console.log(errors);
     }
@@ -66,7 +66,7 @@ const ManageAllApprovedThesis = () => {
 
   const handleThesisFeature = async (thesisId) => {
     try {
-      const { data } = await addFeaturedThesis({ variables: { thesisId } });
+      await addFeaturedThesis({ variables: { thesisId } });
       featuredThesisResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -75,7 +75,7 @@ const ManageAllApprovedThesis = () => {
 
   const handleRemoveThesisFeature = async (thesisId) => {
     try {
-      const { data } = await removeFeaturedThesis({ variables: { thesisId } });
+      await removeFeaturedThesis({ variables: { thesisId } });
       featuredThesisResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -124,7 +124,7 @@ const ManageAllApprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   >
@@ -204,7 +204,7 @@ const ManageAllApprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   />

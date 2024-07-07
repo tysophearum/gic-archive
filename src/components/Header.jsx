@@ -31,8 +31,8 @@ import { useLocation } from 'react-router-dom';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [tab, setTab] = useState('home');
-  const { setTheme } = useTheme();
-  const { loading, error, data } = useQuery(QUERIES.getMe);
+  // const { setTheme } = useTheme();
+  const { data } = useQuery(QUERIES.getMe);
   const location = useLocation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -121,10 +121,10 @@ const Header = () => {
                   </div>
                 </Link>
               </DropdownItem>
-              {data.getMe.role == 'teacher' && (
+              {data.getMe.role === 'teacher' && (
                 <DropdownItem key="settings"><Link to='/teacherDashboard'>Teacher dashboard</Link></DropdownItem>
               )}
-              {data.getMe.role == 'admin' && (
+              {data.getMe.role === 'admin' && (
                 <DropdownItem key="settings"><Link to='/adminDashboard'>Admin dashboard</Link></DropdownItem>
               )}
               {/* <DropdownItem onClick={() => setTheme('light')} key="settings">Light Mode</DropdownItem>

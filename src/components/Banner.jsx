@@ -16,9 +16,9 @@ const Banner = ({query}) => {
       const [[_, res]] = resArray;
       setData(res);
     }
-  }, [loading, response]);
+  }, [loading]);
 
-  if (loading) {
+if (loading) {
     return <BannerLoading />;
   }
   if (error) return (
@@ -34,7 +34,7 @@ const Banner = ({query}) => {
                 removeWrapper
                 alt="Relaxing app background"
                 className="z-0 w-full min-h-[350px] object-cover"
-                src={item.image} />
+                src={item.image || "https://www.creativefabrica.com/wp-content/uploads/2021/08/16/flat-landscape-the-mountains-color-blue-Graphics-15913422-1.jpg"} />
               <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
                 <div className="flex flex-col flex-grow gap-2 items-start text-start text-white">
                   <p className="text-tiny text-white/60 uppercase font-bold">{item.user.name}</p>

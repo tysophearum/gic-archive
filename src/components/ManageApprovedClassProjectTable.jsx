@@ -59,7 +59,7 @@ const ManageApprovedClassProjectTable = ({classProjectCategoryId}) => {
   }, [page, limit])
 
   const handleUnapproveClassProject = async (classProjectId) => {
-    const { data, errors } = await unapproveClassProject({ variables: { classProjectId,  approval: false } });
+    const { errors } = await unapproveClassProject({ variables: { classProjectId,  approval: false } });
     if (errors) {
       console.log(errors);
     }
@@ -68,7 +68,7 @@ const ManageApprovedClassProjectTable = ({classProjectCategoryId}) => {
 
   const handleClassProjectFeature = async (classProjectId) => {
     try {
-      const { data } = await addFeaturedClassProject({ variables: { classProjectId } });
+      await addFeaturedClassProject({ variables: { classProjectId } });
       featuredClassProjectResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -77,7 +77,7 @@ const ManageApprovedClassProjectTable = ({classProjectCategoryId}) => {
 
   const handleRemoveClassProjectFeature = async (classProjectId) => {
     try {
-      const { data } = await removeFeaturedClassProject({ variables: { classProjectId } });
+      await removeFeaturedClassProject({ variables: { classProjectId } });
       featuredClassProjectResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -116,7 +116,7 @@ const ManageApprovedClassProjectTable = ({classProjectCategoryId}) => {
               <TableRow key={classProject.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: `${classProject?.image}` }}
+                    avatarProps={{ radius: "lg", src: `${classProject?.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}` }}
                     description={classProject.description.substring(0, 10)}
                     name={classProject.title}
                   >
@@ -196,7 +196,7 @@ const ManageApprovedClassProjectTable = ({classProjectCategoryId}) => {
               <TableRow key={classProject.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: `${classProject?.image}` }}
+                    avatarProps={{ radius: "lg", src: `${classProject?.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}` }}
                     description={classProject.description.substring(0, 10)}
                     name={classProject.title}
                   >

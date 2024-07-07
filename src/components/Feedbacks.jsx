@@ -1,4 +1,4 @@
-import { Avatar, Button, Textarea, User } from '@nextui-org/react';
+import { Avatar, Button, Textarea } from '@nextui-org/react';
 import { useMutation, useQuery } from '@apollo/client';
 import QUERIES from '../util/queries';
 import { useState, useEffect } from 'react';
@@ -16,6 +16,16 @@ const Feedbacks = ({id, type}) => {
   const [createThesisFeedback] = useMutation(QUERIES.createThesisFeedback);
   const {data: myData, loading: myLoading, error: myError} = useQuery(QUERIES.getMe)
 
+  useEffect(() => {
+    if (response) {
+      const resArray = Object.entries(response);
+      const [[_, res]] = resArray;
+      setData(res.feedbacks);
+    }
+  }, [response])
+
+  if (myLoading) return <p>Loading...</p>
+  if (myError) return <p>Error: {myError.message}</p>
   const handleCreateFeedback = async () => {
     if (feedback === '') {
       return;
@@ -39,14 +49,6 @@ const Feedbacks = ({id, type}) => {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    if (response) {
-      const resArray = Object.entries(response);
-      const [[key, res]] = resArray;
-      setData(res.feedbacks);
-    }
-  }, [response])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error.message}</p>

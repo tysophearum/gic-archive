@@ -7,9 +7,9 @@ const fetchData = async (endpoint, query, variable, header) => {
   try {
     const response = await graphQLClient.request(query, variable);
     data = response;
-  } catch (error) {
-    error = error;
-    console.log(error);
+  } catch (err) {
+    error = err;
+    console.log(err);
   }
   return [data, error]
 };

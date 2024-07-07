@@ -14,10 +14,10 @@ const ItemList = ({ query, variables, title, type }) => {
   useEffect(() => {
     if (typeof response !== 'undefined') {
       const resArray = Object.entries(response);
-      const [[key, res]] = resArray;
+      const [[_, res]] = resArray;
       setData(res.data);
     }
-  }, [query, variables, loading]);
+  }, [query, variables, loading, response]);
 
   if (loading) {
     return <GridLoading />; // Render loading state

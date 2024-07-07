@@ -16,7 +16,7 @@ import {
   Breadcrumbs,
   BreadcrumbItem,
 } from "@nextui-org/react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DeleteIcon } from "../../../icons/DeleteIcon";
 import { EyeIcon } from "../../../icons/EyeIcon";
 import { CheckIcon } from "../../../icons/CheckIcon";
@@ -29,14 +29,7 @@ import unixToTime from "../../../util/unixToTime";
 import ConfirmationAlert from "../../../components/ConfirmationAlert";
 import BannerLoading from "../../../components/loading/BannerLoading";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-
 const ManageUnapprovedThesis = () => {
-  const param = useParams();
   const viewPopup = useDisclosure();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
@@ -63,7 +56,7 @@ const ManageUnapprovedThesis = () => {
 
   const handleDeleteThesis = async (thesisId) => {
     try {
-      const { data } = await deleteThesis({ variables: { thesisId } });
+      await deleteThesis({ variables: { thesisId } });
       thesisResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -72,7 +65,7 @@ const ManageUnapprovedThesis = () => {
 
   const handleApproveThesis = async (thesisId) => {
     try {
-      const { data } = await approveThesis({ variables: { thesisId,  approval: true } });
+      await approveThesis({ variables: { thesisId,  approval: true } });
       thesisResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -143,7 +136,7 @@ const ManageUnapprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   />

@@ -1,5 +1,5 @@
-import { Breadcrumbs, BreadcrumbItem, Card, CardHeader, CardBody, CardFooter, Image, Divider } from "@nextui-org/react";
-import { Link, useParams } from "react-router-dom";
+import { Breadcrumbs, BreadcrumbItem, Card, CardBody, Divider } from "@nextui-org/react";
+import { Link } from "react-router-dom";
 import QUERIES from "../../../util/queries";
 import { useQuery } from "@apollo/client";
 import GridLoading2 from "../../../components/loading/GridLoading2";

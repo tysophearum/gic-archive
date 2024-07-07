@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import ItemList from '../components/ItemList';
+import React from 'react';
 import ViewDetail from '../components/ViewDetail';
 import Comments from '../components/Comments';
 import { useParams } from 'react-router-dom';

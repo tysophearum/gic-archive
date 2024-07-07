@@ -16,7 +16,7 @@ import {
   Breadcrumbs,
   BreadcrumbItem,
 } from "@nextui-org/react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { EyeIcon } from "../../../icons/EyeIcon";
 import { StarIconFill } from "../../../icons/StarIconFill";
 import ViewDetail from "../../../components/ViewDetail";
@@ -26,12 +26,6 @@ import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import unixToTime from "../../../util/unixToTime";
 import BannerLoading from "../../../components/loading/BannerLoading";
-
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
 
 const ManageApprovedThesis = () => {
   const viewPopup = useDisclosure();
@@ -48,7 +42,6 @@ const ManageApprovedThesis = () => {
   });
   const [variable, setVariable] = useState(null);
   const [viewQuery, setViewQuery] = useState(null);
-  const [deleteThesis] = useMutation(QUERIES.deleteThesis);
   const [addFeaturedThesis] = useMutation(QUERIES.addFeaturedThesis);
   const [removeFeaturedThesis] = useMutation(QUERIES.removeFeaturedThesis);
 
@@ -60,18 +53,9 @@ const ManageApprovedThesis = () => {
     }
   }, [page, limit])
 
-  const handleDeleteThesis = async (thesisId) => {
-    try {
-      const { data } = await deleteThesis({ variables: { thesisId } });
-      thesisResponse.refetch()
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   const handleThesisFeature = async (thesisId) => {
     try {
-      const { data } = await addFeaturedThesis({ variables: { thesisId } });
+      await addFeaturedThesis({ variables: { thesisId } });
       featuredThesisResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -80,7 +64,7 @@ const ManageApprovedThesis = () => {
 
   const handleRemoveThesisFeature = async (thesisId) => {
     try {
-      const { data } = await removeFeaturedThesis({ variables: { thesisId } });
+      await removeFeaturedThesis({ variables: { thesisId } });
       featuredThesisResponse.refetch()
     } catch (error) {
       console.log(error);
@@ -150,7 +134,7 @@ const ManageApprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   >
@@ -230,7 +214,7 @@ const ManageApprovedThesis = () => {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: `${thesis.image}` }}
+                    avatarProps={{ radius: "lg", src: `${thesis.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}` }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   >

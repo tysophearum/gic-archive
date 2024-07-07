@@ -19,17 +19,12 @@ import {
   Input,
   Select,
   SelectItem,
-  Tabs,
-  Tab
 } from "@nextui-org/react";
 import { EditIcon } from "../icons/EditIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
-import { EyeIcon } from "../icons/EyeIcon";
 import { useMutation, useQuery } from "@apollo/client";
 import QUERIES from "../util/queries";
-import axios from "axios";
 import EditProfileForm from "../components/EditProfileForm";
-import fetchData from '../util/fetchData';
 import BannerLoading from "./loading/BannerLoading";
 import ConfirmationAlert from "./ConfirmationAlert";
 
@@ -39,7 +34,6 @@ const ManageAdminsTable = () => {
   const [limit, setLimit] = useState(5);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [teachers, setTeachers] = useState([]);
-  const endpoint = process.env.REACT_APP_GRAPHQL;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -61,7 +55,7 @@ const ManageAdminsTable = () => {
   const [deleteUser] = useMutation(QUERIES.deleteUserById)
 
   const handleDeleteUser = async (id) => {
-    const { data, errors } = await deleteUser({ variables: { userId: id } });
+    const { errors } = await deleteUser({ variables: { userId: id } });
     if (errors) {
       console.log(errors);
     }
@@ -70,7 +64,7 @@ const ManageAdminsTable = () => {
   }
 
   const handleCreateUser = async () => {
-    const { data, errors } = await createUser({ variables: { user: { name, studentId: "Admin", email, password, gender } } });
+    const { errors } = await createUser({ variables: { user: { name, studentId: "Admin", email, password, gender } } });
     if (errors) {
       console.log(errors);
     }
@@ -202,7 +196,7 @@ const ManageAdminsTable = () => {
                   <User
                     avatarProps={{
                       radius: "lg",
-                      src: `${admin.image ? admin.image : ''}`
+                      src: `${admin.image ? admin.image : "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}`
                     }}
                     description={admin.studentId}
                     name={admin.name}

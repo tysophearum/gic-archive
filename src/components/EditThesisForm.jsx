@@ -334,7 +334,7 @@ export default function EditThesisForm({ id, onClose, onComplete }) {
                       description={teacher?.studentId}
                       className="my-0.5 mx-3"
                       avatarProps={{
-                        src: teacher?.image,
+                        src: teacher?.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png",
                         size: 'md'
                       }}
                     />
@@ -396,7 +396,7 @@ export default function EditThesisForm({ id, onClose, onComplete }) {
                       description={user?.studentId}
                       className="my-0.5 mx-3"
                       avatarProps={{
-                        src: user?.image,
+                        src: user?.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png",
                         size: 'md'
                       }}
                     />

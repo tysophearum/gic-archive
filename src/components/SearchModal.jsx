@@ -4,11 +4,6 @@ import {
   ModalBody,
   Input,
   Kbd,
-  Button,
-  Card,
-  CardBody,
-  Image,
-  Slider,
 } from "@nextui-org/react";
 import { SearchIcon } from "../icons/SearchIcon";
 import { useQuery } from "@apollo/client";
@@ -108,7 +103,8 @@ const SearchModal = ({onClose}) => {
             thesis.data.searchThesis.data.map((item, index) => (
               <Link to={'/thesis/'+item.id} onClick={() => {onClose()}}>
                 <div className="p-1 bg-white h-24 rounded-xl shadow-md flex items-center duration-150 hover:bg-blue-500 hover:text-white">
-                  <img
+                  <img 
+                    alt="image"
                     className="h-full w-24 object-cover rounded-lg"
                     src={item.image || 'https://cdn.dribbble.com/users/6944734/screenshots/17665290/media/97649adc40b4df0b29b59d57f7657b2c.png'}
                   />

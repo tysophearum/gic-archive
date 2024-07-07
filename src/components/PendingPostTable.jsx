@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, useDisclosure, Modal, ModalContent, Pagination } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, useDisclosure, Modal, ModalContent } from "@nextui-org/react";
 import { EditIcon } from "../icons/EditIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { EyeIcon } from "../icons/EyeIcon";
@@ -11,7 +11,7 @@ import { useMutation } from "@apollo/client";
 import EditClassProjectForm from "./EditClassProjectForm";
 import EditThesisForm from "./EditThesisForm";
 import ConfirmationAlert from "./ConfirmationAlert";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const statusColorMap = {
@@ -48,7 +48,7 @@ export default function PendingPostTable({ fetchData }) {
 
   const handleDeleteClassProject = async (classProjectId) => {
     try {
-      const { data } = await deleteClassProject({ variables: { classProjectId } });
+      await deleteClassProject({ variables: { classProjectId } });
       classProjectResponse.refetch()
       notifyDelete("Document deleted!")
     } catch (error) {
@@ -58,7 +58,7 @@ export default function PendingPostTable({ fetchData }) {
 
   const handleDeleteThesis = async (thesisId) => {
     try {
-      const { data } = await deleteThesis({ variables: { thesisId } });
+      await deleteThesis({ variables: { thesisId } });
       thesisResponse.refetch()
       notifyDelete("Document deleted!")
     } catch (error) {
@@ -88,7 +88,7 @@ export default function PendingPostTable({ fetchData }) {
               <TableRow key={thesis.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: thesis.image }}
+                    avatarProps={{ radius: "lg", src: thesis.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png" }}
                     description={thesis.description.substring(0, 10)}
                     name={thesis.title}
                   >
@@ -149,7 +149,7 @@ export default function PendingPostTable({ fetchData }) {
               <TableRow key={classProject.id}>
                 <TableCell>
                   <User
-                    avatarProps={{ radius: "lg", src: classProject.image }}
+                    avatarProps={{ radius: "lg", src: classProject.image || "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png" }}
                     description={classProject.description.substring(0, 10)}
                     name={classProject.title}
                   />

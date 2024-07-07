@@ -1,5 +1,4 @@
 import React from 'react';
-import ItemList from '../components/ItemList';
 import ViewDetail from '../components/ViewDetail';
 import Comments from '../components/Comments';
 import { useParams } from 'react-router-dom';

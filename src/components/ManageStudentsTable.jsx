@@ -24,7 +24,6 @@ import {
 } from "@nextui-org/react";
 import { EditIcon } from "../icons/EditIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
-import { EyeIcon } from "../icons/EyeIcon";
 import { useMutation, useQuery } from "@apollo/client";
 import QUERIES from "../util/queries";
 import axios from "axios";
@@ -64,7 +63,7 @@ const ManageStudentsTable = () => {
   const [deleteUser] = useMutation(QUERIES.deleteUserById)
 
   const handleDeleteUser = async (id) => {
-    const { data, errors } = await deleteUser({ variables: { userId: id } });
+    const { errors } = await deleteUser({ variables: { userId: id } });
     if (errors) {
       console.log(errors);
     }
@@ -73,7 +72,7 @@ const ManageStudentsTable = () => {
   }
 
   const handleCreateUser = async () => {
-    const { data, errors } = await createUser({ variables: { user: { name, studentId, email, password, gender } } });
+    const { errors } = await createUser({ variables: { user: { name, studentId, email, password, gender } } });
     if (errors) {
       console.log(errors);
     }
@@ -279,7 +278,7 @@ const ManageStudentsTable = () => {
                   <User
                     avatarProps={{ 
                       radius: "lg",
-                      src: `${student.image ? student.image : ''}`
+                      src: `${student.image ? student.image : "https://imebehavioralhealth.com/wp-content/uploads/2021/10/user-icon-placeholder-1.png"}`
                     }}
                     description={student.studentId}
                     name={student.name}
