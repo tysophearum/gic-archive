@@ -12,12 +12,14 @@ const Comments = ({ id, type }) => {
   const [loading, setLoading] = useState(true); // Introduce loading state
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState();
-  const endpoint = process.env.REACT_APP_ENDPOINT;
+  const endpoint = process.env.REACT_APP_GRAPHQL;
   const [createClassProjectComment] = useMutation(QUERIES.createClassProjectComment);
   const [createThesisComment] = useMutation(QUERIES.createThesisComment);
   const [comment, setComment] = useState('');
   const {data: myData, loading: myLoading, error: myError} = useQuery(QUERIES.getMe)
 
+  if (myLoading) return <p>Loading...</p>;
+  if (myError) return <p>Error: {myError.message}</p>;
   async function getData() {
     try {
       let query = null;
@@ -33,7 +35,7 @@ const Comments = ({ id, type }) => {
         throw new Error(error.message);
       }
       const resArray = Object.entries(responseData);
-      const [[key, res]] = resArray;
+      const [[_, res]] = resArray;
       setData([...data, ...res.comment]);
       setPagination(res.pagination)
     } catch (error) {
@@ -78,7 +80,7 @@ const Comments = ({ id, type }) => {
 
   useEffect(() => {
     getData();
-  }, [page]);
+  }, [page, getData]);
 
   if (loading) {
     return <p>Loading...</p>; // Render loading state

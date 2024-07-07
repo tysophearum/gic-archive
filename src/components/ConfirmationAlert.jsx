@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 
 const ConfirmationAlert = ({title, message, ActionButton, action, color, buttonText}) => {

@@ -24,7 +24,7 @@ function App() {
 
   const client = new ApolloClient({
     link: createUploadLink({
-      uri: 'http://localhost:4000/graphql',
+      uri: process.env.REACT_APP_GRAPHQL,
       headers: {
         Authorization: token,
       },

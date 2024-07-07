@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardFooter, Image, CardHeader, Button } from "@nextui-org/react";
+import { Card, CardFooter, Image, Button } from "@nextui-org/react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import { useQuery } from '@apollo/client';
@@ -13,10 +13,10 @@ const Banner = ({query}) => {
   useEffect(() => {
     if (typeof response !== 'undefined') {
       const resArray = Object.entries(response);
-      const [[key, res]] = resArray;
+      const [[_, res]] = resArray;
       setData(res);
     }
-  }, [loading]);
+  }, [loading, response]);
 
   if (loading) {
     return <BannerLoading />;

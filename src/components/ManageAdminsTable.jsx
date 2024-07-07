@@ -39,7 +39,7 @@ const ManageAdminsTable = () => {
   const [limit, setLimit] = useState(5);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [teachers, setTeachers] = useState([]);
-  const endpoint = process.env.REACT_APP_ENDPOINT;
+  const endpoint = process.env.REACT_APP_GRAPHQL;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

@@ -38,7 +38,7 @@ export default function EditThesisForm({ id, onClose, onComplete }) {
   }])
   const [newFiles, setNewFiles] = useState([]);
 
-  const endpoint = process.env.REACT_APP_ENDPOINT;
+  const endpoint = process.env.REACT_APP_GRAPHQL;
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [collaborators, setCollaborators] = useState([]);
   const [teacher, setTeacher] = useState(null);
@@ -159,7 +159,7 @@ export default function EditThesisForm({ id, onClose, onComplete }) {
 
         if (filesToDelete.length > 0) {
           formData.append('filesToDelete', filesToDelete);
-          await axios.post('http://localhost:4000/upload/thesis/files/delete', formData);
+          await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/thesis/files/delete', formData);
         }
 
         if (newFiles.length > 0) {
@@ -169,14 +169,14 @@ export default function EditThesisForm({ id, onClose, onComplete }) {
             formData.append('files', file); // Append each file individually
           });
 
-          await axios.post('http://localhost:4000/upload/thesis/files', formData);
+          await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/thesis/files', formData);
         }
         if (image) {
           // Prepare formData for image
           formData.append('image', image);
   
           // Upload image
-          await axios.post('http://localhost:4000/upload/thesis/image', formData);
+          await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/thesis/image', formData);
         }
       }
 

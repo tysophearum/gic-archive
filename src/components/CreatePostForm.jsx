@@ -49,7 +49,7 @@ let thesisPayload = {
 let image = null;
 
 const CreatePostForm = ({ onClose, onComplete }) => {
-  const endpoint = process.env.REACT_APP_ENDPOINT;
+  const endpoint = process.env.REACT_APP_GRAPHQL;
   const [uploadClassProject] = useMutation(QUERIES.createClassProject);
   const [uploadThesis] = useMutation(QUERIES.createThesis);
   const classProjectCategory = useQuery(QUERIES.listClassProjectCategory);
@@ -119,7 +119,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
         });
 
         // Step 3: Upload files
-        await axios.post('http://localhost:4000/upload/classProject/files', formData);
+        await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/classProject/files', formData);
 
         if (image) {
           // Step 4: Prepare formData for image
@@ -129,7 +129,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
           console.log(image);
 
           // Step 5: Upload image
-          await axios.post('http://localhost:4000/upload/classProject/image', formData);
+          await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/classProject/image', formData);
         }
 
         // Step 6: Call completion handlers if all uploads are successful
@@ -142,7 +142,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
       setErrorMessage(message)
       setIsError(true)
     }
-  }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);
+  }, [classProjectPayload, acceptedFiles, image, onComplete, onClose, uploadClassProject]);
 
   const createThesis = useCallback(async (event) => {
     try {
@@ -167,7 +167,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
         });
 
         // Step 3: Upload files
-        await axios.post('http://localhost:4000/upload/thesis/files', formData);
+        await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/thesis/files', formData);
 
         if (image) {
           // Step 4: Prepare formData for image
@@ -177,7 +177,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
           console.log(image);
 
           // Step 5: Upload image
-          await axios.post('http://localhost:4000/upload/thesis/image', formData);
+          await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/thesis/image', formData);
         }
 
         // Step 6: Call completion handlers if all uploads are successful
@@ -190,7 +190,7 @@ const CreatePostForm = ({ onClose, onComplete }) => {
       setErrorMessage(message)
       setIsError(true)
     }
-  }, [classProjectPayload, acceptedFiles, image, onComplete, onClose]);  
+  }, [classProjectPayload, acceptedFiles, image, onComplete, onClose, uploadThesis]);  
 
   const onSearchStudentInputChange = async (e) => {
     const value = e.target.value;

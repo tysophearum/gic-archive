@@ -38,7 +38,7 @@ const EditProfileForm = ({ onClose, onComplete, user }) => {
     let formData = new FormData();
     formData.append('userId', user.id)
     formData.append('image', e.target.files[0])
-    axios.post('http://localhost:4000/upload/profile/image', formData)
+    axios.post(process.env.REACT_APP_ENDPOINT+'/upload/profile/image', formData)
   }
   const handleCoverChange = (e) => {
     setCoverImage(URL.createObjectURL(e.target.files[0]))
@@ -71,7 +71,7 @@ const EditProfileForm = ({ onClose, onComplete, user }) => {
         contacts: contactNoTypename,
         tags,
       };
-      const response = await updateMyProfile({
+      await updateMyProfile({
         variables: {user},
         ignoreResults: true
       });
@@ -80,7 +80,7 @@ const EditProfileForm = ({ onClose, onComplete, user }) => {
     } catch (error) {
       console.log(JSON.stringify(error, null, 2));
     }
-  }, [name, studentId, bio, gender, email, contacts, tags])
+  }, [name, studentId, bio, gender, email, contacts, tags, onClose, onComplete])
 
   return (
     <>

@@ -38,7 +38,7 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
   }])
   const [newFiles, setNewFiles] = useState([]);
 
-  const endpoint = process.env.REACT_APP_ENDPOINT;
+  const endpoint = process.env.REACT_APP_GRAPHQL;
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [collaborators, setCollaborators] = useState([]);
   const classProjectCategory = useQuery(QUERIES.listClassProjectCategory);
@@ -130,7 +130,7 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
 
         if (filesToDelete.length > 0) {
           formData.append('filesToDelete', filesToDelete);
-          await axios.post('http://localhost:4000/upload/classProject/files/delete', formData);
+          await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/classProject/files/delete', formData);
         }
 
         if (newFiles.length > 0) {
@@ -140,14 +140,14 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
             formData.append('files', file); // Append each file individually
           });
 
-          await axios.post('http://localhost:4000/upload/classProject/files', formData);
+          await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/classProject/files', formData);
         }
         if (image) {
           // Prepare formData for image
           formData.append('image', image);
   
           // Upload image
-          await axios.post('http://localhost:4000/upload/classProject/image', formData);
+          await axios.post(process.env.REACT_APP_ENDPOINT+'/upload/classProject/image', formData);
         }
       }
 
@@ -159,7 +159,7 @@ export default function EditClassProjectForm({ id, onClose, onComplete }) {
       setErrorMessage(message)
       setIsError(true)
     }
-  }, [id, title, description, category, repositoryLink, videoLink, collaborators, image, files, newFiles, updateClassProject, onComplete, onClose]);
+  }, [id, title, description, category, repositoryLink, videoLink, collaborators, image, files, newFiles, updateClassProject, onComplete, onClose, isFilesEmpty]);
 
   const handleImageChange = (e) => {
     image = e.target.files[0]

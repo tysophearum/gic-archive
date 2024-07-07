@@ -39,7 +39,7 @@ const ManageStudentsTable = () => {
   const [limit, setLimit] = useState(5);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [students, setStudents] = useState([]);
-  const endpoint = process.env.REACT_APP_ENDPOINT;
+  const endpoint = process.env.REACT_APP_GRAPHQL;
 
   const [name, setName] = useState('');
   const [studentId, setStudentId] = useState('');
@@ -87,7 +87,7 @@ const ManageStudentsTable = () => {
     }
     let formData = new FormData();
     formData.append('file', csvFile)
-    axios.post('http://localhost:4000/upload/user/csv', formData, {
+    axios.post(process.env.REACT_APP_ENDPOINT+'/upload/user/csv', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

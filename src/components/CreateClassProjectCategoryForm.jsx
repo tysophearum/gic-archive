@@ -17,7 +17,7 @@ import fetchData from "../util/fetchData";
 import { useMutation } from "@apollo/client";
 
 const CreateClassProjectCategoryForm = ({ onClose, onComplete }) => {
-  const endpoint = process.env.REACT_APP_ENDPOINT;
+  const endpoint = process.env.REACT_APP_GRAPHQL;
   const [selectedTeachers, setSelectedTeacher] = useState([]);
   const [searchedTeacher, setSearchedTeacher] = useState([]);
   const [CreateClassProjectCategory] = useMutation(QUERIES.createClassProjectCategory);

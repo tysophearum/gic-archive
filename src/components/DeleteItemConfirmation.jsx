@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  ModalHeader,
   ModalBody,
   ModalFooter,
   Button,
-  Input,
-  Textarea,
 } from "@nextui-org/react";
 import { WarningIcon } from "../icons/WarningIcon";
 
